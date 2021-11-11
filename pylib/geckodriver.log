@@ -1,0 +1,12 @@
+1548992361097	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.VOmfly5hAGZ0"
+*** You are running in headless mode.
+1548992370187	Marionette	INFO	Listening on port 36369
+1548992370225	Marionette	WARN	TLS certificate errors will be ignored for this session
+1548993156494	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.XeHCXTsfEtf0"
+*** You are running in headless mode.
+1548993259410	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.VJOu2FkZ9e7P"
+*** You are running in headless mode.
+1548993376070	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.TVxjaIEARY7E"
+*** You are running in headless mode.
+1548993383378	Marionette	INFO	Listening on port 33643
+1548993383394	Marionette	WARN	TLS certificate errors will be ignored for this session
