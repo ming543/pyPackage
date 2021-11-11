@@ -1,11 +1,11 @@
 #!/bin/python3
 import subprocess
 #start test file 
-sT = "/home/production/data/ventoyTest/t.sh"
+sT = "/home/production/pyPackage/t.sh"
 print("back to main")
 
 f = open(sT, "w") #sT is start test t.sh file
-f.write("cd /home/production/data/ventoyTest && python3 pyMenu.py")
+f.write("cd /home/production/pyPackage && python3 pyMenu.py")
 f.close()
 subprocess.call("sh %s" % sT , shell=True)
 print("back to main")

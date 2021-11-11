@@ -5,7 +5,7 @@ import sys
 import os
 
 REQUIRED = {
-  'GitPython', 'enquiries', 'colorama'
+  'GitPython', 'enquiries', 'colorama', 'getch'
 }
 
 installed = {pkg.key for pkg in pkg_resources.working_set}

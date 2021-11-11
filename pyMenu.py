@@ -10,7 +10,7 @@ from colorama import Fore
 from colorama import Style
 
 #start test file 
-sT = "/home/production/data/ventoyTest/t.sh"
+sT = "/home/production/pyPackage/t.sh"
 #Check system boot by UEFI or LEGACY mode
 booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
 #Get revision
@@ -64,46 +64,10 @@ def mMenu():
         time.sleep(5)
         os.system('systemctl poweroff')
 
-# 2 steps pn pick, aMenu+aaMenu
-def aaaMenu():
-    a1='10953-0000'
-    a2='20010-0000'
-    al='Back to MAIN-MENU'
-    options = [a1,a2,al]
-    os.system('clear')
-    print(Fore.YELLOW + "%s ASSY-MENU" % booted + Style.RESET_ALL + " Build by EFCO SamLee")
-    print("Revision %s" % loginfo)
-    choice = enquiries.choose(Fore.YELLOW + '  Choose one of these options: ' + Style.RESET_ALL, options)
-    if choice == a1:
-        aaMenu(a1)
-    elif choice == a2:
-        aaMenu(a2)
-    elif choice == al:
-        print(choice)
-        mMenu()
-def aaMenu(aOptions):
-    index = []
-    aPath = "/home/production/data/ventoyTest/testAssy"
-    os.system('clear')
-    print(Fore.YELLOW + "%s ASSY-MENU" % booted + Style.RESET_ALL + " Build by EFCO SamLee")
-    print("Revision %s" % loginfo)
-    #Check only match PN list of aaMenu
-    for filename in os.listdir(aPath):
-        if re.match(aOptions, filename):
-            index += [filename]
-    choice = enquiries.choose(Fore.YELLOW + '  Choose one of these options: ' + Style.RESET_ALL, index)
-    for i in range(len(index)):
-        if choice == index[i]:
-            f = open(sT, "w") #sT is start test t.sh file
-            f.write("cd /home/production/data/ventoyTest/testAssy && python3 %s" % index[i])
-            f.close()
-            print(index[i])
-            subprocess.call("sh %s" % sT , shell=True)
-
 #Show all PN of testAssy
 def aMenu():
     index = []
-    aPath = "/home/production/data/ventoyTest/testAssy"
+    aPath = "/home/production/pyPackage/testAssy"
     os.system('clear')
     print(Fore.YELLOW + "%s ASSY-MENU" % booted + Style.RESET_ALL + " Build by EFCO SamLee")
     print("Revision %s" % loginfo)
@@ -113,7 +77,7 @@ def aMenu():
     for i in range(len(index)):
         if choice == index[i]:
             f = open(sT, "w") #sT is start test t.sh file
-            f.write("cd /home/production/data/ventoyTest/testAssy && python3 %s" % index[i])
+            f.write("cd /home/production/pyPackage/testAssy && python3 %s" % index[i])
             f.close()
             print(index[i])
             subprocess.call("sh %s" % sT , shell=True)
@@ -171,7 +135,7 @@ def copyLog():
         response = os.system("ping -c 1 -w 1 8.8.8.8")
         if response == 0:
             print("PING OK")
-            localFolder = "/home/production/data/log"
+            localFolder = "/home/production/log"
             onedriveFolder = "ID-Enbik:General/log"
             retcode = subprocess.call("rclone -v copy %s %s -P" %(localFolder, onedriveFolder), shell=True)
             if retcode == 0: #check rclone pass or fail
@@ -193,7 +157,6 @@ def gitPull():
         response = os.system("ping -c 1 -w 1 8.8.8.8")
         if response == 0:
             print("PING OK")
-            #os.chdir('/home/production/data/ventoyTest')
             g.gc()
             g.fetch('--all')
             g.reset('--hard')

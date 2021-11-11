@@ -4,9 +4,9 @@ import sys
 import getch
 import subprocess
 #start test file
-sT = "/home/production/data/ventoyTest/t.sh"
+sT = "/home/production/pyPackage/t.sh"
 
-print("Input 0000 Back to Mainu, Input SN Start Test: ")
+print("Input 0000 Back to Main, Input SN Start Test: ")
 sn = input()
 print("sn: "+ sn)
 #time.sleep(3)
@@ -14,12 +14,13 @@ sn = str(sn)
 if sn == "0000":
     print("sT is " + sT)
     f = open(sT, "w") #sT is start test t.sh file
-    f.write("cd /home/production/data/ventoyTest && python3 pyMenu.py")
+    f.write("cd /home/production/pyPackage && python3 pyMenu.py")
     f.close()
     subprocess.call("sh %s" % sT , shell=True)
 else:
     print("else: " + sn)
     time.sleep(5)
+    subprocess.call("sh %s" % sT , shell=True)
 
 
 

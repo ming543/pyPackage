@@ -1,0 +1,1 @@
+cd /home/production/pyPackage && python3 pyMenu.py
