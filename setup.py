@@ -5,8 +5,7 @@ import sys
 import os
 
 REQUIRED = {
-  'spacy', 'scikit-learn', 'numpy', 'pandas', 'torch', 
-  'pyfunctional', 'textblob', 'seaborn', 'matplotlib'
+  'GitPython', 'enquiries', 'colorama'
 }
 
 installed = {pkg.key for pkg in pkg_resources.working_set}
