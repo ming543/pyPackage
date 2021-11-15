@@ -1,1 +1,1 @@
-cd /home/production/pyPackage/testAssy && python3 20010-000002-A.0
+cd /home/production/pyPackage && python3 pyMenu.py
