@@ -24,14 +24,14 @@ print(logPath)
 def snGet(pn):
     os.system('clear')
     print("Test_PN: " + pn)
-    print("Input 0000 back to Main, Input SN start test: ")
+    print("Back to menu press 'n', Input SN start test: ")
     global sn
     sn = input()
     sn = str(sn)
     with shelve.open('snTemp') as db:
         db['snSave'] = sn
 
-    if sn == "0000":
+    if sn == "n":
         print("Start Test is " + sT)
         f = open(sT, "w")  # sT is start test t.sh file
         f.write("cd /home/production/pyPackage && python3 pyMenu.py")
