@@ -14,8 +14,6 @@ sT = "/home/production/pyPackage/t.sh"
 # Check system boot by UEFI or LEGACY mode
 booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
 # Get revision
-# with open('revision', 'r') as r:
-#    rev = r.read(5)
 g = git.Git('.')
 # loginfo = g.log('-p', '-1' , '--date=iso')
 loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')

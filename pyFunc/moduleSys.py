@@ -8,22 +8,22 @@ import time
 # import datetime
 import re
 import subprocess
+import cpuinfo
+from colorama import Fore
 
 # logging.basicConfig(level=logging.DEBUG)
 # log_filename = datetime.datetime.now().strftime(sn + "-%Y-%m-%d-%H:%M:%S.log")
 # logging.basicConfig(level=logging.INFO)
 
 sT = "/home/production/pyPackage/t.sh"
-
 loc = "/home/production"
-# loc = "/media/production/data"
 logPath = loc + "/log/"
 print(logPath)
-# pn = "10953-000001-B.0/" # pn for U6-500
 
-
+# pn input form script
 def snGet(pn):
     os.system('clear')
+    print("Test_PN: " + pn)
     print("Input 0000 back to Main, Input SN start test: ")
     global sn
     sn = input()
@@ -32,7 +32,7 @@ def snGet(pn):
         db['snSave'] = sn
 
     if sn == "0000":
-        print("sT is " + sT)
+        print("Start Test is " + sT)
         f = open(sT, "w")  # sT is start test t.sh file
         f.write("cd /home/production/pyPackage && python3 pyMenu.py")
         f.close()
@@ -46,15 +46,18 @@ def snGet(pn):
         global log
         log = logPath + pn + "/" + logMonth + "/" + logFilename
         os.makedirs(os.path.dirname(log), exist_ok=True)  # Create log folder
+        # save log name and location to database
         with shelve.open('snTemp') as db:
             db['log'] = log
 
         logger = logging.getLogger()
+        # Setup logging level
         logger.setLevel(logging.DEBUG)
         formatter = logging.Formatter(
                 '[%(levelname)1.1s %(asctime)s %(module)s:%(lineno)d] %(message)s',
                 datefmt='%Y%m%d %H:%M:%S')
 
+        # Setup log show on stream and file both
         ch = logging.StreamHandler()
         # ch.setLevel(logging.DEBUG)
         ch.setLevel(logging.INFO)
@@ -68,12 +71,8 @@ def snGet(pn):
 
         logger.addHandler(ch)
         logger.addHandler(fh)
-        logging.info('Test PN : ' + pn)
-        logging.info('Test SN : ' + sn)
-        # log = open(logLoc, "w")
-        # log.writelines ("Test start time: " + startTime + "\n")
-        # log.writelines ("Test SN: " + sn + "\n")
-        # log.writelines (" " + "\n")
+        logging.info('Test_PN: ' + pn)
+        logging.info('Test_SN: ' + sn)
         # logging.debug('debug')
         # logging.info('info')
         # logging.warning('warning')
@@ -86,17 +85,18 @@ def rtcCheck():
     rtcTime = subprocess.check_output("sudo hwclock -r", shell=True)
     rtcTime = str(rtcTime)
     if re.search(y, rtcTime):
-        logging.info('RTC Time : ' + rtcTime + " SPEC is " + y)
+        logging.info('RTC_Time: ' + rtcTime + " SPEC_" + y)
     else:
-        logging.error('Fail RTC Time : ' + rtcTime + " SPEC is " + y)
+        logging.error('RTC_Time: ' + rtcTime + " SPEC_" + y)
+        failRed()
 
 
 def macCheck(macA, macH):
     ethMac = getmac.get_mac_address(interface=macA)
     if re.search(macH, ethMac):
-        logging.info('Test MAC : ' + macA + " " + ethMac + " SPEC is " + macH)
+        logging.info('Test_MAC: ' + macA + "_" + ethMac + " SPEC_" + macH)
     else:
-        logging.error('Fail Test MAC : ' + macA + " " + ethMac + " SPEC is " + macH)
+        logging.error('Test_MAC: ' + macA + "_" + ethMac + " SPEC_" + macH)
         failRed()
 
 
@@ -104,11 +104,18 @@ def failRed():
     logging.error('****** TEST_FAILED! ******')
     logFail = log + ".FAIL"
     os.replace(log, logFail)
-    print("Fail, Press any key test again")
-    input()
+    print(Fore.RED + "Fail" + Fore.RESET)
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        os.system('systemctl poweroff')
     subprocess.call("sh %s" % sT, shell=True)
-    # quit()
 
-# with shelve.open('snTemp') as db:
-#    sn = db['snSave']
-# print(sn)
+
+def cpuInfo():
+    c = cpuinfo.get_cpu_info()['brand_raw']
+    logging.info('CPU_Info: ' + c)
+    print(Fore.YELLOW + "Check CPU with BOM" + Fore.RESET)
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('CPU_Info: ' + c + ' not match BOM')
+        failRed()
