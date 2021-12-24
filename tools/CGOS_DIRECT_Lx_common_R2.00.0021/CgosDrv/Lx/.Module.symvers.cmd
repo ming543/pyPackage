@@ -1,0 +1,1 @@
+cmd_/home/stux/CGOS_DIRECT_Lx_common_R2.00.0021/CgosDrv/Lx/Module.symvers := sed 's/ko$$/o/' /home/stux/CGOS_DIRECT_Lx_common_R2.00.0021/CgosDrv/Lx/modules.order | scripts/mod/modpost -m -a   -o /home/stux/CGOS_DIRECT_Lx_common_R2.00.0021/CgosDrv/Lx/Module.symvers -e -i Module.symvers   -T -

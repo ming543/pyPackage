@@ -1,0 +1,1 @@
+cmd_/root/桌面/cgoslx-1.03.020/CgosDrv/Lx/cgosdrv.ko := ld -r -m elf_i386 -T /usr/src/linux-headers-2.6.32-21-generic/scripts/module-common.lds --build-id -o /root/桌面/cgoslx-1.03.020/CgosDrv/Lx/cgosdrv.ko /root/桌面/cgoslx-1.03.020/CgosDrv/Lx/cgosdrv.o /root/桌面/cgoslx-1.03.020/CgosDrv/Lx/cgosdrv.mod.o

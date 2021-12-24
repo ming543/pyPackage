@@ -1,0 +1,1 @@
+cmd_/home/stux/CGOS_DIRECT_Lx_common_R2.00.0021/CgosDrv/Lx/built-in.a := rm -f /home/stux/CGOS_DIRECT_Lx_common_R2.00.0021/CgosDrv/Lx/built-in.a; ar cDPrST /home/stux/CGOS_DIRECT_Lx_common_R2.00.0021/CgosDrv/Lx/built-in.a 

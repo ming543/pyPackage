@@ -1,0 +1,44 @@
+Version 1.0
+-----------
+
+- initial release
+
+Version 1.1
+-----------
+
+* cgos/cgos.py
+  
+      CGMOD001: Removed ioGetName (not supported)
+
+      CGMOD002: i2cWriteReadCombined: Changed data type in array_type_write and array_type_read 
+            from unsigned int (ctypes.c_uint) to unsigned char (ctypes.c_ubyte)
+
+* examples/cgostest/cgostest.py
+
+      CGMOD001: Removed ioGetName call because it is not supported.
+
+* setup.py
+  cgos/__init__.py 
+  
+      Set version number to 1.1
+      
+Version 1.2
+-----------
+
+* cgos/cgos.py
+  
+      CGMOD003: Added Python3 support
+      
+      
+* examples/cgostest/cgostest.py
+
+      CGMOD003: Added Python3 support
+      
+* setup.py
+  cgos/__init__.py 
+  
+      Set version number to 1.2
+
+* documentation/cgospy_manual_1_2.pdf
+
+      Updated manual for version 1.2
