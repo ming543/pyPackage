@@ -1,4 +1,5 @@
 #!/bin/python3
+import git
 import os
 # import sys
 import logging
@@ -8,6 +9,7 @@ import time
 # import datetime
 import re
 import subprocess
+import enquiries
 import cpuinfo
 from colorama import Fore
 
@@ -15,14 +17,40 @@ from colorama import Fore
 # log_filename = datetime.datetime.now().strftime(sn + "-%Y-%m-%d-%H:%M:%S.log")
 # logging.basicConfig(level=logging.INFO)
 
-sT = "/home/production/pyPackage/t.sh"
-loc = "/home/production"
-logPath = loc + "/log/"
-print(logPath)
+# Check system boot by UEFI or LEGACY mode
+booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
+
+# Get revision
+g = git.Git('.')
+loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
+
+
+#sT = "/home/production/pyPackage/t.sh"
+sT = "/home/stux/pyPackage/t.sh"
+logPath = "/media/sda2/log/"
+if os.path.isdir(logPath):
+    print(" ")
+else:
+    subprocess.check_call("sudo mount /dev/sda2 /media/sda2 -o umask=000", shell=True, stdin=sys.stdin)
+
+def pnGet():
+    index = []
+    aPath = "/home/stux/pyPackage/testAssy"
+    print(Fore.YELLOW + "%s ASSY-MENU" % booted + Fore.RESET, end='')
+    print(" Build by EFCO SamLee")
+    print("Revision %s" % loginfo)
+    for filename in os.listdir(aPath):
+        index += [filename]
+    choice = enquiries.choose('  Choose options: ', index)
+    for i in range(len(index)):
+        if choice == index[i]:
+            return index[i]
+
 
 # pn input form script
-def snGet(pn):
+def snGet(pn, modelName):
     os.system('clear')
+    print("Test_Model: " + modelName)
     print("Test_PN: " + pn)
     print("Back to menu press 'n', Input SN start test: ")
     global sn
@@ -33,16 +61,15 @@ def snGet(pn):
 
     if sn == "n":
         print("Start Test is " + sT)
-        f = open(sT, "w")  # sT is start test t.sh file
-        f.write("cd /home/production/pyPackage && python3 pyMenu.py")
-        f.close()
+        with open(sT, "w") as f:
+            f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
         subprocess.call("sh %s" % sT, shell=True)
     else:
         # setup test start time
         startTime = time.strftime("%Y%m%d-%H%M%S", time.localtime())
         # setup test log month folder
         logMonth = time.strftime("%Y%m", time.localtime())
-        logFilename = sn + "-" + startTime + ".log"
+        logFilename = sn + "-" + modelName + "-" + startTime + ".log"
         global log
         log = logPath + pn + "/" + logMonth + "/" + logFilename
         os.makedirs(os.path.dirname(log), exist_ok=True)  # Create log folder
@@ -71,6 +98,7 @@ def snGet(pn):
 
         logger.addHandler(ch)
         logger.addHandler(fh)
+        logging.info('Test_Model: ' + modelName)
         logging.info('Test_PN: ' + pn)
         logging.info('Test_SN: ' + sn)
         # logging.debug('debug')
@@ -119,3 +147,6 @@ def cpuInfo():
     if check == ("n"):
         logging.error('CPU_Info: ' + c + ' not match BOM')
         failRed()
+
+
+

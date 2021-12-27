@@ -87,9 +87,8 @@ def aMenu():
     choice = enquiries.choose('  Choose options: ', index)
     for i in range(len(index)):
         if choice == index[i]:
-            f = open(sT, "w")  # sT is start test t.sh file
-            f.write("cd " + aPath + "&& python3 %s" % index[i])
-            f.close()
+            with open(sT, "w") as f:
+                f.write("cd " + aPath + "&& python3 %s" % index[i])
             print(index[i])
             subprocess.call("sh %s" % sT, shell=True)
 
@@ -132,9 +131,8 @@ def oMenu():
 
 def bMenu():
     print("BI tool here")
-    time.sleep(5)
-    mMenu()
-
+    os.system('clear')
+    subprocess.call("cd /home/stux/pyPackage/testBi && python3 testBi.py", shell=True)
 
 def osSetup():
     print("OS setup tool here")

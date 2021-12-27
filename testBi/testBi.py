@@ -3,9 +3,10 @@ import sys
 sys.path.append("..")
 from pyFunc import moduleSys
 
-pn = __file__
+modelName = "BI-120M"
+pn = moduleSys.pnGet()
 
-moduleSys.snGet(pn)
+moduleSys.snGet(pn, modelName)
 moduleSys.rtcCheck()
 moduleSys.cpuInfo()
 moduleSys.macCheck('enp1s0', '80:7b:86')
