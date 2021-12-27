@@ -1,0 +1,13 @@
+#!/bin/python3
+import sys
+sys.path.append("..")
+from pyFunc import moduleSys
+
+pn = __file__
+
+moduleSys.snGet(pn)
+moduleSys.rtcCheck()
+moduleSys.cpuInfo()
+moduleSys.macCheck('enp1s0', '80:7b:86')
+
+

@@ -1,1 +1,1 @@
-cd /home/production/pyPackage && python3 pyMenu.py
+cd /home/stux/pyPackage && python3 pyMenu.py

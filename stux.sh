@@ -1,0 +1,2 @@
+#!/bin/bash
+cd /home/stux/pyPackage && python3 pyMenu.py

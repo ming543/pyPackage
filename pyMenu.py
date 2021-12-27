@@ -1,6 +1,7 @@
 #!/bin/python3
 import git
 import os
+import sh
 import sys
 import subprocess
 import enquiries
@@ -10,9 +11,12 @@ from colorama import Fore
 # from colorama import Style
 
 # start test file
-sT = "/home/production/pyPackage/t.sh"
+#sT = "/home/production/pyPackage/t.sh"
+sT = "/home/stux/pyPackage/t.sh"
+
 # Check system boot by UEFI or LEGACY mode
 booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
+
 # Get revision
 g = git.Git('.')
 # loginfo = g.log('-p', '-1' , '--date=iso')
@@ -20,6 +24,11 @@ loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 # logData = loginfo.splitlines()
 # rev = logData[2] + logData[4]
 
+logFolder = "/media/sda2/log"
+if os.path.isdir(logFolder):
+    print("Logfolder exist")
+else:
+    subprocess.check_call("sudo mount /dev/sda2 /media/sda2 -o umask=000", shell=True, stdin=sys.stdin)
 
 def mMenu():
     m1 = 'Assy-Test (Label: SS02XXXX & CS04XXXX)'
@@ -68,7 +77,7 @@ def mMenu():
 # Show all PN of testAssy
 def aMenu():
     index = []
-    aPath = "/home/production/pyPackage/testAssy"
+    aPath = "/home/stux/pyPackage/testAssy"
     os.system('clear')
     print(Fore.YELLOW + "%s ASSY-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
