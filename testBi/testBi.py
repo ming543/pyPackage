@@ -9,6 +9,6 @@ pn = moduleSys.pnGet()
 moduleSys.snGet(pn, modelName)
 moduleSys.rtcCheck()
 moduleSys.cpuInfo()
-moduleSys.biosBaseNameCheck("V3C")
-moduleSys.biosBaseNameCheck("V2C")
+moduleSys.dmidecodeCheck("baseboard-product-name", "V3C")
+moduleSys.dmidecodeCheck("baseboard-product-name", "V2C")
 

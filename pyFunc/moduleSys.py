@@ -26,16 +26,42 @@ loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 
 
 #sT = "/home/production/pyPackage/t.sh"
-sT = "/home/stux/pyPackage/t.sh"
+startTest = "/home/stux/pyPackage/t.sh"
 logPath = "/media/sda2/log/"
 if os.path.isdir(logPath):
     print(" ")
 else:
     subprocess.check_call("sudo mount /dev/sda2 /media/sda2 -o umask=000", shell=True, stdin=sys.stdin)
 
-	
 
 def pnGet():
+    print(Fore.YELLOW + " Choose PN number for Test and Log! " + Fore.RESET)
+    index = ['10300-', '10400-', '10500-', '10901-', '10902-', '10951-', '10953-', '20010-']
+    indexChoice = enquiries.choose('  Choose options: ', index)
+    body = []
+    for i in range(1, 10):
+        #add number by six digi, someday may used.
+        #body.append(indexChoice + "{:06d}".format(i))
+        body.append(indexChoice + '000' + str(i))
+    bodyFirst = enquiries.choose(' Choose body: ', body)
+    body.clear()
+    for j in range(1, 10):
+        body.append(bodyFirst + str(j))
+    bodySecond = enquiries.choose(' Choose body: ', body)
+    body.clear()
+    for k in range(1, 10):
+        body.append(bodySecond + str(k))
+    bodyThird = enquiries.choose(' Choose body: ', body)
+    body.clear()
+    rev = [bodyThird + '-A.', bodyThird + '-B.', bodyThird + '-C.', bodyThird + '-D.', bodyThird + '-E.']
+    revChoice = enquiries.choose('  Choose Revision: ', rev)
+    for p in range(1, 10):
+        body.append(revChoice + str(p))
+    pn = enquiries.choose('  Choose PN: ', body)
+    print(pn)
+    return pn
+
+def pnGet2():
     index = []
     aPath = "/home/stux/pyPackage/testAssy"
     print(Fore.YELLOW + "%s ASSY-MENU" % booted + Fore.RESET, end='')
@@ -62,10 +88,10 @@ def snGet(pn, modelName):
         db['snSave'] = sn
 
     if sn == "n":
-        print("Start Test is " + sT)
-        with open(sT, "w") as f:
+        print("Start Test is " + startTest)
+        with open(startTest, "w") as f:
             f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
-        subprocess.call("sh %s" % sT, shell=True)
+        subprocess.call("sh %s" % startTest, shell=True)
     else:
         # setup test start time
         startTime = time.strftime("%Y%m%d-%H%M%S", time.localtime())
@@ -109,14 +135,14 @@ def snGet(pn, modelName):
         # logging.error('error')
         # logging.critical('critical')
 
-
-def biosBaseNameCheck(spec):
-    biosN = subprocess.check_output("sudo dmidecode -s baseboard-product-name", shell=True)
+#dmiFunc ex.baseboard-product-name
+def dmidecodeCheck(dmiFunc, spec):
+    biosN = subprocess.check_output("sudo dmidecode -s %s" % dmiFunc, shell=True)
     biosN = str(biosN)
     if re.search(spec, biosN):
-        logging.info('Baseboard_Name: ' + biosN + " SPEC_" + spec)
+        logging.info(dmiFunc + ': ' + biosN + " SPEC: " + spec)
     else:
-        logging.error('Baseboard_Name: ' + biosN + " SPEC_" + spec)
+        logging.error(dmiFunc + ': ' + biosN + " SPEC: " + spec)
         failRed()		
 
 		
@@ -124,9 +150,9 @@ def biosVersionCheck(spec):
     biosV = subprocess.check_output("sudo dmidecode -s bios-version", shell=True)
     biosV = str(biosV)
     if re.search(spec, biosV):
-        logging.info('BIOS_Version: ' + biosV + " SPEC_" + spec)
+        logging.info('BIOS_Version: ' + biosV + " SPEC: " + spec)
     else:
-        logging.error('BIOS_Version: ' + biosV + " SPEC_" + spec)
+        logging.error('BIOS_Version: ' + biosV + " SPEC: " + spec)
         failRed()
 
 		
@@ -135,18 +161,18 @@ def rtcCheck():
     rtcTime = subprocess.check_output("sudo hwclock -r", shell=True)
     rtcTime = str(rtcTime)
     if re.search(y, rtcTime):
-        logging.info('RTC_Time: ' + rtcTime + " SPEC_" + y)
+        logging.info('RTC_Time: ' + rtcTime + " SPEC: " + y)
     else:
-        logging.error('RTC_Time: ' + rtcTime + " SPEC_" + y)
+        logging.error('RTC_Time: ' + rtcTime + " SPEC: " + y)
         failRed()
 
 
 def macCheck(macA, macH):
     ethMac = getmac.get_mac_address(interface=macA)
     if re.search(macH, ethMac):
-        logging.info('Test_MAC: ' + macA + "_" + ethMac + " SPEC_" + macH)
+        logging.info('Test_MAC: ' + macA + "_" + ethMac + " SPEC: " + macH)
     else:
-        logging.error('Test_MAC: ' + macA + "_" + ethMac + " SPEC_" + macH)
+        logging.error('Test_MAC: ' + macA + "_" + ethMac + " SPEC: " + macH)
         failRed()
 
 
@@ -155,10 +181,10 @@ def failRed():
     logFail = log + ".FAIL"
     os.replace(log, logFail)
     print(Fore.RED + "Fail" + Fore.RESET)
-    check = input("Failed press 'n', other key continue: ").lower()
+    check = input("Press 'n' power off, other key re-test: ").lower()
     if check == ("n"):
         os.system('systemctl poweroff')
-    subprocess.call("sh %s" % sT, shell=True)
+    subprocess.call("sh %s" % startTest, shell=True)
 
 
 def cpuInfo():
