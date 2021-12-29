@@ -33,6 +33,8 @@ if os.path.isdir(logPath):
 else:
     subprocess.check_call("sudo mount /dev/sda2 /media/sda2 -o umask=000", shell=True, stdin=sys.stdin)
 
+	
+
 def pnGet():
     index = []
     aPath = "/home/stux/pyPackage/testAssy"
@@ -108,6 +110,24 @@ def snGet(pn, modelName):
         # logging.critical('critical')
 
 
+def biosBaseNameCheck(spec):
+    biosN = subprocess.check_output("sudo dmidecode -s baseboard-product-name", shell=True)
+	if re.search(spec, biosN):
+		logging.info('Baseboard_Name: ' + biosN + " SPEC_" + spec)
+    else:
+        logging.error('Baseboard_Name: ' + biosN + " SPEC_" + spec)
+        failRed()		
+
+		
+def biosVersionCheck(spec):
+    biosV = subprocess.check_output("sudo dmidecode -s bios-version", shell=True)
+	if re.search(spec, biosV):
+		logging.info('BIOS_Version: ' + biosV + " SPEC_" + spec)
+    else:
+        logging.error('BIOS_Version: ' + biosV + " SPEC_" + spec)
+        failRed()
+
+		
 def rtcCheck():
     y = "2021"  # check years of BIOS time
     rtcTime = subprocess.check_output("sudo hwclock -r", shell=True)
