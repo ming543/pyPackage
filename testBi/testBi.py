@@ -9,6 +9,6 @@ pn = moduleSys.pnGet()
 moduleSys.snGet(pn, modelName)
 moduleSys.rtcCheck()
 moduleSys.cpuInfo()
-moduleSys.macCheck('enp1s0', '80:7b:86')
-
+moduleSys.biosBaseNameCheck("V3C")
+moduleSys.biosBaseNameCheck("V2C")
 

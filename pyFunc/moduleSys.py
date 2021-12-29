@@ -112,8 +112,9 @@ def snGet(pn, modelName):
 
 def biosBaseNameCheck(spec):
     biosN = subprocess.check_output("sudo dmidecode -s baseboard-product-name", shell=True)
-	if re.search(spec, biosN):
-		logging.info('Baseboard_Name: ' + biosN + " SPEC_" + spec)
+    biosN = str(biosN)
+    if re.search(spec, biosN):
+        logging.info('Baseboard_Name: ' + biosN + " SPEC_" + spec)
     else:
         logging.error('Baseboard_Name: ' + biosN + " SPEC_" + spec)
         failRed()		
@@ -121,8 +122,9 @@ def biosBaseNameCheck(spec):
 		
 def biosVersionCheck(spec):
     biosV = subprocess.check_output("sudo dmidecode -s bios-version", shell=True)
-	if re.search(spec, biosV):
-		logging.info('BIOS_Version: ' + biosV + " SPEC_" + spec)
+    biosV = str(biosV)
+    if re.search(spec, biosV):
+        logging.info('BIOS_Version: ' + biosV + " SPEC_" + spec)
     else:
         logging.error('BIOS_Version: ' + biosV + " SPEC_" + spec)
         failRed()
