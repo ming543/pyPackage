@@ -135,7 +135,7 @@ def bMenu():
     moduleSys.pnGet()
     if moduleSys.pnCheck() is True:
         with open(startTest, "w") as f:
-            f.write("cd /home/stux/pyPackage/testBi && python3 testBi.py")
+            f.write("cd /home/stux/pyPackage && python3 testBi.py")
         subprocess.call("sh %s" % startTest, shell=True)
     else:
         mMenu()

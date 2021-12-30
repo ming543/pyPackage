@@ -31,7 +31,7 @@ logPath = "/media/sda2/log/"
 if os.path.isdir(logPath):
     print(" ")
 else:
-    subprocess.check_call("sudo mount /dev/sda2 /media/sda2 -o umask=000", shell=True, stdin=sys.stdin)
+    subprocess.check_call("sudo mount /dev/sda2 /media/sda2 -o umask=000", shell=True)
 
 
 def pnGet():
@@ -151,14 +151,6 @@ def snGet(pn, modelName):
         # logging.critical('critical')
 
 #dmiFunc ex.baseboard-product-name
-def biFuncCheck():
-    biosN = subprocess.check_output("sudo dmidecode -s baseboard-product-name", shell=True)
-    biosN = str(biosN)
-    if re.search("V([0-9]C)", biosN):
-        return True
-    else:
-        return False
-
 def dmidecodeCheck(dmiFunc, spec):
     biosN = subprocess.check_output("sudo dmidecode -s %s" % dmiFunc, shell=True)
     biosN = str(biosN)
@@ -221,9 +213,4 @@ def cpuInfo():
         failRed()
 
 
-def getCpuMips():
-    with open('/proc/cpuinfo', 'r') as infos:
-        for line in infos:
-            if line.lower().startswith('bogomips'):
-                mips = line.split(':')[1].lstrip().split('\n')[0]
-        return mips
+
