@@ -6,5 +6,5 @@ from pyFunc import moduleSys
 
 print('filename: ' + __file__)
 
-moduleSys.pnGet()
-
+moduleSys.getCpuMips()
+#print(n)

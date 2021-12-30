@@ -58,8 +58,8 @@ def pnGet():
     for p in range(1, 10):
         body.append(revChoice + str(p))
     pn = enquiries.choose('  Choose PN: ', body)
-    print(pn)
-    return pn
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        db['pnSave'] = pn
 
 def pnGet2():
     index = []
@@ -75,6 +75,19 @@ def pnGet2():
             return index[i]
 
 
+def pnCheck():
+    os.system('clear')
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        pn = db['pnSave'] 
+    print(Fore.YELLOW + " Check PN number for Test and Log! " + Fore.RESET)
+    print("Test_PN: " + pn)
+    pnCheck = input("Back to menu press 'n', other key continue: ").lower()
+    if pnCheck == "n":
+        return False
+    else:
+        return True
+
+
 # pn input form script
 def snGet(pn, modelName):
     os.system('clear')
@@ -84,7 +97,8 @@ def snGet(pn, modelName):
     global sn
     sn = input()
     sn = str(sn)
-    with shelve.open('snTemp') as db:
+    #with shelve.open('snTemp') as db:
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
         db['snSave'] = sn
 
     if sn == "n":
@@ -102,7 +116,8 @@ def snGet(pn, modelName):
         log = logPath + pn + "/" + logMonth + "/" + logFilename
         os.makedirs(os.path.dirname(log), exist_ok=True)  # Create log folder
         # save log name and location to database
-        with shelve.open('snTemp') as db:
+        # with shelve.open('snTemp') as db:
+        with shelve.open('/home/stux/pyPackage/dataBase') as db:
             db['log'] = log
 
         logger = logging.getLogger()
@@ -136,16 +151,25 @@ def snGet(pn, modelName):
         # logging.critical('critical')
 
 #dmiFunc ex.baseboard-product-name
+def biFuncCheck():
+    biosN = subprocess.check_output("sudo dmidecode -s baseboard-product-name", shell=True)
+    biosN = str(biosN)
+    if re.search("V([0-9]C)", biosN):
+        return True
+    else:
+        return False
+
 def dmidecodeCheck(dmiFunc, spec):
     biosN = subprocess.check_output("sudo dmidecode -s %s" % dmiFunc, shell=True)
     biosN = str(biosN)
     if re.search(spec, biosN):
         logging.info(dmiFunc + ': ' + biosN + " SPEC: " + spec)
+        return True
     else:
         logging.error(dmiFunc + ': ' + biosN + " SPEC: " + spec)
         failRed()		
 
-		
+
 def biosVersionCheck(spec):
     biosV = subprocess.check_output("sudo dmidecode -s bios-version", shell=True)
     biosV = str(biosV)
@@ -197,4 +221,9 @@ def cpuInfo():
         failRed()
 
 
-
+def getCpuMips():
+    with open('/proc/cpuinfo', 'r') as infos:
+        for line in infos:
+            if line.lower().startswith('bogomips'):
+                mips = line.split(':')[1].lstrip().split('\n')[0]
+        return mips

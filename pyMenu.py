@@ -8,11 +8,11 @@ import enquiries
 import time
 # import re
 from colorama import Fore
-# from colorama import Style
+from pyFunc import moduleSys
 
 # start test file
 #sT = "/home/production/pyPackage/t.sh"
-sT = "/home/stux/pyPackage/t.sh"
+startTest = "/home/stux/pyPackage/t.sh"
 
 # Check system boot by UEFI or LEGACY mode
 booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
@@ -87,10 +87,10 @@ def aMenu():
     choice = enquiries.choose('  Choose options: ', index)
     for i in range(len(index)):
         if choice == index[i]:
-            with open(sT, "w") as f:
+            with open(startTest, "w") as f:
                 f.write("cd " + aPath + "&& python3 %s" % index[i])
             print(index[i])
-            subprocess.call("sh %s" % sT, shell=True)
+            subprocess.call("sh %s" % startTest, shell=True)
 
 
 def pMenu():
@@ -132,7 +132,13 @@ def oMenu():
 def bMenu():
     print("BI tool here")
     os.system('clear')
-    subprocess.call("cd /home/stux/pyPackage/testBi && python3 testBi.py", shell=True)
+    moduleSys.pnGet()
+    if moduleSys.pnCheck() is True:
+        with open(startTest, "w") as f:
+            f.write("cd /home/stux/pyPackage/testBi && python3 testBi.py")
+        subprocess.call("sh %s" % startTest, shell=True)
+    else:
+        mMenu()
 
 def osSetup():
     print("OS setup tool here")
