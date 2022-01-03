@@ -149,6 +149,7 @@ def snGet(pn, modelName):
         # logging.warning('warning')
         # logging.error('error')
         # logging.critical('critical')
+    return sn
 
 #dmiFunc ex.baseboard-product-name
 def dmidecodeCheck(dmiFunc, spec):
