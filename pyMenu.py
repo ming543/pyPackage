@@ -36,12 +36,11 @@ def mMenu():
     m3 = 'Other-Test'
     m4 = 'BurnIn-Test'
     m5 = 'OS Clone Setup'
-    m6 = 'OS Clone Execute'
-    m7 = 'Copy Log to Onedrive'
-    m8 = 'Update Linux Test Script'
-    m9 = 'Update DOS Test Script'
+    m6 = 'Copy Log to Onedrive'
+    m7 = 'Update Linux Test Script'
+    m8 = 'Update DOS Test Script'
     ml = 'Power off system'
-    options = [m1, m2, m3, m4, m5, m6, m7, m8, m9, ml]
+    options = [m1, m2, m3, m4, m5, m6, m7, m8, ml]
 
     os.system('clear')
     print(Fore.YELLOW + "%s MAIN-MENU" % booted + Fore.RESET, end='')
@@ -59,13 +58,11 @@ def mMenu():
         bMenu()
     elif choice == m5:  # OS clone setup
         osClone()
-    elif choice == m6:  # OS clone Execute
-        osExec()
-    elif choice == m7:  # copy log to onedrive
+    elif choice == m6:  # copy log to onedrive
         copyLog()
-    elif choice == m8:  # Update Linux script
+    elif choice == m7:  # Update Linux script
         gitPull()
-    elif choice == m9:  # Update DOS script
+    elif choice == m8:  # Update DOS script
         dosMenu()
     # Last of list
     elif choice == ml:  # power off system
@@ -144,7 +141,9 @@ def osClone():
     print("OS setup tool here")
     os.system('clear')
     moduleSys.pnGet()
-    if moduleSys.pnCheck() is True:
+    moduleSys.diskGet()
+    moduleSys.osGet()
+    if moduleSys.cloneCheck() is True:
         with open(startTest, "w") as f:
             f.write("cd /home/stux/pyPackage && python3 osClone.py")
         subprocess.call("sh %s" % startTest, shell=True)

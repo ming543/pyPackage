@@ -93,7 +93,8 @@ def snGet(pn, modelName):
     os.system('clear')
     print("Test_Model: " + modelName)
     print("Test_PN: " + pn)
-    print("Back to menu press 'n', Input SN start test: ")
+    print("Back to menu press 'n', ", end='')
+    print(Fore.YELLOW + "Input SN start test: " + Fore.RESET)
     global sn
     sn = input()
     sn = str(sn)
@@ -214,4 +215,48 @@ def cpuInfo():
         failRed()
 
 
+def diskGet():
+    output = subprocess.check_output(
+            'lsblk -o type,path,model,size', shell=True)
+    output = str(output).lstrip('b\'').split('\\n')
+    os.system('clear')
+    options = []
+    for line in output:
+        if line.lower().startswith('disk'):
+            options.append(line)
+    diskShow = enquiries.choose(' Choose clone disk options: ', options)
+    diskGet = diskShow.split(' ')[1]
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        db['diskSave'] = diskGet
+        db['diskShow'] = diskShow
 
+
+def osGet():
+    index = []
+    osFolder = "/media/sda2/OS_IMAGE"
+    if os.path.isdir(osFolder):
+        subprocess.call(
+                "sudo ln -s %s /home/partimag" % osFolder, shell=True)
+    os.system('clear')
+    for filename in os.listdir(osFolder):
+        index += [filename]
+    osGet = enquiries.choose(' Choose clone OS options: ', index)
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        db['osSave'] = osGet
+
+def cloneCheck():
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        pn = db['pnSave']
+        diskGet = db['diskSave']
+        diskShow = db['diskShow']
+        osGet = db['osSave']
+    os.system('clear')
+    print(Fore.YELLOW + "OS Clone Setup Check" + Fore.RESET)
+    print("PN:", pn)
+    print("Clone Disk:", diskShow)
+    print("Clone OS:", osGet)
+    check = input("Back to menu press 'n', other key continue: ").lower()
+    if check == "n":
+        return False
+    else:
+        return True

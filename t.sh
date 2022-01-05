@@ -1,1 +1,1 @@
-cd /home/stux/pyPackage/testBi && python3 testBi.py
+cd /home/stux/pyPackage && python3 osClone.py
