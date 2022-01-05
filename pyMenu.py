@@ -58,7 +58,7 @@ def mMenu():
     elif choice == m4:  # Burnin test
         bMenu()
     elif choice == m5:  # OS clone setup
-        osSetup()
+        osClone()
     elif choice == m6:  # OS clone Execute
         osExec()
     elif choice == m7:  # copy log to onedrive
@@ -140,10 +140,16 @@ def bMenu():
     else:
         mMenu()
 
-def osSetup():
+def osClone():
     print("OS setup tool here")
-    time.sleep(5)
-    mMenu()
+    os.system('clear')
+    moduleSys.pnGet()
+    if moduleSys.pnCheck() is True:
+        with open(startTest, "w") as f:
+            f.write("cd /home/stux/pyPackage && python3 osClone.py")
+        subprocess.call("sh %s" % startTest, shell=True)
+    else:
+        mMenu()
 
 
 def osExec():
