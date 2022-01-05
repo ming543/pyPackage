@@ -27,7 +27,7 @@ def coaGet():
 
 def osClone():
     osClone = subprocess.call(
-            "sudo /usr/sbin/ocs-sr -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk %s %s" %(osGet, diskGet), shell=True)
+            "sudo /usr/sbin/ocs-sr -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_IMAGE/%s %s" %(osGet, diskGet), shell=True)
     if osClone != 0:
         logging.error("OS Clone fail code:%s" % osClone)
 #           exit()
@@ -44,6 +44,8 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
     osGet = db['osSave']
 
 modelName = "CLONE-OS"
+print("Clone_Disk: ", diskShow)
+print("Clone_OS: ", osGet)
 moduleSys.snGet(pn, modelName)
 logging.info('Clone_Disk: ' + diskShow)
 logging.info('Clone_OS: ' + osGet)

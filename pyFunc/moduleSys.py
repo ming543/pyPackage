@@ -27,11 +27,11 @@ loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 
 #sT = "/home/production/pyPackage/t.sh"
 startTest = "/home/stux/pyPackage/t.sh"
-logPath = "/media/sda2/log/"
+logPath = "/home/partimag/log/"
 if os.path.isdir(logPath):
     print(" ")
 else:
-    subprocess.check_call("sudo mount /dev/sda2 /media/sda2 -o umask=000", shell=True)
+    subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True)
 
 
 def pnGet():
@@ -90,7 +90,7 @@ def pnCheck():
 
 # pn input form script
 def snGet(pn, modelName):
-    os.system('clear')
+#    os.system('clear')
     print("Test_Model: " + modelName)
     print("Test_PN: " + pn)
     print("Back to menu press 'n', ", end='')
@@ -217,7 +217,7 @@ def cpuInfo():
 
 def diskGet():
     output = subprocess.check_output(
-            'lsblk -o type,path,model,size', shell=True)
+            'lsblk -o type,name,model,size', shell=True)
     output = str(output).lstrip('b\'').split('\\n')
     os.system('clear')
     options = []
@@ -233,10 +233,11 @@ def diskGet():
 
 def osGet():
     index = []
-    osFolder = "/media/sda2/OS_IMAGE"
-    if os.path.isdir(osFolder):
-        subprocess.call(
-                "sudo ln -s %s /home/partimag" % osFolder, shell=True)
+    osFolder = "/home/partimag/OS_IMAGE"
+
+#    if os.path.isdir(osFolder):
+#        subprocess.call(
+#                "sudo mount %s /home/partimag -o umask=000" % osFolder, shell=True)
     os.system('clear')
     for filename in os.listdir(osFolder):
         index += [filename]
