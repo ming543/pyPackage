@@ -1,3 +1,4 @@
+#coding: utf8
 #!/bin/python3
 import git
 import os
@@ -45,7 +46,7 @@ def mMenu():
     print(Fore.YELLOW + "%s MAIN-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("Revision %s" % loginfo)
-    choice = enquiries.choose('  Choose options: ', options)
+    choice = enquiries.choose(' 選擇Choose options: ', options)
 
     if choice == m1:  # Assy test
         aMenu()
