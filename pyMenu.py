@@ -32,21 +32,21 @@ else:
     subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True, stdin=sys.stdin)
 
 def mMenu():
-    m1 = 'Assy-Test (Label: SS02XXXX & CS04XXXX)'
-    m2 = 'PCBA-Test (Label: 000168-A0-SB000XXX)'
-    m3 = 'Other-Test'
-    m4 = 'BurnIn-Test'
-    m5 = 'OS Clone Setup'
-    m6 = 'Copy Log to Onedrive'
-    m7 = 'Update Linux Test Script'
-    ml = 'Power off system'
+    m1 = '組裝測試 Assy-Test (Label: SS02XXXX & CS04XXXX)'
+    m2 = '板階測試 PCBA-Test (Label: 000168-A0-SB000XXX)'
+    m3 = '其他測試 Other-Test'
+    m4 = '燒機測試 BurnIn-Test'
+    m5 = '出貨作業系統安裝 OS Clone Setup'
+    m6 = '上傳日誌檔 Copy Log to Onedrive'
+    m7 = '更新本機測試程式 Update Linux Test Script'
+    ml = '系統關機 Power off system'
     options = [m1, m2, m3, m4, m5, m6, m7, ml]
 
     os.system('clear')
-    print(Fore.YELLOW + "%s MAIN-MENU" % booted + Fore.RESET, end='')
+    print(Fore.YELLOW + "%s 主選單 MAIN-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("Revision %s" % loginfo)
-    choice = enquiries.choose(' 選擇Choose options: ', options)
+    choice = enquiries.choose(' 選擇測試項目 Choose options: ', options)
 
     if choice == m1:  # Assy test
         aMenu()
@@ -64,7 +64,7 @@ def mMenu():
         gitPull()
     # Last of list
     elif choice == ml:  # power off system
-        print("The system will shutdown after 5 secs!")
+        print("系統關機 The system will shutdown after 5 secs!")
         time.sleep(5)
         os.system('systemctl poweroff')
 
@@ -74,12 +74,12 @@ def aMenu():
     index = []
     aPath = "/home/stux/pyPackage/testAssy"
     os.system('clear')
-    print(Fore.YELLOW + "%s ASSY-MENU" % booted + Fore.RESET, end='')
+    print(Fore.YELLOW + "%s 組裝測試選單 ASSY-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("Revision %s" % loginfo)
     for filename in os.listdir(aPath):
         index += [filename]
-    choice = enquiries.choose('  Choose options: ', index)
+    choice = enquiries.choose('  選擇測試項目 Choose options: ', index)
     for i in range(len(index)):
         if choice == index[i]:
             with open(startTest, "w") as f:
@@ -168,15 +168,15 @@ def copyLog():
             oF = "onedrive:General/log"
             rC = subprocess.call("rclone -v copy %s %s -P" % (lF, oF), shell=True)
             if rC == 0:  # check rclone pass or fail
-                print(Fore.GREEN + "Log copy to onedrive done!!!" + Fore.RESET)
+                print(Fore.GREEN + "日誌檔案上傳成功 Log copy to onedrive done!!!" + Fore.RESET)
                 time.sleep(5)
                 break
             else:
-                print(Fore.RED + "Log copy to onedrive Fail!!!" + Fore.RESET)
+                print(Fore.RED + "日誌檔案上傳失敗 Log copy to onedrive Fail!!!" + Fore.RESET)
                 time.sleep(5)
                 break
         else:
-            print(Fore.YELLOW + "Ping fail, check internet" + Fore.RESET)
+            print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(1)
     mMenu()
 
@@ -197,7 +197,7 @@ def gitPull():
             time.sleep(1)
             break
         else:
-            print(Fore.YELLOW + "Ping fail, check internet" + Fore.RESET)
+            print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(5)
 
     sys.stdout.flush()
