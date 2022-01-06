@@ -1,1 +1,1 @@
-cd /home/stux/pyPackage && python3 osClone.py
+cd /home/stux/pyPackage && python3 pyMenu.py

@@ -24,11 +24,11 @@ loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 # logData = loginfo.splitlines()
 # rev = logData[2] + logData[4]
 
-logFolder = "/media/sda2/log"
+logFolder = "/home/partimag/log"
 if os.path.isdir(logFolder):
     print("Logfolder exist")
 else:
-    subprocess.check_call("sudo mount /dev/sda2 /media/sda2 -o umask=000", shell=True, stdin=sys.stdin)
+    subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True, stdin=sys.stdin)
 
 def mMenu():
     m1 = 'Assy-Test (Label: SS02XXXX & CS04XXXX)'
@@ -38,9 +38,8 @@ def mMenu():
     m5 = 'OS Clone Setup'
     m6 = 'Copy Log to Onedrive'
     m7 = 'Update Linux Test Script'
-    m8 = 'Update DOS Test Script'
     ml = 'Power off system'
-    options = [m1, m2, m3, m4, m5, m6, m7, m8, ml]
+    options = [m1, m2, m3, m4, m5, m6, m7, ml]
 
     os.system('clear')
     print(Fore.YELLOW + "%s MAIN-MENU" % booted + Fore.RESET, end='')
@@ -62,8 +61,6 @@ def mMenu():
         copyLog()
     elif choice == m7:  # Update Linux script
         gitPull()
-    elif choice == m8:  # Update DOS script
-        dosMenu()
     # Last of list
     elif choice == ml:  # power off system
         print("The system will shutdown after 5 secs!")
@@ -160,11 +157,14 @@ def osExec():
 def copyLog():
     # os.system('clear')
     for i in range(5):  # ping 5 times
-        response = os.system("ping -c 1 -w 1 8.8.8.8")
+        response = subprocess.call(
+                "ping -c 1 -w 1 8.8.8.8", shell=True)
+        print("response: ", response)
+        time.sleep(2)
         if response == 0:
             print("PING OK")
-            lF = "/home/production/log"
-            oF = "ID-Enbik:General/log"
+            lF = "/home/partimag/log"
+            oF = "onedrive:General/log"
             rC = subprocess.call("rclone -v copy %s %s -P" % (lF, oF), shell=True)
             if rC == 0:  # check rclone pass or fail
                 print(Fore.GREEN + "Log copy to onedrive done!!!" + Fore.RESET)
@@ -183,7 +183,8 @@ def copyLog():
 def gitPull():
     # os.system('clear')
     for i in range(5):  # ping 5 times
-        response = os.system("ping -c 1 -w 1 8.8.8.8")
+        response = subprocess.call(
+                "ping -c 1 -w 1 8.8.8.8", shell=True)
         if response == 0:
             print("PING OK")
             g.gc()
@@ -200,12 +201,6 @@ def gitPull():
 
     sys.stdout.flush()
     os.execv(sys.executable, ["python3"] + sys.argv)
-
-
-def dosMenu():
-    print("dos tool here")
-    time.sleep(5)
-    mMenu()
 
 
 mMenu()
