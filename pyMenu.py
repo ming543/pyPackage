@@ -37,7 +37,7 @@ def mMenu():
     m3 = '其他測試 Other-Test'
     m4 = '燒機測試 BurnIn-Test'
     m5 = '出貨作業系統安裝 OS Clone Setup'
-    m6 = '上傳日誌檔 Copy Log to Onedrive'
+    m6 = '網路上傳日誌檔 Copy Log to Onedrive'
     m7 = '更新本機測試程式 Update Linux Test Script'
     ml = '系統關機 Power off system'
     options = [m1, m2, m3, m4, m5, m6, m7, ml]
@@ -107,21 +107,22 @@ def pMenu():
 
 
 def oMenu():
-    o1 = 'o1'
-    o2 = 'o2'
-    ol = 'Back to MAIN-MENU'
-    options = [o1, o2, ol]
+    index = []
+    aPath = "/home/stux/pyPackage/testOther"
     os.system('clear')
-    print(Fore.YELLOW + "%s OTHER-MENU" % booted + Fore.RESET, end='')
+    print(Fore.YELLOW + "%s 其他測試選單 OTHER-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("Revision %s" % loginfo)
-    choice = enquiries.choose('  Choose options: ', options)
-    if choice == o1:
-        print("o1 is")
-    elif choice == o2:
-        print("o2 is")
-    elif choice == ol:
-        mMenu()
+    for filename in os.listdir(aPath):
+        index += [filename]
+    choice = enquiries.choose('  選擇測試項目 Choose options: ', index)
+    for i in range(len(index)):
+        if choice == index[i]:
+            with open(startTest, "w") as f:
+                f.write("cd " + aPath + "&& python3 %s" % index[i])
+            print(index[i])
+            subprocess.call("sh %s" % startTest, shell=True)
+
 
 
 def bMenu():
@@ -147,12 +148,6 @@ def osClone():
         subprocess.call("sh %s" % startTest, shell=True)
     else:
         mMenu()
-
-
-def osExec():
-    print("OS Exec tool here")
-    time.sleep(5)
-    mMenu()
 
 
 def copyLog():

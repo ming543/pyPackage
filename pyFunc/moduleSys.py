@@ -175,7 +175,7 @@ def biosVersionCheck(spec):
 
 		
 def rtcCheck():
-    y = "2021"  # check years of BIOS time
+    y = "2022"  # check years of BIOS time
     rtcTime = subprocess.check_output("sudo hwclock -r", shell=True)
     rtcTime = str(rtcTime)
     if re.search(y, rtcTime):
