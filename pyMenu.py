@@ -7,6 +7,7 @@ import sys
 import subprocess
 import enquiries
 import time
+import shelve
 # import re
 from colorama import Fore
 from pyFunc import moduleSys
@@ -69,8 +70,34 @@ def mMenu():
         os.system('systemctl poweroff')
 
 
-# Show all PN of testAssy
 def aMenu():
+    index = []
+    aPath = "/home/stux/pyPackage/testAssy"
+    os.system('clear')
+    moduleSys.pnGet()
+    if moduleSys.pnCheck() is True:
+        with shelve.open('/home/stux/pyPackage/dataBase') as db:
+            pn = db['pnSave']
+        for filename in os.listdir(aPath):
+            index += [filename]
+        for i in range(len(index)):
+            print(index[i])
+        if pn == index[i]:
+            with open(startTest, "w") as f:
+                f.write("cd %s && python3 %s" % (aPath, pn))
+            subprocess.call("sh %s" % startTest, shell=True)
+        else:
+            print(Fore.YELLOW + "PN選擇無對應測試程式: %s" % pn + Fore.RESET)
+                #for i in range(len(index)):
+                #    print(index[i])
+                   # time.sleep(5)
+        
+    else:
+        mMenu()
+
+
+# Show all PN of testAssy
+def aMenu2():
     index = []
     aPath = "/home/stux/pyPackage/testAssy"
     os.system('clear')

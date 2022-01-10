@@ -117,3 +117,5 @@ modelName = biFuncCheck()
 sn = moduleSys.snGet(pn, modelName)
 biStress()
 print("test done")
+moduleSys.passGreen()
+

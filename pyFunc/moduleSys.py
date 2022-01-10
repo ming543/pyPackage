@@ -35,27 +35,28 @@ else:
 
 
 def pnGet():
+    print(Fore.YELLOW + " 選取測試PN " + Fore.RESET, end='')
     print(Fore.YELLOW + " Choose PN number for Test and Log! " + Fore.RESET)
     index = ['10300-', '10400-', '10500-', '10901-', '10902-', '10951-', '10953-', '20010-']
     indexChoice = enquiries.choose('  Choose options: ', index)
     body = []
-    for i in range(1, 10):
+    for i in range(0, 10):
         #add number by six digi, someday may used.
         #body.append(indexChoice + "{:06d}".format(i))
         body.append(indexChoice + '000' + str(i))
     bodyFirst = enquiries.choose(' Choose body: ', body)
     body.clear()
-    for j in range(1, 10):
+    for j in range(0, 10):
         body.append(bodyFirst + str(j))
     bodySecond = enquiries.choose(' Choose body: ', body)
     body.clear()
-    for k in range(1, 10):
+    for k in range(0, 10):
         body.append(bodySecond + str(k))
     bodyThird = enquiries.choose(' Choose body: ', body)
     body.clear()
     rev = [bodyThird + '-A.', bodyThird + '-B.', bodyThird + '-C.', bodyThird + '-D.', bodyThird + '-E.']
     revChoice = enquiries.choose('  Choose Revision: ', rev)
-    for p in range(1, 10):
+    for p in range(0, 10):
         body.append(revChoice + str(p))
     pn = enquiries.choose('  Choose PN: ', body)
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
@@ -79,8 +80,10 @@ def pnCheck():
     os.system('clear')
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         pn = db['pnSave'] 
+    print(Fore.YELLOW + " 確認PN是否正確 " + Fore.RESET, end='')
     print(Fore.YELLOW + " Check PN number for Test and Log! " + Fore.RESET)
     print("Test_PN: " + pn)
+    print("按n鍵結束,其他鍵繼續  ", end='')
     pnCheck = input("Back to menu press 'n', other key continue: ").lower()
     if pnCheck == "n":
         return False
@@ -93,7 +96,9 @@ def snGet(pn, modelName):
 #    os.system('clear')
     print("Test_Model: " + modelName)
     print("Test_PN: " + pn)
-    print("Back to menu press 'n', ", end='')
+    print("按n鍵結束,其他鍵繼續  ", end='')
+    print("Back to menu press 'n' ")
+    print(Fore.YELLOW + "輸入序號開始測試 " + Fore.RESET, end='')
     print(Fore.YELLOW + "Input SN start test: " + Fore.RESET)
     global sn
     sn = input()
@@ -161,7 +166,7 @@ def dmidecodeCheck(dmiFunc, spec):
         return True
     else:
         logging.error(dmiFunc + ': ' + biosN + " SPEC: " + spec)
-        failRed()		
+        failRed("規格不符")		
 
 
 def biosVersionCheck(spec):
@@ -171,18 +176,18 @@ def biosVersionCheck(spec):
         logging.info('BIOS_Version: ' + biosV + " SPEC: " + spec)
     else:
         logging.error('BIOS_Version: ' + biosV + " SPEC: " + spec)
-        failRed()
+        failRed("BIOS版本不符")
 
 		
 def rtcCheck():
     y = "2022"  # check years of BIOS time
     rtcTime = subprocess.check_output("sudo hwclock -r", shell=True)
-    rtcTime = str(rtcTime)
+    rtcTime = str(rtcTime).lstrip('b\'').split('\\n')[0]
     if re.search(y, rtcTime):
         logging.info('RTC_Time: ' + rtcTime + " SPEC: " + y)
     else:
         logging.error('RTC_Time: ' + rtcTime + " SPEC: " + y)
-        failRed()
+        failRed("rtc年份不符")
 
 
 def macCheck(macA, macH):
@@ -191,28 +196,62 @@ def macCheck(macA, macH):
         logging.info('Test_MAC: ' + macA + "_" + ethMac + " SPEC: " + macH)
     else:
         logging.error('Test_MAC: ' + macA + "_" + ethMac + " SPEC: " + macH)
-        failRed()
+        failRed("MAC不符")
 
 
-def failRed():
+def failRed(issueCheck):
     logging.error('****** TEST_FAILED! ******')
     logFail = log + ".FAIL"
     os.replace(log, logFail)
-    print(Fore.RED + "Fail" + Fore.RESET)
-    check = input("Press 'n' power off, other key re-test: ").lower()
+    print(Fore.RED + "FFFFFF______A______IIIIII____LL____" + Fore.RESET)
+    print(Fore.RED + "FF________AA_AA______II______LL____" + Fore.RESET)
+    print(Fore.RED + "FF_______AA___AA_____II______LL____" + Fore.RESET)
+    print(Fore.RED + "FFFF_____AA___AA_____II______LL____" + Fore.RESET)
+    print(Fore.RED + "FF_______AA___AA_____II______LL____" + Fore.RESET)
+    print(Fore.RED + "FF_______AA_A_AA_____II______LL____" + Fore.RESET)
+    print(Fore.RED + "FF_______AA___AA___IIIIII____LLLLLL" + Fore.RESET)
+    print(" ")
+    print("確認規格: ", issueCheck)
+    print(" ")
+    print("按n鍵關機,其他鍵重測  ", end='')
+    check = input("Press'n'power off, other key re-test: ").lower()
     if check == ("n"):
         os.system('systemctl poweroff')
     subprocess.call("sh %s" % startTest, shell=True)
 
 
+def passGreen():
+    logging.info('****** TEST_PASSED! ******')
+    logPass = log + ".PASS"
+    os.replace(log, logPass)
+    print(Fore.GREEN + "PPPPP_______A______SSSSSS___SSSSSS" + Fore.RESET)
+    print(Fore.GREEN + "PP__PP____AA_AA____SS_______SS____" + Fore.RESET)
+    print(Fore.GREEN + "PP___PP__AA___AA___SS_______SS____" + Fore.RESET)
+    print(Fore.GREEN + "PP__PP___AA___AA___SSSSSS___SSSSSS" + Fore.RESET)
+    print(Fore.GREEN + "PPPPP____AA___AA_______SS_______SS" + Fore.RESET)
+    print(Fore.GREEN + "PP_______AA_A_AA_______SS_______SS" + Fore.RESET)
+    print(Fore.GREEN + "PP_______AA___AA___SSSSSS___SSSSSS" + Fore.RESET)
+    print(" ")
+    print("按任意鍵關機  ", end='')
+    check = input("Press any key power off").lower()
+    if check == ("n"):
+        subprocess.call("sh %s" % startTest, shell=True)
+    os.system('systemctl poweroff')
+
+
+
 def cpuInfo():
     c = cpuinfo.get_cpu_info()['brand_raw']
-    logging.info('CPU_Info: ' + c)
+    os.system('clear')
+    print("CPU_Info: " + c)
+    print(Fore.YELLOW + "確認CPU型號與BOM是否相符 " + Fore.RESET, end='')
     print(Fore.YELLOW + "Check CPU with BOM" + Fore.RESET)
+    print("按n鍵結束,其他鍵繼續  ", end='')
     check = input("Failed press 'n', other key continue: ").lower()
     if check == ("n"):
         logging.error('CPU_Info: ' + c + ' not match BOM')
-        failRed()
+        failRed("CPU型號不符")
+    logging.info('CPU_Info: ' + c)
 
 
 def diskGet():
@@ -224,6 +263,7 @@ def diskGet():
     for line in output:
         if line.lower().startswith('disk'):
             options.append(line)
+    print("選取回寫入儲存裝置(克隆目標) ", end='')
     diskShow = enquiries.choose(' Choose clone disk options: ', options)
     diskGet = diskShow.split(' ')[1]
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
@@ -234,13 +274,10 @@ def diskGet():
 def osGet():
     index = []
     osFolder = "/home/partimag/OS_IMAGE"
-
-#    if os.path.isdir(osFolder):
-#        subprocess.call(
-#                "sudo mount %s /home/partimag -o umask=000" % osFolder, shell=True)
     os.system('clear')
     for filename in os.listdir(osFolder):
         index += [filename]
+    print("選取回寫作業系統 ", end='')
     osGet = enquiries.choose(' Choose clone OS options: ', index)
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         db['osSave'] = osGet
@@ -252,6 +289,7 @@ def cloneCheck():
         diskShow = db['diskShow']
         osGet = db['osSave']
     os.system('clear')
+    print(Fore.YELLOW + "作業系統克隆確認 " + Fore.RESET, end='')
     print(Fore.YELLOW + "OS Clone Setup Check" + Fore.RESET)
     print("PN:", pn)
     print("Clone Disk:", diskShow)
