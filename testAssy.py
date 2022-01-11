@@ -13,23 +13,16 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
 
 def AIML():
     modelName = inspect.currentframe().f_code.co_name
-    print("modelName: ", modelName)
-    return "monday"
-def tuesday():
-    return "tuesday"
-def wednesday():
-    return "wednesday"
-def thursday():
-    return "thursday"
-def friday():
-    return "friday"
-def saturday():
-    return "saturday"
-def sunday():
-    return "sunday"
+    moduleSys.snGet(pn, modelName)
+    moduleSys.biosVersionCheck("1.20")
+    moduleSys.rtcCheck()
+    moduleSys.cpuGet()
+    moduleSys.memoryGet()
+    moduleSys.storageGet()
+    moduleSys.macCheck("eth0", "80:7b:85")
+    moduleSys.lanCarrierCheck("eth1")
 
 def default():
-
     print("無對應組裝測試程式")
     check = input("按任意鍵繼續 press any key continue...").lower()
     with open(startTest, "w") as f:
@@ -39,13 +32,8 @@ def default():
 
 
 switcher = {
-    "10953-000321-A.r12": AIML,
     "10300-000000-A.0": AIML,
-    3: wednesday,
-    4: thursday,
-    5: friday,
-    6: saturday,
-    7: sunday
+    7: AIML
     }
 
 def switch(pnNum):
@@ -55,6 +43,6 @@ os.system('clear')
 print(Fore.YELLOW + "組裝測試選單 ASSY-MENU" + Fore.RESET, end='')
 print(" Build by EFCO SamLee")
 print("測試PN:", pn)
-#sn = moduleSys.snGet(pn, modelName)
+
 switch(pn)
-#moduleSys.passGreen()
+moduleSys.passGreen()

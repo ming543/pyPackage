@@ -94,7 +94,7 @@ def pnCheck():
 def snGet(pn, modelName):
 #    os.system('clear')
     print("Test_Model: " + modelName)
-    print("Test_PN: " + pn)
+#    print("Test_PN: " + pn)
     print("按n鍵結束,其他鍵繼續  ", end='')
     print("Back to menu press 'n' ")
     print(Fore.YELLOW + "輸入序號開始測試 " + Fore.RESET, end='')
@@ -170,7 +170,7 @@ def dmidecodeCheck(dmiFunc, spec):
 
 def biosVersionCheck(spec):
     biosV = subprocess.check_output("sudo dmidecode -s bios-version", shell=True)
-    biosV = str(biosV)
+    biosV = str(biosV).lstrip('b\'').split('\\n')[0]
     if re.search(spec, biosV):
         logging.info('BIOS_Version: ' + biosV + " SPEC: " + spec)
     else:
@@ -189,13 +189,24 @@ def rtcCheck():
         failRed("rtc年份不符")
 
 
-def macCheck(macA, macH):
-    ethMac = getmac.get_mac_address(interface=macA)
+def macCheck(ethN, macH):
+    ethMac = getmac.get_mac_address(interface=ethN)
     if re.search(macH, ethMac):
-        logging.info('Test_MAC: ' + macA + "_" + ethMac + " SPEC: " + macH)
+        logging.info('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
     else:
-        logging.error('Test_MAC: ' + macA + "_" + ethMac + " SPEC: " + macH)
+        logging.error('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
         failRed("MAC不符")
+
+
+def lanCarrierCheck(ethN):
+    response = subprocess.check_output(
+            "cat /sys/class/net/%s/carrier" % ethN, shell=True)
+    response = str(response).lstrip('b\'').split('\\n')[0]
+    if response == "1":
+        logging.info('Test_Lan: %s carrier linked' % ethN)
+    else:
+        logging.error('Test_Lan: %s carrier not link' % ethN)
+        failRed("%s 測試網路連線失敗" % ethN)
 
 
 def failRed(issueCheck):
@@ -239,9 +250,9 @@ def passGreen():
 
 
 
-def cpuInfo():
-    c = cpuinfo.get_cpu_info()['brand_raw']
+def cpuGet():
     os.system('clear')
+    c = cpuinfo.get_cpu_info()['brand_raw']
     print("CPU_Info: " + c)
     print(Fore.YELLOW + "確認CPU型號與BOM是否相符 " + Fore.RESET, end='')
     print(Fore.YELLOW + "Check CPU with BOM" + Fore.RESET)
@@ -251,6 +262,49 @@ def cpuInfo():
         logging.error('CPU_Info: ' + c + ' not match BOM')
         failRed("CPU型號不符")
     logging.info('CPU_Info: ' + c)
+
+
+def memoryGet():
+    os.system('clear')
+    memoryN = subprocess.check_output(
+            "sudo dmidecode -t memory | grep 'Channel\|Size\|Part\|Serial'", shell=True)
+    memoryN = str(memoryN).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
+    for i in range(4):
+        logging.info('Memory_1 ' + memoryN[i])
+    print(" ")
+    for i in range(4, 8):
+        logging.info('Memory_2 ' + memoryN[i])
+    print(Fore.YELLOW + "確認記憶體規格與BOM是否相符 " + Fore.RESET, end='')
+    print(Fore.YELLOW + "Check Memory with BOM" + Fore.RESET)
+    print("按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('Memory_Info: not match BOM')
+        failRed("記憶體規格不符")
+    
+
+def storageGet():
+    os.system('clear')
+    output = subprocess.check_output(
+            'lsblk -o type,name,model,size', shell=True)
+    output = str(output).lstrip('b\'').split('\\n')
+    options = []
+    for line in output:
+        if line.lower().startswith('disk'):
+            options.append(line)
+    check = False
+    for i in range(1, len(options)):
+        logging.info('Storage_Info: ' + options[i])
+        check = True
+    if check == False:
+        print("系統查無儲存裝置 No storage find at system")
+    print(Fore.YELLOW + "確認儲存裝置與BOM是否相符 " + Fore.RESET, end='')
+    print(Fore.YELLOW + "Check Storage with BOM" + Fore.RESET)
+    print("按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('Storage_Info: not match BOM')
+        failRed("儲存裝置規格不符")
 
 
 def diskGet():

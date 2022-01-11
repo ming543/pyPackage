@@ -42,7 +42,7 @@ def mMenu():
     m2 = '板階測試 PCBA-Test (Label: 000168-A0-SB000XXX)'
     m3 = '其他測試 Other-Test'
     m4 = '燒機測試 BurnIn-Test'
-    m5 = '出貨作業系統安裝 OS Clone Setup'
+    m5 = '作業系統安裝 OS Clone Setup'
     m6 = '網路上傳日誌檔 Copy Log to Onedrive'
     m7 = '更新本機測試程式 Update Linux Test Script'
     ml = '系統關機 Power off system'
