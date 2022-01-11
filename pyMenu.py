@@ -13,7 +13,6 @@ from colorama import Fore
 from pyFunc import moduleSys
 
 # start test file
-#sT = "/home/production/pyPackage/t.sh"
 startTest = "/home/stux/pyPackage/t.sh"
 
 # Check system boot by UEFI or LEGACY mode
@@ -26,13 +25,19 @@ loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 # logData = loginfo.splitlines()
 # rev = logData[2] + logData[4]
 
+#Check and mount log folder
 logFolder = "/home/partimag/log"
 if os.path.isdir(logFolder):
     print("Logfolder exist")
 else:
     subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True, stdin=sys.stdin)
 
+#Get PN from db
+with shelve.open('/home/stux/pyPackage/dataBase') as db:
+    pn = db['pnSave']
+
 def mMenu():
+    m0 = '測試PN設定 PN-Setup'
     m1 = '組裝測試 Assy-Test (Label: SS02XXXX & CS04XXXX)'
     m2 = '板階測試 PCBA-Test (Label: 000168-A0-SB000XXX)'
     m3 = '其他測試 Other-Test'
@@ -41,15 +46,17 @@ def mMenu():
     m6 = '網路上傳日誌檔 Copy Log to Onedrive'
     m7 = '更新本機測試程式 Update Linux Test Script'
     ml = '系統關機 Power off system'
-    options = [m1, m2, m3, m4, m5, m6, m7, ml]
+    options = [m0, m1, m2, m3, m4, m5, m6, m7, ml]
 
     os.system('clear')
     print(Fore.YELLOW + "%s 主選單 MAIN-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
-    print("Revision %s" % loginfo)
-    choice = enquiries.choose(' 選擇測試項目 Choose options: ', options)
+    print("測試程式版本 Revision %s" % loginfo)
+    choice = enquiries.choose('PN:%s 選擇測試項目 Choose options:' % pn, options)
 
-    if choice == m1:  # Assy test
+    if choice == m0:  # pn Setup
+        pnMenu()
+    elif choice == m1:  # Assy test
         aMenu()
     elif choice == m2:  # PCBA test
         pMenu()
@@ -70,37 +77,26 @@ def mMenu():
         os.system('systemctl poweroff')
 
 
-def aMenu():
-    index = []
-    aPath = "/home/stux/pyPackage/testAssy"
+def pnMenu():
     os.system('clear')
     moduleSys.pnGet()
-    if moduleSys.pnCheck() is True:
-        with shelve.open('/home/stux/pyPackage/dataBase') as db:
-            pn = db['pnSave']
-        for filename in os.listdir(aPath):
-            index += [filename]
-        for i in range(len(index)):
-            print(index[i])
-        if pn == index[i]:
-            with open(startTest, "w") as f:
-                f.write("cd %s && python3 %s" % (aPath, pn))
-            subprocess.call("sh %s" % startTest, shell=True)
-        else:
-            print(Fore.YELLOW + "PN選擇無對應測試程式: %s" % pn + Fore.RESET)
-                #for i in range(len(index)):
-                #    print(index[i])
-                   # time.sleep(5)
-        
-    else:
-        mMenu()
+    moduleSys.pnCheck()
+    sys.stdout.flush()
+    os.execv(sys.executable, ["python3"] + sys.argv)
 
+
+#AssyTest
+def aMenu():
+    with open(startTest, "w") as f:
+        f.write("cd /home/stux/pyPackage && python3 testAssy.py")
+    subprocess.call("sh %s" % startTest, shell=True)
+    
 
 # Show all PN of testAssy
 def aMenu2():
+    os.system('clear')
     index = []
     aPath = "/home/stux/pyPackage/testAssy"
-    os.system('clear')
     print(Fore.YELLOW + "%s 組裝測試選單 ASSY-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("Revision %s" % loginfo)
@@ -114,13 +110,13 @@ def aMenu2():
             print(index[i])
             subprocess.call("sh %s" % startTest, shell=True)
 
-
+#pcbaTest
 def pMenu():
+    os.system('clear')
     p1 = 'p1'
     p2 = 'p2'
     pl = 'Back to MAIN-MENU'
     options = [p1, p2, pl]
-    os.system('clear')
     print(Fore.YELLOW + "%s PCBA-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("Revision %s" % loginfo)
@@ -132,11 +128,11 @@ def pMenu():
     elif choice == pl:
         mMenu()
 
-
+#otherTest
 def oMenu():
+    os.system('clear')
     index = []
     aPath = "/home/stux/pyPackage/testOther"
-    os.system('clear')
     print(Fore.YELLOW + "%s 其他測試選單 OTHER-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("Revision %s" % loginfo)
@@ -151,22 +147,17 @@ def oMenu():
             subprocess.call("sh %s" % startTest, shell=True)
 
 
-
+#biTest
 def bMenu():
-    print("BI tool here")
     os.system('clear')
-    moduleSys.pnGet()
-    if moduleSys.pnCheck() is True:
-        with open(startTest, "w") as f:
-            f.write("cd /home/stux/pyPackage && python3 testBi.py")
-        subprocess.call("sh %s" % startTest, shell=True)
-    else:
-        mMenu()
+    with open(startTest, "w") as f:
+        f.write("cd /home/stux/pyPackage && python3 testBi.py")
+    subprocess.call("sh %s" % startTest, shell=True)
 
+
+#osclone
 def osClone():
-    print("OS setup tool here")
     os.system('clear')
-    moduleSys.pnGet()
     moduleSys.diskGet()
     moduleSys.osGet()
     if moduleSys.cloneCheck() is True:
@@ -177,8 +168,9 @@ def osClone():
         mMenu()
 
 
+#logToOnedrive
 def copyLog():
-    # os.system('clear')
+    os.system('clear')
     for i in range(5):  # ping 5 times
         response = subprocess.call(
                 "ping -c 1 -w 1 8.8.8.8", shell=True)
@@ -203,8 +195,9 @@ def copyLog():
     mMenu()
 
 
+#linuxUpdate
 def gitPull():
-    # os.system('clear')
+    os.system('clear')
     for i in range(5):  # ping 5 times
         response = subprocess.call(
                 "ping -c 1 -w 1 8.8.8.8", shell=True)
@@ -221,7 +214,6 @@ def gitPull():
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(5)
-
     sys.stdout.flush()
     os.execv(sys.executable, ["python3"] + sys.argv)
 

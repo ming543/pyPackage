@@ -1,1 +1,1 @@
-cd /home/stux/pyPackage/testAssy&& python3 10300-000004-A.4
+cd /home/stux/pyPackage && python3 pyMenu.py

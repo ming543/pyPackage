@@ -30,7 +30,7 @@ def osClone():
             "sudo /usr/sbin/ocs-sr -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_IMAGE/%s %s" %(osGet, diskGet), shell=True)
     if osClone != 0:
         logging.error("OS Clone fail code:%s" % osClone)
-#           exit()
+        moduleSys.failRed("OS回寫失敗")
     else:
         logging.info("OS Clone pass code:%s" % osClone)
 
@@ -43,6 +43,8 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
     diskShow = db['diskShow']
     osGet = db['osSave']
 
+
+os.system('clear')
 modelName = "CLONE-OS"
 print("Clone_Disk: ", diskShow)
 print("Clone_OS: ", osGet)
@@ -51,4 +53,4 @@ logging.info('Clone_Disk: ' + diskShow)
 logging.info('Clone_OS: ' + osGet)
 coaGet()
 osClone()
-print("test done")
+moduleSys.passGreen()

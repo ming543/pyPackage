@@ -80,11 +80,10 @@ def pnCheck():
     os.system('clear')
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         pn = db['pnSave'] 
-    print(Fore.YELLOW + " 確認PN是否正確 " + Fore.RESET, end='')
+    print(Fore.YELLOW + "確認PN是否正確" + Fore.RESET, end='')
     print(Fore.YELLOW + " Check PN number for Test and Log! " + Fore.RESET)
     print("Test_PN: " + pn)
-    print("按n鍵結束,其他鍵繼續  ", end='')
-    pnCheck = input("Back to menu press 'n', other key continue: ").lower()
+    pnCheck = input("任意鍵繼續 Press any key continue: ").lower()
     if pnCheck == "n":
         return False
     else:
@@ -255,15 +254,15 @@ def cpuInfo():
 
 
 def diskGet():
+    os.system('clear')
     output = subprocess.check_output(
             'lsblk -o type,name,model,size', shell=True)
     output = str(output).lstrip('b\'').split('\\n')
-    os.system('clear')
     options = []
     for line in output:
         if line.lower().startswith('disk'):
             options.append(line)
-    print("選取回寫入儲存裝置(克隆目標) ", end='')
+    print("選取回寫入儲存裝置(克隆目標) ")
     diskShow = enquiries.choose(' Choose clone disk options: ', options)
     diskGet = diskShow.split(' ')[1]
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
@@ -272,15 +271,26 @@ def diskGet():
 
 
 def osGet():
+    os.system('clear')
     index = []
     osFolder = "/home/partimag/OS_IMAGE"
     os.system('clear')
     for filename in os.listdir(osFolder):
         index += [filename]
-    print("選取回寫作業系統 ", end='')
-    osGet = enquiries.choose(' Choose clone OS options: ', index)
+    try:
+        print("選取回寫作業系統 ")
+        osGet = enquiries.choose(' Choose clone OS options: ', index)
+    except ValueError:
+        print(Fore.YELLOW + "未發現作業系統 No OS find " + Fore.RESET, end='')
+        print("需先執行OS複製程式...")
+        print(" ")
+        osGet = "NO_OS"
+        input("按任意鍵繼續 Press any key continue...")
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         db['osSave'] = osGet
+
+
+
 
 def cloneCheck():
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
@@ -292,9 +302,10 @@ def cloneCheck():
     print(Fore.YELLOW + "作業系統克隆確認 " + Fore.RESET, end='')
     print(Fore.YELLOW + "OS Clone Setup Check" + Fore.RESET)
     print("PN:", pn)
-    print("Clone Disk:", diskShow)
-    print("Clone OS:", osGet)
-    check = input("Back to menu press 'n', other key continue: ").lower()
+    print("回寫裝置Clone Disk:", diskShow)
+    print("回寫檔案Clone OS:", osGet)
+    print("按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Back to menu press'n', other key continue: ").lower()
     if check == "n":
         return False
     else:
