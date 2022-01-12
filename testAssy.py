@@ -12,6 +12,7 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
     pn = db['pnSave']
 
 def AIML():
+    moduleSys.usbCheck()
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     moduleSys.biosVersionCheck("1.20")
@@ -19,8 +20,7 @@ def AIML():
     moduleSys.cpuGet()
     moduleSys.memoryGet()
     moduleSys.storageGet()
-    moduleSys.macCheck("eth0", "80:7b:85")
-    moduleSys.lanCarrierCheck("eth1")
+    moduleSys.lanCheck("eth0", "80:7b:85")
 
 def default():
     print("無對應組裝測試程式")

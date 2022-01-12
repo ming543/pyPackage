@@ -11,6 +11,7 @@ import re
 import subprocess
 import enquiries
 import cpuinfo
+import netifaces
 from colorama import Fore
 
 # logging.basicConfig(level=logging.DEBUG)
@@ -189,7 +190,7 @@ def rtcCheck():
         failRed("rtc年份不符")
 
 
-def macCheck(ethN, macH):
+def lanMacCheck(ethN, macH):
     ethMac = getmac.get_mac_address(interface=ethN)
     if re.search(macH, ethMac):
         logging.info('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
@@ -198,7 +199,15 @@ def macCheck(ethN, macH):
         failRed("MAC不符")
 
 
-def lanCarrierCheck(ethN):
+def lanCheck(ethN, macH):
+    #test MAC
+    ethMac = getmac.get_mac_address(interface=ethN)
+    if re.search(macH, ethMac):
+        logging.info('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
+    else:
+        logging.error('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
+        failRed("MAC不符")
+    #test carrier link
     response = subprocess.check_output(
             "cat /sys/class/net/%s/carrier" % ethN, shell=True)
     response = str(response).lstrip('b\'').split('\\n')[0]
@@ -207,7 +216,22 @@ def lanCarrierCheck(ethN):
     else:
         logging.error('Test_Lan: %s carrier not link' % ethN)
         failRed("%s 測試網路連線失敗" % ethN)
+    #test IP get
+    try:
+        ipAddr = netifaces.ifaddresses(ethN)[netifaces.AF_INET]
+        ipAddr = ipAddr[0]['addr']
+        logging.info('Test_Lan: %s IP address: %s' % (ethN,ipAddr))
+    except KeyError: 
+        print("keyerror")
+        logging.error('Test_Lan: %s IP address get failed!' % ethN)
+        failRed("%s 測試網路IP連線失敗" % ethN)
 
+
+
+def usbCheck():
+    usbList = subprocess.check_output("lsusb", shell=True)
+    usbList = str(usbList).lstrip('b\'').split('\\n')[0]
+    print("usb: ", usbList)
 
 def failRed(issueCheck):
     logging.error('****** TEST_FAILED! ******')
