@@ -227,25 +227,58 @@ def lanCheck(ethN, macH):
         failRed("%s 測試網路IP連線失敗" % ethN)
 
 
+def usbCheckbak(spec):
+    usbFind = subprocess.call("lsusb | grep %s" % spec, shell=True)
+    if usbFind == 0:
+        usbList = subprocess.check_output("lsusb | grep %s" % spec, shell=True)
+        usbList = str(usbList).lstrip('b\'').rstrip('\\n\'')
+        logging.info( 'Check USB %s: ' % spec + usbList)
+        return True
+    else:
+        usbList = subprocess.check_output("lsusb", shell=True)
+        usbList = str(usbList).lstrip('b\'').rstrip('\'').split('\\n')
+        for i in range(len(usbList)-1):
+            logging.error('Check USB %s: ' % spec + usbList[i])
+        failRed("Check USB %s 規格不符" % spec)		
 
-def usbCheck():
-    usbList = subprocess.check_output("lsusb", shell=True)
-    usbList = str(usbList).lstrip('b\'').split('\\n')[0]
-    print("usb: ", usbList)
+
+def usbCheck(spec, num):
+    usbFind = subprocess.call("lsusb | grep %s" % spec, shell=True)
+    if usbFind == 0:
+        usbList = subprocess.check_output("lsusb | grep %s" % spec, shell=True)
+        usbList = str(usbList).lstrip('b\'').split('\\n')
+        usbNum = len(usbList)-1
+        if usbNum == num:
+            for i in range(len(usbList)-1):
+                logging.info( 'Check USB %s: ' % spec + usbList[i])
+            logging.info( 'Check USB %s Number: %s 數量: %s' % (spec, usbNum, num) )
+            return True
+        else:
+            for i in range(len(usbList)-1):
+                logging.error('Check USB %s: ' % spec + usbList[i])
+            logging.error('Check USB %s: %s SPEC: %s' % (spec, usbNum, num) )
+            failRed("Check USB %s x %s 規格不符 SPEC: %s" % (spec, usbNum, num))		
+    else:
+        usbList = subprocess.check_output("lsusb", shell=True)
+        usbList = str(usbList).lstrip('b\'').rstrip('\'').split('\\n')
+        for i in range(len(usbList)-1):
+            logging.error('Check USB %s: ' % spec + usbList[i])
+        failRed("Check USB %s 規格不符 數量: %s" % (spec, num))		
+
 
 def failRed(issueCheck):
     logging.error('****** TEST_FAILED! ******')
     logFail = log + ".FAIL"
     os.replace(log, logFail)
     print(Fore.RED + "FFFFFF______A______IIIIII____LL____" + Fore.RESET)
-    print(Fore.RED + "FF________AA_AA______II______LL____" + Fore.RESET)
     print(Fore.RED + "FF_______AA___AA_____II______LL____" + Fore.RESET)
     print(Fore.RED + "FFFF_____AA___AA_____II______LL____" + Fore.RESET)
     print(Fore.RED + "FF_______AA___AA_____II______LL____" + Fore.RESET)
     print(Fore.RED + "FF_______AA_A_AA_____II______LL____" + Fore.RESET)
     print(Fore.RED + "FF_______AA___AA___IIIIII____LLLLLL" + Fore.RESET)
     print(" ")
-    print("確認規格: ", issueCheck)
+    print("測試序號SN:", sn)
+    print("確認規格:", issueCheck)
     print(" ")
     print("按n鍵關機,其他鍵重測  ", end='')
     check = input("Press'n'power off, other key re-test: ").lower()
