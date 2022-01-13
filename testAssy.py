@@ -22,6 +22,7 @@ def AIML():
     moduleSys.lanCheck("eth1", "80:7b:85")
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("hub", 3)
+    moduleSys.uartLoopCheck("\dev\ttyS0", "1")
 
 def default():
     print("無對應組裝測試程式")

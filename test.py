@@ -9,7 +9,7 @@ from pyFunc import moduleSys
 
 #print('filename: ' + __file__)
 
-moduleSys.uartLoopCheck("/dev/ttyS0")
+moduleSys.uartLoopCheck("/dev/ttyS0", "1")
 
 #help(usb)
 #moduleSys.usbCheck("Hub")

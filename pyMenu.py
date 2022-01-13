@@ -130,21 +130,9 @@ def pMenu():
 
 #otherTest
 def oMenu():
-    os.system('clear')
-    index = []
-    aPath = "/home/stux/pyPackage/testOther"
-    print(Fore.YELLOW + "%s 其他測試選單 OTHER-MENU" % booted + Fore.RESET, end='')
-    print(" Build by EFCO SamLee")
-    print("Revision %s" % loginfo)
-    for filename in os.listdir(aPath):
-        index += [filename]
-    choice = enquiries.choose('  選擇測試項目 Choose options: ', index)
-    for i in range(len(index)):
-        if choice == index[i]:
-            with open(startTest, "w") as f:
-                f.write("cd " + aPath + "&& python3 %s" % index[i])
-            print(index[i])
-            subprocess.call("sh %s" % startTest, shell=True)
+    with open(startTest, "w") as f:
+        f.write("cd /home/stux/pyPackage && python3 testOther.py")
+    subprocess.call("sh %s" % startTest, shell=True)
 
 
 #biTest
