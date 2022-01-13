@@ -12,6 +12,7 @@ import subprocess
 import enquiries
 import cpuinfo
 import netifaces
+import serial
 from colorama import Fore
 
 # logging.basicConfig(level=logging.DEBUG)
@@ -227,43 +228,44 @@ def lanCheck(ethN, macH):
         failRed("%s 測試網路IP連線失敗" % ethN)
 
 
-def usbCheckbak(spec):
-    usbFind = subprocess.call("lsusb | grep %s" % spec, shell=True)
-    if usbFind == 0:
-        usbList = subprocess.check_output("lsusb | grep %s" % spec, shell=True)
-        usbList = str(usbList).lstrip('b\'').rstrip('\\n\'')
-        logging.info( 'Check USB %s: ' % spec + usbList)
-        return True
-    else:
-        usbList = subprocess.check_output("lsusb", shell=True)
-        usbList = str(usbList).lstrip('b\'').rstrip('\'').split('\\n')
-        for i in range(len(usbList)-1):
-            logging.error('Check USB %s: ' % spec + usbList[i])
-        failRed("Check USB %s 規格不符" % spec)		
-
-
 def usbCheck(spec, num):
-    usbFind = subprocess.call("lsusb | grep %s" % spec, shell=True)
-    if usbFind == 0:
-        usbList = subprocess.check_output("lsusb | grep %s" % spec, shell=True)
-        usbList = str(usbList).lstrip('b\'').split('\\n')
-        usbNum = len(usbList)-1
-        if usbNum == num:
-            for i in range(len(usbList)-1):
-                logging.info( 'Check USB %s: ' % spec + usbList[i])
-            logging.info( 'Check USB %s Number: %s 數量: %s' % (spec, usbNum, num) )
-            return True
-        else:
-            for i in range(len(usbList)-1):
-                logging.error('Check USB %s: ' % spec + usbList[i])
-            logging.error('Check USB %s: %s SPEC: %s' % (spec, usbNum, num) )
-            failRed("Check USB %s x %s 規格不符 SPEC: %s" % (spec, usbNum, num))		
+    usbList = subprocess.check_output("lsusb", shell=True)
+    usbSplit = str(usbList).lstrip('b\'').rstrip('\'').split('\\n')
+    usbNum = 0
+    for i in range(len(usbSplit)-1):
+        if re.search(spec, str(usbSplit[i])):
+            #logging.info( 'Check USB %s OK: ' % spec + usbSplit[i])
+            usbNum += 1
+    if usbNum == num:
+        logging.info( 'Check USB %s x %s SPEC: %s ' % (spec, usbNum, num))
     else:
-        usbList = subprocess.check_output("lsusb", shell=True)
-        usbList = str(usbList).lstrip('b\'').rstrip('\'').split('\\n')
-        for i in range(len(usbList)-1):
-            logging.error('Check USB %s: ' % spec + usbList[i])
-        failRed("Check USB %s 規格不符 數量: %s" % (spec, num))		
+        for i in range(len(usbSplit)-1):
+            logging.error('Check USB %s x %s Fail! SPEC: %s ' % (spec, usbNum, num) + usbSplit[i] )
+        failRed("Check USB %s x %s 規格不符 SPEC: %s " % (spec, usbNum, num))		
+
+
+def uartLoopCheck(comPort, num):
+    os.system('clear')
+    print(" ")
+    print("COM LOOPBACK 單一接頭測試 ")
+    print("確認 LOOPBACK 位於 COM - %s", % num)
+    print(" ")
+    input("按任意鍵繼續 Press any key continue...")
+    subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
+    mySerial = serial.Serial(comPort, 115200, timeout=1)
+    for num  in range(10):
+        sendData = bytes([num])
+        result = mySerial.write(sendData)
+        recvData = mySerial.readline()
+        if sendData != recvData:
+            logging.error('Tese_UART: %s loopback test failed!' % comPort)
+            failRed("%s COM PORT LOOPBACK測試失敗" % comPort)
+            print('test fail')
+        print('COM PORT LOOPBACK TEST...')
+    logging.info('Test_UART: %s loopback test passed!' % comPort)
+
+
+
 
 
 def failRed(issueCheck):

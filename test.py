@@ -8,9 +8,12 @@ from pyFunc import moduleSys
 
 
 #print('filename: ' + __file__)
+
+moduleSys.uartLoopCheck("/dev/ttyS0")
+
 #help(usb)
 #moduleSys.usbCheck("Hub")
-moduleSys.usbMultiCheck("Keyboard", 1)
+#moduleSys.usbCheck("Keyboard|hub", 1)
 
 #dev = usb.core.find(find_all=True)
 #for cfg in dev:
