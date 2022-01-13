@@ -179,7 +179,17 @@ def biosVersionCheck(spec):
         logging.error('BIOS_Version: ' + biosV + " SPEC: " + spec)
         failRed("BIOS版本不符")
 
-		
+
+def biosReleaseCheck(spec):
+    biosV = subprocess.check_output("sudo dmidecode -s bios-release-date", shell=True)
+    biosV = str(biosV).lstrip('b\'').split('\\n')[0]
+    if re.search(spec, biosV):
+        logging.info('BIOS_Release_Date: ' + biosV + " SPEC: " + spec)
+    else:
+        logging.error('BIOS_Release_Date: ' + biosV + " SPEC: " + spec)
+        failRed("BIOS_Release_Date不符")
+
+
 def rtcCheck():
     y = "2022"  # check years of BIOS time
     rtcTime = subprocess.check_output("sudo hwclock -r", shell=True)

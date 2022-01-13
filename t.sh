@@ -1,1 +1,1 @@
-cd /home/stux/pyPackage && python3 testOther.py
+cd /home/stux/pyPackage && python3 testAssy.py
