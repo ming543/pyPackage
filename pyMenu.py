@@ -207,9 +207,9 @@ def gitPull():
 #DOS Update    
     dosFolder = "/usr/lib/live/mount/persistence/sda1"
     rFolder = "EFCO_test_script:V23C_DOS/"
-    subprocess.call("rclone -v copy %s %s -P" % (rFolder + "AUTOEXEC.BAT", dosFolder), shell=True)
-    subprocess.call("rclone -v copy %s %s -P" % (rFolder + "V23C", dosFolder + "V23C"), shell=True)
-    
+    subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "AUTOEXEC.BAT", dosFolder), shell=True)
+    subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "V23C", dosFolder + "V23C"), shell=True)
+    time.sleep(3)
     sys.stdout.flush()
     os.execv(sys.executable, ["python3"] + sys.argv)
 
