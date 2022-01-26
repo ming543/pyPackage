@@ -209,7 +209,7 @@ def gitPull():
     rFolder = "EFCO_test_script:V23C_DOS/"
     subprocess.call("rclone -v copy %s %s -P" % (rFolder + "AUTOEXEC.BAT", dosFolder), shell=True)
     subprocess.call("rclone -v copy %s %s -P" % (rFolder + "V23C", dosFolder + "V23C"), shell=True)
-    cp /tools/bios/*.nsh $DOS_LOC
+    
     sys.stdout.flush()
     os.execv(sys.executable, ["python3"] + sys.argv)
 
