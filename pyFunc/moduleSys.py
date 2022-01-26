@@ -97,7 +97,7 @@ def snGet(pn, modelName):
 #    os.system('clear')
     print("Test_Model: " + modelName)
 #    print("Test_PN: " + pn)
-    print("按n鍵結束,其他鍵繼續  ", end='')
+    print("按n鍵結束  ", end='')
     print("Back to menu press 'n' ")
     print(Fore.YELLOW + "輸入序號開始測試 " + Fore.RESET, end='')
     print(Fore.YELLOW + "Input SN start test: " + Fore.RESET)
