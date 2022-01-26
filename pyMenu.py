@@ -8,6 +8,7 @@ import subprocess
 import enquiries
 import time
 import shelve
+# import shutil
 # import re
 from colorama import Fore
 from pyFunc import moduleSys
@@ -203,7 +204,12 @@ def gitPull():
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(5)
-    cp $TEST_LOC/tools/bios/*.nsh $DOS_LOC
+#DOS Update    
+    dosFolder = "/usr/lib/live/mount/persistence/sda1"
+    rFolder = "EFCO_test_script:V23C_DOS/"
+    subprocess.call("rclone -v copy %s %s -P" % (rFolder + "AUTOEXEC.BAT", dosFolder), shell=True)
+    subprocess.call("rclone -v copy %s %s -P" % (rFolder + "V23C", dosFolder + "V23C"), shell=True)
+    cp /tools/bios/*.nsh $DOS_LOC
     sys.stdout.flush()
     os.execv(sys.executable, ["python3"] + sys.argv)
 
