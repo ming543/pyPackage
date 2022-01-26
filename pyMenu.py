@@ -47,8 +47,9 @@ def mMenu():
     m5 = '作業系統安裝 OS Clone Setup'
     m6 = '網路上傳日誌檔 Copy Log to Onedrive'
     m7 = '更新本機測試程式 Update Test Script'
+    m8 = '更新DOS測試程式 Update DOS Test Script'
     ml = '系統關機 Power off system'
-    options = [m0, m1, m2, m3, m4, m5, m6, m7, ml]
+    options = [m0, m1, m2, m3, m4, m5, m6, m7, m8, ml]
 
     os.system('clear')
     print(Fore.YELLOW + "%s 主選單 MAIN-MENU" % booted + Fore.RESET, end='')
@@ -72,6 +73,8 @@ def mMenu():
         copyLog()
     elif choice == m7:  # Update Linux script
         gitPull()
+    elif choice == m8:  # Update Linux script
+        dosPull()
     # Last of list
     elif choice == ml:  # power off system
         print("系統關機 The system will shutdown after 5 secs!")
@@ -204,14 +207,19 @@ def gitPull():
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(5)
-#DOS Update    
+    sys.stdout.flush()
+    os.execv(sys.executable, ["python3"] + sys.argv)
+
+
+#DOS Update 
+def dosPull():   
     dosFolder = "/usr/lib/live/mount/persistence/sda1"
     rFolder = "EFCO_test_script:V23C_DOS/"
     subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "AUTOEXEC.BAT", dosFolder), shell=True)
     subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "V23C", dosFolder + "V23C"), shell=True)
     time.sleep(3)
-    sys.stdout.flush()
-    os.execv(sys.executable, ["python3"] + sys.argv)
+    mMenu()
+    
 
 
 mMenu()
