@@ -13,7 +13,8 @@ from colorama import Fore
 from pyFunc import moduleSys
 
 # start test file
-startTest = "/home/stux/pyPackage/t.sh"
+pyFolder = "/home/stux/pyPackage/"
+startTest = pyFolder + "t.sh"
 
 # Check system boot by UEFI or LEGACY mode
 booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
@@ -33,7 +34,7 @@ else:
     subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True, stdin=sys.stdin)
 
 #Get PN from db
-with shelve.open('/home/stux/pyPackage/dataBase') as db:
+with shelve.open(pyFolder + 'dataBase') as db:
     pn = db['pnSave']
 
 def mMenu():
@@ -44,7 +45,7 @@ def mMenu():
     m4 = '燒機測試 BurnIn-Test'
     m5 = '作業系統安裝 OS Clone Setup'
     m6 = '網路上傳日誌檔 Copy Log to Onedrive'
-    m7 = '更新本機測試程式 Update Linux Test Script'
+    m7 = '更新本機測試程式 Update Test Script'
     ml = '系統關機 Power off system'
     options = [m0, m1, m2, m3, m4, m5, m6, m7, ml]
 
@@ -96,7 +97,7 @@ def aMenu():
 def aMenu2():
     os.system('clear')
     index = []
-    aPath = "/home/stux/pyPackage/testAssy"
+    aPath = pyFolder + "testAssy"
     print(Fore.YELLOW + "%s 組裝測試選單 ASSY-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("Revision %s" % loginfo)
@@ -202,6 +203,7 @@ def gitPull():
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(5)
+    cp $TEST_LOC/tools/bios/*.nsh $DOS_LOC
     sys.stdout.flush()
     os.execv(sys.executable, ["python3"] + sys.argv)
 
