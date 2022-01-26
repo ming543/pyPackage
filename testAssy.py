@@ -26,7 +26,7 @@ def AIML():
     moduleSys.uartLoopCheck("/dev/ttyS0", "1")
 
 def default():
-    print("無對應組裝測試程式")
+    print("此PN無對應測試程式")
     check = input("按任意鍵繼續 press any key continue...").lower()
     with open(startTest, "w") as f:
         f.write("cd /home/stux/pyPackage && python3 pyMenu.py")

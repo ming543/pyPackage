@@ -202,7 +202,7 @@ def gitPull():
             g.clean('-f', '-d')
             g.pull()
             print("gitPullDone")
-            time.sleep(1)
+            time.sleep(3)
             break
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
@@ -217,6 +217,7 @@ def dosPull():
     rFolder = "EFCO_test_script:V23C_DOS/"
     subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "AUTOEXEC.BAT", dosFolder), shell=True)
     subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "V23C", dosFolder + "V23C"), shell=True)
+    print("DOS Update Done")
     time.sleep(3)
     mMenu()
     
