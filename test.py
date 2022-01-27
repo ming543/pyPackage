@@ -5,13 +5,14 @@ import usb.util
 import pexpect
 #sys.path.append("..")
 from pyFunc import moduleSys
-from pyFunc import moduleEb
+from pyFunc import moduleEbk
 
 
 #print('filename: ' + __file__)
 
 #moduleSys.uartLoopCheck("/dev/ttyS0", "1")
-moduleEb.aicVersion()
+moduleEbk.aicFan("Fan 1 RPM:")
+
 
 #help(usb)
 #moduleSys.usbCheck("Hub")

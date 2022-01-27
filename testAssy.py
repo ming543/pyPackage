@@ -5,6 +5,7 @@ import inspect
 import subprocess
 from colorama import Fore
 from pyFunc import moduleSys
+from pyFunc import moduleEbk
 
 startTest = "/home/stux/pyPackage/t.sh"
 #Get PN from db
@@ -16,6 +17,15 @@ def AIML():
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
     moduleSys.biosReleaseCheck("11/11/2019")
+    moduleEbk.aicVersion("AIC-1.04")
+    moduleEbk.aicDdmLogo()
+    moduleEbk.aicTemp(20, 60)
+    moduleEbk.aicRtc(2.999, 3.333)
+#    moduleEbk.aicPoe("PoE  1 Present:")
+#    moduleEbk.aicPoe("PoE  2 Present:")
+#    moduleEbk.aicPoe("PoE  3 Present:")
+#    moduleEbk.aicPoe("PoE  4 Present:")
+    moduleEbk.aicFan("Fan 1 RPM:")
     moduleSys.rtcCheck()
     moduleSys.cpuGet()
     moduleSys.memoryGet()
