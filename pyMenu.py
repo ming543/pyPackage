@@ -217,6 +217,7 @@ def dosPull():
     rFolder = "EFCO_test_script:V23C_DOS/"
     subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "AUTOEXEC.BAT", dosFolder), shell=True)
     subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "V23C", dosFolder + "V23C"), shell=True)
+    subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "AICCFG", dosFolder + "AICCFG"), shell=True)
     print("DOS Update Done")
     time.sleep(3)
     mMenu()

@@ -153,3 +153,29 @@ def aicFan(port):
     else:
         logging.error('AIC_Fan_Fail: %s' % j)
         failRed('AIC_Fan_Fail: %s' % j)
+
+
+def aicIo(port, name):
+    process = pexpect.spawn('make run', cwd=ekitFolder, timeout=2, encoding='utf-8' )
+    process.expect('(11)*') #IO
+    process.sendline("11\r")
+    process.expect("( 1)*") #DI Pins Status
+    process.sendline("1\r")
+    process.expect("(Exit)*") 
+    process.sendline("exit\r")
+    process.expect(pexpect.EOF)
+    result = process.before
+    result = str(result).splitlines()
+    for i in range(len(result)):
+        if re.search(port, result[i]):
+            #print(result[i])
+            j = result[i]
+            fanCheck = result[i].split()[3]
+            fanCheck = int(fanCheck)
+            #fanCheck = str(fanCheck)
+            print(fanCheck)
+    if fanCheck != 0 :
+        logging.info('AIC_Fan: %s' % j)
+    else:
+        logging.error('AIC_Fan_Fail: %s' % j)
+        failRed('AIC_Fan_Fail: %s' % j)
