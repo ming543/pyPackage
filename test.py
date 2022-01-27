@@ -11,7 +11,7 @@ from pyFunc import moduleEbk
 #print('filename: ' + __file__)
 
 #moduleSys.uartLoopCheck("/dev/ttyS0", "1")
-moduleEbk.aicFan("Fan 1 RPM:")
+moduleEbk.aicIdio("DIO1", 00)
 
 
 #help(usb)

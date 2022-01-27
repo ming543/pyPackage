@@ -27,6 +27,35 @@ def AIML():
 #    moduleEbk.aicPoe("PoE  4 Present:")
 #    moduleEbk.aicFan("Fan 1 RPM:")
 #    moduleEbk.aicFan("Fan 2 RPM:")
+    moduleEbk.aicDio("GPIO1", 00)
+    moduleSys.rtcCheck()
+    moduleSys.cpuGet()
+    moduleSys.memoryGet()
+    moduleSys.storageGet()
+    moduleSys.lanCheck("eth1", "80:7b:85")
+    moduleSys.usbCheck("Keyboard", 1)
+    moduleSys.usbCheck("hub", 3)
+    moduleSys.uartLoopCheck("/dev/ttyS0", "1")
+
+def AIHD1I2I():
+    modelName = inspect.currentframe().f_code.co_name
+    moduleSys.snGet(pn, modelName)
+    #moduleSys.biosVersionCheck("1.20")
+    moduleSys.biosReleaseCheck("11/11/2020")
+    moduleEbk.aicVersion("AIC-1.04")
+    moduleEbk.aicDdmLogo()
+    moduleEbk.aicTemp(20, 60)
+    moduleEbk.aicRtc(2.999, 3.333)
+#    moduleEbk.aicPoe("PoE  1 Present:")
+#    moduleEbk.aicPoe("PoE  2 Present:")
+#    moduleEbk.aicPoe("PoE  3 Present:")
+#    moduleEbk.aicPoe("PoE  4 Present:")
+#    moduleEbk.aicFan("Fan 1 RPM:")
+#    moduleEbk.aicFan("Fan 2 RPM:")
+    moduleEbk.aicIdio("DIO1", 00)
+    moduleEbk.aicIdio("DIO2", 00)
+#    moduleEbk.aicDio("GPIO1", 00)
+#    moduleEbk.aicDio("GPIO2", 00)
     moduleSys.rtcCheck()
     moduleSys.cpuGet()
     moduleSys.memoryGet()
@@ -46,7 +75,8 @@ def default():
 
 
 switcher = {
-    "10300-000000-A.0": AIML,
+    "10300-000001-A.0": AIML,
+    "10300-000000-A.0": AIHD1I2I,
     7: AIML
     }
 

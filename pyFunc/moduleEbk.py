@@ -155,11 +155,11 @@ def aicFan(port):
         failRed('AIC_Fan_Fail: %s' % j)
 
 
-def aicIo(port, name):
+def aicIdio(port, data):
     process = pexpect.spawn('make run', cwd=ekitFolder, timeout=2, encoding='utf-8' )
     process.expect('(11)*') #IO
     process.sendline("11\r")
-    process.expect("( 1)*") #DI Pins Status
+    process.expect("( 1)*") #IDIO Pins Status
     process.sendline("1\r")
     process.expect("(Exit)*") 
     process.sendline("exit\r")
@@ -170,12 +170,48 @@ def aicIo(port, name):
         if re.search(port, result[i]):
             #print(result[i])
             j = result[i]
-            fanCheck = result[i].split()[3]
-            fanCheck = int(fanCheck)
-            #fanCheck = str(fanCheck)
-            print(fanCheck)
-    if fanCheck != 0 :
-        logging.info('AIC_Fan: %s' % j)
+            portCheck = result[i].split()[0]
+            dataCheck = result[i].split()[1]
+            dataCheck = int(dataCheck)
+            #print(fanCheck)
+    if portCheck == port:
+        logging.info('AIC_IDIO: %s SPEC: %s' % (j, port))
     else:
-        logging.error('AIC_Fan_Fail: %s' % j)
-        failRed('AIC_Fan_Fail: %s' % j)
+        logging.error('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+        failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+    if dataCheck != data:
+        logging.error('AIC_IDIO_Data_Fail: %s SPEC: %s' % (j, port))
+        failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+#    else:
+#        logging.info('AIC_IDIO_Data:%s SPEC:%s' % (j, data))
+
+
+def aicDio(port, data):
+    process = pexpect.spawn('make run', cwd=ekitFolder, timeout=2, encoding='utf-8' )
+    process.expect('(11)*') #IO
+    process.sendline("11\r")
+    process.expect("( 6)*") #DIO Pins Status
+    process.sendline("6\r")
+    process.expect("(Exit)*") 
+    process.sendline("exit\r")
+    process.expect(pexpect.EOF)
+    result = process.before
+    result = str(result).splitlines()
+    for i in range(len(result)):
+        if re.search(port, result[i]):
+            #print(result[i])
+            j = result[i]
+            portCheck = result[i].split()[0]
+            dataCheck = result[i].split()[1]
+            dataCheck = int(dataCheck)
+            #print(fanCheck)
+    if portCheck == port:
+        logging.info('AIC_IDIO: %s SPEC: %s' % (j, port))
+    else:
+        logging.error('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+        failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+    if dataCheck != data:
+        logging.error('AIC_IDIO_Data_Fail: %s SPEC: %s' % (j, port))
+        failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+#    else:
+#        logging.info('AIC_IDIO_Data:%s SPEC:%s' % (j, data))
