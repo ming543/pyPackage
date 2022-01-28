@@ -42,7 +42,7 @@ def AIM(sPoe, sFan, sDio, sLan, sCom):
         moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
 
 
-def AIHD(sPoe, sFan, sDio, sLan, sCom):
+def AIH(sPoe, sFan, sDio, sLan, sCom):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
@@ -65,6 +65,10 @@ def AIHD(sPoe, sFan, sDio, sLan, sCom):
     elif sDio == "1I2I":
         moduleEbk.aicDio("DIO1", 00)
         moduleEbk.aicDio("DIO2", 00)
+    elif sDio == "1I":
+        moduleEbk.aicDio("DIO1", 00)
+    elif sDio == "1D":
+        moduleEbk.aicDio("GPIO1", 00)
     moduleSys.rtcCheck()
     moduleSys.cpuGet()
     moduleSys.memoryGet()
@@ -122,17 +126,19 @@ elif pn == "10500-000340-A.0": U713064G()
 elif pn == "10902-000097-A.0": AIM(4, "noFan", "DIO1", 4, 4)
 elif pn == "10951-000004-A.0": U7130()
 elif pn == "10953-000001-B.0": U650()
-elif pn == "20010-000160-A.0": AIM("DIO1")
-elif pn == "20010-000161-A.0": AIM("DIO1")
-elif pn == "20010-000162-A.0": AIM("DIO1")
-elif pn == "20010-000170-A.0": AIHD(4, "2Fan", "1D2D", 6, 2)
+elif pn == "20010-000160-A.0": AIM(4, "noFan", "DIO1", 4, 4)
+elif pn == "20010-000161-A.0": AIM(4, "noFan", "DIO1", 4, 4)
+elif pn == "20010-000162-A.0": AIM(4, "noFan", "DIO1", 4, 4)
+elif pn == "20010-000170-A.0": AIH(4, "2Fan", "1D2D", 6, 2)
 elif pn == "20010-000173-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
 elif pn == "20010-000177-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
 elif pn == "20010-000179-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
-elif pn == "20010-000181-A.2": AIHD(4, "2Fan", "1I2I", 6, 2) #AIHDP-i2
+elif pn == "20010-000181-A.2": AIH(4, "2Fan", "1I2I", 6, 2) #AIHDP-i2
 elif pn == "20010-000191-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
-elif pn == "20010-000194-A.2": AIH(4, "noFan", "1I2I", 6, 2) #AIH-
-elif pn == "10300-000000-A.0": AIHD(4, "2Fan", "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
+elif pn == "20010-000194-A.2": AIH(4, "noFan", "1D", 6, 6) #AIH-DIO
+elif pn == "20010-000197-A.1": AIH(4, "2Fan", "1D", 6, 6) #AIH-EP1
+elif pn == "20010-000199-A.1": AIH(4, "2Fan", "1I2D", 6, 2) #AIHDP-i
+elif pn == "10300-000000-A.0": AIH(4, "2Fan", "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
 else: default()
 
 moduleSys.passGreen()
