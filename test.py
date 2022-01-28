@@ -11,8 +11,14 @@ from pyFunc import moduleEbk
 #print('filename: ' + __file__)
 
 #moduleSys.uartLoopCheck("/dev/ttyS0", "1")
-moduleEbk.aicIdio("DIO1", 00)
-
+#moduleEbk.aicIdio("DIO1", 00)
+#moduleSys.uartLoopCheck("/dev/ttyS0", "1")
+sCom = 4
+if sCom == 4:
+    for i in range(sCom):
+        j = i + 1
+        print(i)
+    #moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
 
 #help(usb)
 #moduleSys.usbCheck("Hub")

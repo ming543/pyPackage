@@ -12,7 +12,7 @@ startTest = "/home/stux/pyPackage/t.sh"
 with shelve.open('/home/stux/pyPackage/dataBase') as db:
     pn = db['pnSave']
 
-def AIM(IO1):
+def AIM(sPoe, sFan, sDio, sLan, sCom):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
@@ -21,45 +21,28 @@ def AIM(IO1):
     moduleEbk.aicDdmLogo()
     moduleEbk.aicTemp(20, 60)
     moduleEbk.aicRtc(2.999, 3.333)
-    moduleEbk.aicPoe("PoE  1 Present:")
-    moduleEbk.aicPoe("PoE  2 Present:")
-    moduleEbk.aicPoe("PoE  3 Present:")
-    moduleEbk.aicPoe("PoE  4 Present:")
+    if sPoe == 4:
+        for i in range(1, sPoe + 1):
+            moduleEbk.aicPoe("PoE  %s Present:" % i)
+#    moduleEbk.aicPoe("PoE  1 Present:")
 #    moduleEbk.aicFan("Fan 1 RPM:")
 #    moduleEbk.aicFan("Fan 2 RPM:")
-#DIO1=GPIO1 IDIO1=DIO1
-    moduleEbk.aicDio(IO1, 00)
+    moduleEbk.aicDio(sDio, 00)
     moduleSys.rtcCheck()
     moduleSys.cpuGet()
     moduleSys.memoryGet()
     moduleSys.storageGet()
-    moduleSys.lanCheck("eth1", "80:7b:85")
+    for i in range(sLan):
+        moduleSys.lanCheck("eth%s" % i, "80:7b:85")
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("hub", 3)
-    moduleSys.uartLoopCheck("/dev/ttyS0", "1")
+    #moduleSys.uartLoopCheck("/dev/ttyS0", "1")
+    for i in range(sCom):
+        j = i + 1
+        moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
 
-def AIML():
-    modelName = inspect.currentframe().f_code.co_name
-    moduleSys.snGet(pn, modelName)
-    #moduleSys.biosVersionCheck("1.20")
-    moduleSys.biosReleaseCheck("11/11/2019")
-    moduleEbk.aicVersion("AIC-1.04")
-    moduleEbk.aicDdmLogo()
-    moduleEbk.aicTemp(20, 60)
-    moduleEbk.aicRtc(2.999, 3.333)
-#    moduleEbk.aicFan("Fan 1 RPM:")
-#    moduleEbk.aicFan("Fan 2 RPM:")
-    moduleEbk.aicDio("GPIO1", 00)
-    moduleSys.rtcCheck()
-    moduleSys.cpuGet()
-    moduleSys.memoryGet()
-    moduleSys.storageGet()
-    moduleSys.lanCheck("eth1", "80:7b:85")
-    moduleSys.usbCheck("Keyboard", 1)
-    moduleSys.usbCheck("hub", 3)
-    moduleSys.uartLoopCheck("/dev/ttyS0", "1")
 
-def AIHD(sFan, sDio):
+def AIHD(sPoe, sFan, sDio, sLan, sCom):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
@@ -68,16 +51,11 @@ def AIHD(sFan, sDio):
     moduleEbk.aicDdmLogo()
     moduleEbk.aicTemp(20, 60)
     moduleEbk.aicRtc(2.999, 3.333)
-#    moduleEbk.aicPoe("PoE  1 Present:")
-#    moduleEbk.aicPoe("PoE  2 Present:")
-#    moduleEbk.aicPoe("PoE  3 Present:")
-#    moduleEbk.aicPoe("PoE  4 Present:")
-    if sFan == "0":
-        print("No Fan")
-    else sFan == "2":
+    for i in range(1, sPoe + 1):
+        moduleEbk.aicPoe("PoE  %s Present:" % i)
+    if sFan == "2Fan":
         moduleEbk.aicFan("Fan 1 RPM:")
         moduleEbk.aicFan("Fan 2 RPM:")
-
     if sDio == "1D2D":
         moduleEbk.aicDio("GPIO1", 00)
         moduleEbk.aicDio("GPIO2", 00)
@@ -87,15 +65,17 @@ def AIHD(sFan, sDio):
     elif sDio == "1I2I":
         moduleEbk.aicDio("DIO1", 00)
         moduleEbk.aicDio("DIO2", 00)
-
     moduleSys.rtcCheck()
     moduleSys.cpuGet()
     moduleSys.memoryGet()
     moduleSys.storageGet()
-    moduleSys.lanCheck("eth1", "80:7b:85")
+    for i in range(sLan):
+        moduleSys.lanCheck("eth%s" % i, "80:7b:85")
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("hub", 3)
-    moduleSys.uartLoopCheck("/dev/ttyS0", "1")
+    for i in range(sCom):
+        j = i + 1
+        moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
 
 def Q715QA5():
     print("Not Ready")
@@ -129,6 +109,8 @@ print(Fore.YELLOW + "組裝測試選單 ASSY-MENU" + Fore.RESET, end='')
 print(" Build by EFCO SamLee")
 print("測試PN:", pn)
 
+#DIO=GPIO1 IDIO=DIO1
+#1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
 if pn == "10300-000004-A.3": Q715QA5()
 elif pn == "10300-000004-A.3": Q715QA5()
 elif pn == "10300-000004-A.4": Q715QA5()
@@ -137,13 +119,20 @@ elif pn == "10400-000004-B.2": U7130PAS()
 elif pn == "10400-000009-A.0": U7150()
 elif pn == "10400-000010-A.0": U7150()
 elif pn == "10500-000340-A.0": U713064G()
-elif pn == "10902-000097-A.0": AIM("DIO1")
+elif pn == "10902-000097-A.0": AIM(4, "noFan", "DIO1", 4, 4)
 elif pn == "10951-000004-A.0": U7130()
 elif pn == "10953-000001-B.0": U650()
 elif pn == "20010-000160-A.0": AIM("DIO1")
 elif pn == "20010-000161-A.0": AIM("DIO1")
 elif pn == "20010-000162-A.0": AIM("DIO1")
-elif pn == "10300-000000-A.0": AIHD("0","1I2I") #1-fan, 2-dio
+elif pn == "20010-000170-A.0": AIHD(4, "2Fan", "1D2D", 6, 2)
+elif pn == "20010-000173-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
+elif pn == "20010-000177-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
+elif pn == "20010-000179-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
+elif pn == "20010-000181-A.2": AIHD(4, "2Fan", "1I2I", 6, 2) #AIHDP-i2
+elif pn == "20010-000191-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
+elif pn == "20010-000194-A.2": AIH(4, "noFan", "1I2I", 6, 2) #AIH-
+elif pn == "10300-000000-A.0": AIHD(4, "2Fan", "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
 else: default()
 
 moduleSys.passGreen()
