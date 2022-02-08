@@ -68,10 +68,11 @@ def diskChoose():
             options.append(line)
     print("選取回寫入儲存裝置(克隆目標) ")
     diskShow = enquiries.choose(' Choose clone disk options: ', options)
+    global diskGet
     diskGet = diskShow.split(' ')[1]
-    return diskGet
 
 def osChoose():
+    global osGet
     os.system('clear')
     index = []
     osFolder = "/home/partimag/OS_TESTER"
@@ -89,7 +90,7 @@ def osChoose():
         input("按任意鍵繼續 Press any key continue...")
         mMenu()
 
-    return osGet
+    
 #    with shelve.open('/home/stux/pyPackage/dataBase') as db:
 #        db['osSave'] = osGet
 
@@ -128,7 +129,8 @@ def failRed():
 def testerBuild():
     diskChoose()
     osChoose()
-#    osGet = osGet()
+    print(osGet)
+    time.sleep(5)
     osClone = subprocess.call(
             "sudo /usr/sbin/ocs-sr -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_TESTER/%s %s" %(osGet, diskGet), shell=True)
     if osClone != 0:
@@ -137,9 +139,11 @@ def testerBuild():
         passGreen()
 
 def osSync():
+    diskChoose()
     subprocess.check_call("sudo mount /dev/%s2 /mnt -o umask=000" % diskGet, shell=True, stdin=sys.stdin)
-    subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE /mnt/OS_IMAGE", shell=True, stdin=sys.stdin)
+    subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE /mnt", shell=True, stdin=sys.stdin)
     subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
+    passGreen()
 
 #linuxUpdate
 def gitPull():
