@@ -39,7 +39,7 @@ def mMenu():
     options = [m0, m1, m7, ml]
 
     os.system('clear')
-    print(Fore.YELLOW + "%s 主選單 MAIN-MENU" % booted + Fore.RESET, end='')
+    print(Fore.YELLOW + "%s 母片選單 MAIN-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("測試程式版本 Revision %s" % loginfo)
     choice = enquiries.choose(' 選擇測試項目 Choose options:', options)
