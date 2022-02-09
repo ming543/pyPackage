@@ -32,7 +32,7 @@ else:
     subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True, stdin=sys.stdin)
 
 def mMenu():
-    m0 = '製作測試碟64G Build test disk'
+    m0 = '製作測試碟 Build test disk'
     m1 = '複製OS印象檔至測試碟 Sync OS image to test disk'
     m7 = '更新本機測試程式 Update Test Script'
     ml = '系統關機 Power off system'
@@ -132,7 +132,7 @@ def testerBuild():
     print(osGet)
     time.sleep(5)
     osClone = subprocess.call(
-            "sudo /usr/sbin/ocs-sr -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_TESTER/%s %s" %(osGet, diskGet), shell=True)
+            "sudo /usr/sbin/ocs-sr -l 2 -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_TESTER/%s %s" %(osGet, diskGet), shell=True)
     if osClone != 0:
         failRed()
     else:
