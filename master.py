@@ -58,6 +58,7 @@ def mMenu():
 
 
 def diskChoose():
+    global diskGet
     os.system('clear')
     output = subprocess.check_output(
             'lsblk -o type,name,model,size', shell=True)
@@ -68,7 +69,6 @@ def diskChoose():
             options.append(line)
     print("選取回寫入儲存裝置(克隆目標) ")
     diskShow = enquiries.choose(' Choose clone disk options: ', options)
-    global diskGet
     diskGet = diskShow.split(' ')[1]
 
 def osChoose():
@@ -129,7 +129,6 @@ def failRed():
 def testerBuild():
     diskChoose()
     osChoose()
-    print(osGet)
     time.sleep(5)
     osClone = subprocess.call(
             "sudo /usr/sbin/ocs-sr -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_TESTER/%s %s" %(osGet, diskGet), shell=True)
