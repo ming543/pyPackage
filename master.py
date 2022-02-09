@@ -132,7 +132,7 @@ def testerBuild():
     print(osGet)
     time.sleep(5)
     osClone = subprocess.call(
-            "sudo /usr/sbin/ocs-sr -l 2 -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_TESTER/%s %s" %(osGet, diskGet), shell=True)
+            "sudo /usr/sbin/ocs-sr -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_TESTER/%s %s" %(osGet, diskGet), shell=True)
     if osClone != 0:
         failRed()
     else:
