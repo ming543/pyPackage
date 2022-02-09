@@ -71,6 +71,7 @@ def diskChoose():
     diskShow = enquiries.choose(' Choose clone disk options: ', options)
     diskGet = diskShow.split(' ')[1]
 
+
 def osChoose():
     global osGet
     os.system('clear')
@@ -89,10 +90,6 @@ def osChoose():
         osGet = "NO_OS"
         input("按任意鍵繼續 Press any key continue...")
         mMenu()
-
-    
-#    with shelve.open('/home/stux/pyPackage/dataBase') as db:
-#        db['osSave'] = osGet
 
 
 def passGreen():
@@ -139,9 +136,21 @@ def testerBuild():
 
 def osSync():
     diskChoose()
-    subprocess.check_call("sudo mount /dev/%s2 /mnt -o umask=000" % diskGet, shell=True, stdin=sys.stdin)
-    subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE /mnt", shell=True, stdin=sys.stdin)
-    subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
+    output = subprocess.check_output(
+            'lsblk /dev/%s1 -o size' % diskGet, shell=True)
+    output = str(output).lstrip('b\'').split('\\n')
+    #Check /dev/sdx1 part size, 2G > 3.8.0
+    partSize = output[1].lstrip()
+    if partSize == "2G":
+        subprocess.check_call("sudo mount /dev/%s5 /mnt" % diskGet, shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE/ /mnt/home/partimag", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sync", shell=True, stdin=sys.stdin)
+    else:
+        subprocess.check_call("sudo mount /dev/%s2 /mnt" % diskGet, shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE /mnt", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sync", shell=True, stdin=sys.stdin)
     passGreen()
 
 #linuxUpdate
