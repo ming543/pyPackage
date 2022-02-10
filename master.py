@@ -67,6 +67,7 @@ def diskChoose():
     for line in output:
         if line.lower().startswith('disk'):
             options.append(line)
+    options.remove("sda")
     print("選取回寫入儲存裝置(克隆目標) ")
     diskShow = enquiries.choose(' Choose clone disk options: ', options)
     diskGet = diskShow.split(' ')[1]
