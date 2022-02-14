@@ -9,3 +9,5 @@ cd $dosFolder && sudo git remote add origin https://github.com/ming543/V23C_DOS.
 
 sudo cp $userFolder/.gitconfig /root/
 sudo cp $userFolder/.git-credentials /root/
+
+echo "****** system update done ******"
