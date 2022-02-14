@@ -221,11 +221,11 @@ def dosPull():
                 "ping -c 1 -w 1 8.8.8.8", shell=True)
         if response == 0:
             print("PING OK")
-            gDos.init()
-            gDos.fetch('--all')
-            gDos.checkout('origin/master', '-- AUTOEXEC.BAT')
+            subprocess.call("cd %s && sudo git fetch --all" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/master -- AUTOEXEC.BAT" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/master -- V23C" % dosFolder, shell=True)
             print("gitDosPullDone")
-            time.sleep(3)
+            time.sleep(5)
             break
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
