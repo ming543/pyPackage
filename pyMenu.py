@@ -202,6 +202,7 @@ def gitPull():
             g.clean('-f', '-d')
             g.pull()
             print("gitPullDone")
+            subprocess.call("sh /home/stux/system.sh", shell=True)
             time.sleep(3)
             break
         else:
