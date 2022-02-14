@@ -1,1 +1,1 @@
-cd /home/stux/pyPackage && python3 master.py
+cd /home/stux/pyPackage && python3 pyMenu.py
