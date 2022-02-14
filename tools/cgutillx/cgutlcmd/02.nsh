@@ -1,0 +1,1 @@
+cgutlcmd bflash FS0:QA5TRT02.bin /e

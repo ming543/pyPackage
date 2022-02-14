@@ -6,6 +6,7 @@ import subprocess
 from colorama import Fore
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
+from pyFunc import moduleCg
 
 startTest = "/home/stux/pyPackage/t.sh"
 #Get PN from db
@@ -82,7 +83,12 @@ def AIH(sPoe, sFan, sDio, sLan, sCom):
         moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
 
 def Q715QA5():
-    print("Not Ready")
+    modelName = inspect.currentframe().f_code.co_name
+    moduleSys.snGet(pn, modelName)
+    moduleSys.rtcCheck()
+    moduleSys.cpuGet()
+    moduleSys.memoryGet()
+    moduleSys.storageGet()
 
 def U7130PAS():
     print("Not Ready")

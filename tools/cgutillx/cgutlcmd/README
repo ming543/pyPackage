@@ -1,0 +1,6 @@
+QA50W159
+advance > module serial ports > soc serial port 0 > disable to enable
+chipset > south cluster > LPSS conf > LPSS HSUART #1 > disable to PCIMOD
+
+
+
