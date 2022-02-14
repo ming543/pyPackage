@@ -202,7 +202,7 @@ def gitPull():
             g.clean('-f', '-d')
             g.pull()
             print("gitPullDone")
-            subprocess.call("sh %s + system.sh" % pyFolder, shell=True)
+            subprocess.call("cd %s && sh system.sh" % pyFolder, shell=True)
             time.sleep(3)
             break
         else:
