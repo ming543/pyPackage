@@ -85,10 +85,21 @@ def AIH(sPoe, sFan, sDio, sLan, sCom):
 def Q715QA5():
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
+    moduleSys.dmidecodeLog("bios-version")
+    moduleSys.dmidecodeLog("baseboard-product-name")
+    moduleSys.dmidecodeLog("baseboard-serial-number")
     moduleSys.rtcCheck()
     moduleSys.cpuGet()
     moduleSys.memoryGet()
     moduleSys.storageGet()
+    moduleSys.lanCheck("eth0", "80:7b:85")
+    moduleSys.lanCheck("eth1", "00:13:95")
+    moduleSys.lanSpeedSet(2, 100)
+    moduleSys.lanLedCheck("綠", "橘")
+    moduleSys.lanLedOffCheck("滅", "滅")
+    moduleSys.usbCheck("Keyboard", 1)
+    moduleSys.usbCheck("JMS567", 1)
+    moduleSys.atCheck("/dev/ttyUSB2", "ati\r\n", "Rev")
 
 def U7130PAS():
     print("Not Ready")

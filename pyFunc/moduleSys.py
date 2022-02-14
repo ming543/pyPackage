@@ -36,6 +36,22 @@ else:
     subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True)
 
 
+def atCheck(comPort, atCommand, atBack):
+    subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
+    mySerial = serial.Serial(comPort, 115200, timeout=3)
+    sendData = bytes([atCommand])
+    result = mySerial.write(sendData)
+    recvData = mySerial.readline()
+    if re.search(atBack, recvData):
+        logging.info(atCommand + ': ' + recvData + " SPEC: " + atBack)
+        return True
+    else:
+        logging.error(atCommand + ': ' + recvData + " SPEC: " + atBack)
+        failRed("確認 LTE & SIM 卡" + atCommand)
+        
+
+
+
 def pnGet():
     print(Fore.YELLOW + " 選取測試PN " + Fore.RESET, end='')
     print(Fore.YELLOW + " Choose PN number for Test and Log! " + Fore.RESET)
@@ -170,6 +186,14 @@ def dmidecodeCheck(dmiFunc, spec):
         failRed("規格不符")		
 
 
+def dmidecodeLog(dmiFunc):
+    biosN = subprocess.check_output("sudo dmidecode -s %s" % dmiFunc, shell=True)
+    biosN = str(biosN)
+    logging.info(dmiFunc + ': ' + biosN)
+    return True
+    
+        
+
 def biosVersionCheck(spec):
     biosV = subprocess.check_output("sudo dmidecode -s bios-version", shell=True)
     biosV = str(biosV).lstrip('b\'').split('\\n')[0]
@@ -236,6 +260,41 @@ def lanCheck(ethN, macH):
         print("keyerror")
         logging.error('Test_Lan: %s IP address get failed!' % ethN)
         failRed("%s 測試網路IP連線失敗" % ethN)
+
+def lanSpeedSet(sLan, sSpeed):
+    for i in range(sLan):
+        subprocess.call(
+            "sudo ethtool -s eth%s speed %s duplex full autoneg on" % (i, sSpeed), shell=True )
+    
+
+    
+def lanLedCheck(ledL, ledR):
+    os.system('clear')
+    print(" ")
+    print("網路燈號確認 LAN LED Check")
+    print("確認網路孔燈號是否顯示 - %s %s" % (ledL, ledR))
+    print(" ")
+    print("不良按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('LAN_LED: Not display as normal')
+        failRed("LAN LED 燈號不良")
+    logging.info('LAN_LED: Display OK')
+
+
+def lanLedOffCheck(ledL, ledR):
+    os.system('clear')
+    print(" ")
+    print("網路燈號確認 LAN LED OFF Check")
+    print("移除網路線 Remove LAN Cable")
+    print("確認網路孔燈號是否顯示 - %s %s" % (ledL, ledR))
+    print(" ")
+    print("不良按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('LAN_LED_OFF: Not display as normal')
+        failRed("LAN LED_OFF 燈號未熄滅")
+    logging.info('LAN_LED_OFF: Remove LAN Cable and LED OFF')
 
 
 def usbCheck(spec, num):
