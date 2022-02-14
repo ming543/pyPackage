@@ -69,10 +69,17 @@ def diskChoose():
             options.append(line)
     del options [0]
     print("選取回寫入儲存裝置(克隆目標) ")
-    diskShow = enquiries.choose(' Choose clone disk options: ', options)
-    diskGet = diskShow.split(' ')[1]
-
-
+    try:
+        diskShow = enquiries.choose(' Choose clone disk options: ', options)
+        diskGet = diskShow.split(' ')[1]
+    except ValueError:
+        print(Fore.YELLOW + "未發現回寫裝置 No Disk find " + Fore.RESET, end='')
+        print("請與工程確認...")
+        print(" ")
+        diskGetGet = "NO_Disk"
+        input("按任意鍵繼續 Press any key continue...")
+        mMenu()
+        
 def osChoose():
     global osGet
     os.system('clear')
