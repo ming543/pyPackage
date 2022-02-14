@@ -214,14 +214,24 @@ def gitPull():
 #DOS Update 
 def dosPull():   
     dosFolder = "/usr/lib/live/mount/persistence/sda1/"
-    rFolder = "EFCO_test_script:V23C_DOS/"
-    subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "AUTOEXEC.BAT", dosFolder), shell=True)
-    subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "V23C", dosFolder + "V23C"), shell=True)
-    subprocess.call("sudo rclone -v copy %s %s -P" % (rFolder + "AICCFG", dosFolder + "AICCFG"), shell=True)
-    print("DOS Update Done")
-    time.sleep(3)
-    mMenu()
-    
+    gDos = git.Git(dosFolder)
+    os.system('clear')
+    for i in range(5):  # ping 5 times
+        response = subprocess.call(
+                "ping -c 1 -w 1 8.8.8.8", shell=True)
+        if response == 0:
+            print("PING OK")
+            gDos.init()
+            gDos.fetch('--all')
+            gDos.checkout('origin/master', '-- AUTOEXEC.BAT')
+            print("gitDosPullDone")
+            time.sleep(3)
+            break
+        else:
+            print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
+            time.sleep(5)
+    sys.stdout.flush()
+    os.execv(sys.executable, ["python3"] + sys.argv)
 
 
 mMenu()
