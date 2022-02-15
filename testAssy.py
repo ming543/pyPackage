@@ -99,7 +99,13 @@ def Q715QA5():
     moduleSys.lanLedOffCheck("滅", "滅")
     moduleSys.usbCheck("Keyboard|Holtek", 1)
     moduleSys.usbCheck("JMS567", 1)
-    moduleSys.atCheck("/dev/ttyUSB2", "ati\r\n", "Rev")
+    #SIM7600
+    moduleSys.atCheck("/dev/ttyUSB2", "at", "OK")
+    moduleSys.atCheck("/dev/ttyUSB2", "at+cgmr\r\n", "CGMR")
+    moduleSys.atCheck("/dev/ttyUSB2", "at+ciccid\r\n", "ICCID")
+    #EC25
+#    moduleSys.atCheck("/dev/ttyUSB2", "ati\r\n", "Rev")
+#    moduleSys.atCheck("/dev/ttyUSB2", "at+qccid\r\n", "CCID")
 
 def U7130PAS():
     print("Not Ready")

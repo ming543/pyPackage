@@ -35,30 +35,36 @@ if os.path.isdir(logPath):
 else:
     subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True)
 
-
-def atCheck(comPort, atCommand, atBack):
-    try:
-        subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
-        mySerial = serial.Serial(comPort, 115200, timeout=3)
-    except:
-        print("Serial Device find error")
-        logging.error('AT_CHECK: %s COM port get failed!' % comPort)
-        failRed("%s COM連線失敗" % comPort)
-    try:
-        sendData = bytes([atCommand])
-        result = mySerial.write(sendData)
-        recvData = mySerial.readline()
-        if re.search(atBack, recvData):
-            logging.info(atCommand + ': ' + recvData + " SPEC: " + atBack)
-            return True
-        else:
-            logging.error(atCommand + ': ' + recvData + " SPEC: " + atBack)
-            failRed("確認 LTE & SIM 卡" + atCommand)
-    except:
-        print("at command fail")
-        logging.error('AT_COMMAND: %s get failed!' % atCommand)
-        failRed("%s AT Command 連線失敗" % atCommand)
         
+def atCheck(comPort, atCommand, atBack):
+    atCommand = atCommand + '\\r\\n'
+    atLog = "/tmp/at.log"
+    if os.path.exists(atLog):
+        os.remove(atLog)
+    subprocess.call("sudo cat %s | tee -a %s &" % (comPort, atLog), shell=True, timeout=5)
+    try:
+        subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommand, comPort), shell=True, timeout=5)
+    except:
+        subprocess.call("sudo killall cat &", shell=True, timeout=5)
+        logging.error('AT_COMMAND: %s %s get failed!' % (comPort, atCommand))
+        failRed("%s AT Command 連線失敗" % atCommand)
+    time.sleep(2)
+    with open(atLog) as f:
+        lines = f.read()
+
+    #lines = str(lines).lstrip('\n').rstrip('\n').split('\\n')
+
+
+    if re.search(atBack, lines):
+        lines = str(lines)
+        print(lines)
+        logging.info("%s: %s SPEC:%s" % (atCommand, lines, atBack))
+        return True
+    else:
+        subprocess.call("sudo killall cat &", shell=True, timeout=5)
+        logging.error(atCommand + ': ' + lines + " SPEC: " + atBack)
+        failRed("確認 LTE & SIM 卡" + atCommand) 
+    subprocess.call("sudo killall cat &", shell=True, timeout=5)
 
 
 
@@ -275,6 +281,8 @@ def lanSpeedSet(sLan, sSpeed):
     for i in range(sLan):
         subprocess.call(
             "sudo ethtool -s eth%s speed %s duplex full autoneg on" % (i, sSpeed), shell=True )
+        subprocess.call(
+            "ping 8.8.8.8 -c 20 > /dev/null &", shell=True )
     logging.info('LAN_SPEED_SET: eth%s to %s' %(i, sSpeed))
 
     
@@ -404,14 +412,23 @@ def cpuGet():
 
 def memoryGet():
     os.system('clear')
-    memoryN = subprocess.check_output(
-            "sudo dmidecode -t memory | grep 'Channel\|Size\|Part\|Serial'", shell=True)
-    memoryN = str(memoryN).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
+    memoryA = subprocess.check_output(
+            "sudo dmidecode -t memory | grep 'ChannelA\|Size\|Part\|Serial'", shell=True)
+    memoryA = str(memoryA).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
+    memoryB = subprocess.check_output(
+            "sudo dmidecode -t memory | grep 'ChannelB\|Size\|Part\|Serial'", shell=True)
+    memoryB = str(memoryB).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
     for i in range(4):
-        logging.info('Memory_1 ' + memoryN[i])
+        logging.info('Memory_A ' + memoryA[i])
     print(" ")
-    for i in range(4, 8):
-        logging.info('Memory_2 ' + memoryN[i])
+    try:
+        for i in range(4):
+            logging.info('Memory_B ' + memoryB[i])
+        print(" ")
+    except:
+        logging.info('Memory_B not find')
+        print(" ")
+
     print(Fore.YELLOW + "確認記憶體規格與BOM是否相符 " + Fore.RESET, end='')
     print(Fore.YELLOW + "Check Memory with BOM" + Fore.RESET)
     print("按n鍵結束,其他鍵繼續  ", end='')

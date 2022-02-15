@@ -1,15 +1,71 @@
 #!/bin/python3
 #from subprocess import Popen, PIPE
+import serial
+import re
+import logging
 import subprocess
 import enquiries
 import sys
 import os
+import time
 import usb.util
 import pexpect
 #sys.path.append("..")
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
 
+def atCheck(comPort, atCommand, atBack):
+    atLog = "/tmp/at.log"
+    if os.path.exists(atLog):
+        os.remove(atLog)
+    subprocess.call("sudo cat %s | tee -a %s &" % (comPort, atLog), shell=True, timeout=5)
+    try:
+        subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommand, comPort), shell=True, timeout=5)
+    except:
+        logging.error('AT_COMMAND: %s %s get failed!' % (comPort, atCommand))
+        failRed("%s AT Command 連線失敗" % atCommand)
+    time.sleep(2)
+    with open(atLog) as f:
+        lines = f.read()
+    print(lines)
+#    lines = str(lines)
+    print(lines)
+    if re.search(atBack, lines):
+        print("OKOK")
+        logging.info(atCommand + ': ' + lines + " SPEC: " + atBack)
+        return True
+
+    #else:
+#        logging.error(atCommand + ': ' + lines + " SPEC: " + atBack)
+#        failRed("確認 LTE & SIM 卡" + atCommand)
+    subprocess.call("sudo killall cat &", shell=True, timeout=5)
+
+
+
+atCheck("/dev/ttyUSB2", "at\r\n", "OK")
+
+
+def uartLoopCheck(comPort):
+    subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
+
+    mySerial = serial.Serial(comPort, 115200, timeout=1)
+    sendData = "at\r\n"
+    result = mySerial.write(sendData.encode())
+    time.sleep(3)
+    recvData = mySerial.readline()
+    print("Data" + recvData)
+    for num  in range(1, 6):
+        sendData = bytes([num])
+        result = mySerial.write(sendData)
+        recvData = mySerial.readline()
+        if sendData != recvData:
+            logging.error('Tese_UART: %s loopback test failed!' % comPort)
+            failRed("%s COM PORT LOOPBACK測試失敗" % comPort)
+            print('test fail')
+        print('COM PORT LOOPBACK TEST %s' % num)
+#    logging.info('Test_UART: %s loopback test passed!' % comPort)
+
+#uartLoopCheck("/dev/ttyUSB2")
 
 def diskChoose():
     os.system('clear')
@@ -45,9 +101,9 @@ def osSync():
     subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE /mnt", shell=True, stdin=sys.stdin)
     subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
 
-diskChoose()
+#diskChoose()
 #print(diskGet)
-sizeCheck()
+#sizeCheck()
 
 #print('filename: ' + __file__)
 
