@@ -97,7 +97,7 @@ def Q715QA5():
     moduleSys.lanSpeedSet(2, 100)
     moduleSys.lanLedCheck("綠", "橘")
     moduleSys.lanLedOffCheck("滅", "滅")
-    moduleSys.usbCheck("Keyboard", 1)
+    moduleSys.usbCheck("Keyboard|Holtek", 1)
     moduleSys.usbCheck("JMS567", 1)
     moduleSys.atCheck("/dev/ttyUSB2", "ati\r\n", "Rev")
 
@@ -125,6 +125,9 @@ def default():
     subprocess.call("sh %s" % startTest, shell=True)
 
 
+def debug():
+    print("debug")
+
 os.system('clear')
 print(Fore.YELLOW + "組裝測試選單 ASSY-MENU" + Fore.RESET, end='')
 print(" Build by EFCO SamLee")
@@ -132,7 +135,7 @@ print("測試PN:", pn)
 
 #DIO=GPIO1 IDIO=DIO1
 #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
-if pn == "10300-000004-A.3": Q715QA5()
+if pn == "10300-000000-A.0": debug()
 elif pn == "10300-000004-A.3": Q715QA5()
 elif pn == "10300-000004-A.4": Q715QA5()
 elif pn == "10300-000007-A.0": Q715QA5()
@@ -155,7 +158,7 @@ elif pn == "20010-000191-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
 elif pn == "20010-000194-A.2": AIH(4, "noFan", "1D", 6, 6) #AIH-DIO
 elif pn == "20010-000197-A.1": AIH(4, "2Fan", "1D", 6, 6) #AIH-EP1
 elif pn == "20010-000199-A.1": AIH(4, "2Fan", "1I2D", 6, 2) #AIHDP-i
-elif pn == "10300-000000-A.0": AIH(4, "2Fan", "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
+elif pn == "10300-000001-A.0": AIH(4, "2Fan", "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
 else: default()
 
 moduleSys.passGreen()

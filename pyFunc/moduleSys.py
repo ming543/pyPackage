@@ -37,17 +37,27 @@ else:
 
 
 def atCheck(comPort, atCommand, atBack):
-    subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
-    mySerial = serial.Serial(comPort, 115200, timeout=3)
-    sendData = bytes([atCommand])
-    result = mySerial.write(sendData)
-    recvData = mySerial.readline()
-    if re.search(atBack, recvData):
-        logging.info(atCommand + ': ' + recvData + " SPEC: " + atBack)
-        return True
-    else:
-        logging.error(atCommand + ': ' + recvData + " SPEC: " + atBack)
-        failRed("確認 LTE & SIM 卡" + atCommand)
+    try:
+        subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
+        mySerial = serial.Serial(comPort, 115200, timeout=3)
+    except:
+        print("Serial Device find error")
+        logging.error('AT_CHECK: %s COM port get failed!' % comPort)
+        failRed("%s COM連線失敗" % comPort)
+    try:
+        sendData = bytes([atCommand])
+        result = mySerial.write(sendData)
+        recvData = mySerial.readline()
+        if re.search(atBack, recvData):
+            logging.info(atCommand + ': ' + recvData + " SPEC: " + atBack)
+            return True
+        else:
+            logging.error(atCommand + ': ' + recvData + " SPEC: " + atBack)
+            failRed("確認 LTE & SIM 卡" + atCommand)
+    except:
+        print("at command fail")
+        logging.error('AT_COMMAND: %s get failed!' % atCommand)
+        failRed("%s AT Command 連線失敗" % atCommand)
         
 
 
@@ -188,7 +198,7 @@ def dmidecodeCheck(dmiFunc, spec):
 
 def dmidecodeLog(dmiFunc):
     biosN = subprocess.check_output("sudo dmidecode -s %s" % dmiFunc, shell=True)
-    biosN = str(biosN)
+    biosN = str(biosN).lstrip('b\'').split('\\n')[0]
     logging.info(dmiFunc + ': ' + biosN)
     return True
     
@@ -238,9 +248,9 @@ def lanCheck(ethN, macH):
     #test MAC
     ethMac = getmac.get_mac_address(interface=ethN)
     if re.search(macH, ethMac):
-        logging.info('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
+        logging.info('Test_MAC: ' + ethN + " " + ethMac + " SPEC: " + macH)
     else:
-        logging.error('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
+        logging.error('Test_MAC: ' + ethN + " " + ethMac + " SPEC: " + macH)
         failRed("MAC不符")
     #test carrier link
     response = subprocess.check_output(
@@ -265,7 +275,7 @@ def lanSpeedSet(sLan, sSpeed):
     for i in range(sLan):
         subprocess.call(
             "sudo ethtool -s eth%s speed %s duplex full autoneg on" % (i, sSpeed), shell=True )
-    
+    logging.info('LAN_SPEED_SET: eth%s to %s' %(i, sSpeed))
 
     
 def lanLedCheck(ledL, ledR):
@@ -277,9 +287,9 @@ def lanLedCheck(ledL, ledR):
     print("不良按n鍵結束,其他鍵繼續  ", end='')
     check = input("Failed press 'n', other key continue: ").lower()
     if check == ("n"):
-        logging.error('LAN_LED: Not display as normal')
+        logging.error('LAN_LED_ON: Not display as normal')
         failRed("LAN LED 燈號不良")
-    logging.info('LAN_LED: Display OK')
+    logging.info('LAN_LED_ON: Display OK')
 
 
 def lanLedOffCheck(ledL, ledR):
