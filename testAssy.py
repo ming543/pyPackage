@@ -100,12 +100,14 @@ def Q715QA5():
     moduleSys.usbCheck("Keyboard|Holtek", 1)
     moduleSys.usbCheck("JMS567", 1)
     #SIM7600
-    moduleSys.atCheck("/dev/ttyUSB2", "at", "OK")
+    moduleSys.atCheck("/dev/ttyUSB2", "ati", "Rev")
+    moduleSys.atCheck("/dev/ttyUSB2", "ati", "IMEI")
     moduleSys.atCheck("/dev/ttyUSB2", "at+cgmr", "CGMR")
     moduleSys.atCheck("/dev/ttyUSB2", "at+ciccid", "ICCID")
     #EC25
-#    moduleSys.atCheck("/dev/ttyUSB2", "ati\r\n", "Rev")
-#    moduleSys.atCheck("/dev/ttyUSB2", "at+qccid\r\n", "CCID")
+#    moduleSys.atCheck("/dev/ttyUSB2", "ati", "Rev")
+#    moduleSys.atCheck("/dev/ttyUSB2", "at+qccid", "CCID")
+    moduleSys.cpuTempCheck(20, 60)
 
 def U7130PAS():
     print("Not Ready")

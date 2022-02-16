@@ -43,9 +43,10 @@ def atCheck(comPort, atCommand, atBack):
         os.remove(atLog)
     subprocess.call("sudo cat %s | tee -a %s &" % (comPort, atLog), shell=True, timeout=5)
     try:
-        for i in range(2):
-            subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommandrn, comPort), shell=True, timeout=5)
-            time.sleep(2)
+        subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommandrn, comPort), shell=True, timeout=5)
+#        for i in range(2):
+#            subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommandrn, comPort), shell=True, timeout=5)
+#            time.sleep(2)
     except:
         subprocess.call("sudo killall cat &", shell=True, timeout=5)
         logging.error('AT_COMMAND: %s %s get failed!' % (comPort, atCommand))
@@ -56,7 +57,7 @@ def atCheck(comPort, atCommand, atBack):
     for i in range(len(lines)):
         if re.search(atBack, lines[i]):
             linesRn = lines[i].rstrip()
-            logging.info("%s: %s SPEC:%s" % (atCommand, linesRn, atBack))
+            logging.info("%s: %s" % (atCommand, linesRn))
             lineCheck = True
             break
     if lineCheck == False:
@@ -66,6 +67,20 @@ def atCheck(comPort, atCommand, atBack):
     subprocess.call("sudo killall cat &", shell=True, timeout=5)
     time.sleep(2)
 
+
+def cpuTempCheck(cpuL, cpuH):
+    sensors = subprocess.check_output(
+            "sensors -u", shell=True)
+    sensors = sensors.decode().splitlines()
+    for line in sensors:
+        if re.search('temp2_input', line):
+            cpuT = str(f'{line}').split(':')[1]
+            cpuT = int(float(cpuT))
+    if cpuL < cpuT < cpuH:
+        logging.info("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+    else:
+        logging.error("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+        failRed("確認 CPU 溫度 %s C ! spec %s to %s C" % (cpuT, cpuL, cpuH))
 
 def pnGet():
     print(Fore.YELLOW + " 選取測試PN " + Fore.RESET, end='')
