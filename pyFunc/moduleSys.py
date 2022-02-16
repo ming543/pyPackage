@@ -37,35 +37,34 @@ else:
 
         
 def atCheck(comPort, atCommand, atBack):
-    atCommand = atCommand + '\\r\\n'
+    atCommandrn = atCommand + '\\r\\n'
     atLog = "/tmp/at.log"
     if os.path.exists(atLog):
         os.remove(atLog)
     subprocess.call("sudo cat %s | tee -a %s &" % (comPort, atLog), shell=True, timeout=5)
     try:
-        subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommand, comPort), shell=True, timeout=5)
+        for i in range(2):
+            subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommandrn, comPort), shell=True, timeout=5)
+            time.sleep(2)
     except:
         subprocess.call("sudo killall cat &", shell=True, timeout=5)
         logging.error('AT_COMMAND: %s %s get failed!' % (comPort, atCommand))
         failRed("%s AT Command 連線失敗" % atCommand)
-    time.sleep(2)
     with open(atLog) as f:
-        lines = f.read()
-
-    #lines = str(lines).lstrip('\n').rstrip('\n').split('\\n')
-
-
-    if re.search(atBack, lines):
-        lines = str(lines)
-        print(lines)
-        logging.info("%s: %s SPEC:%s" % (atCommand, lines, atBack))
-        return True
-    else:
-        subprocess.call("sudo killall cat &", shell=True, timeout=5)
-        logging.error(atCommand + ': ' + lines + " SPEC: " + atBack)
-        failRed("確認 LTE & SIM 卡" + atCommand) 
+        lines = f.readlines()
+    lineCheck = False
+    for i in range(len(lines)):
+        if re.search(atBack, lines[i]):
+            linesRn = lines[i].rstrip()
+            logging.info("%s: %s SPEC:%s" % (atCommand, linesRn, atBack))
+            lineCheck = True
+            break
+    if lineCheck == False:
+            subprocess.call("sudo killall cat &", shell=True, timeout=5)
+            logging.error(atCommand + ": not find. SPEC: " + atBack)
+            failRed("確認 LTE & SIM 卡 " + atCommand) 
     subprocess.call("sudo killall cat &", shell=True, timeout=5)
-
+    time.sleep(2)
 
 
 def pnGet():

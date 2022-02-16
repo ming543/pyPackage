@@ -101,8 +101,8 @@ def Q715QA5():
     moduleSys.usbCheck("JMS567", 1)
     #SIM7600
     moduleSys.atCheck("/dev/ttyUSB2", "at", "OK")
-    moduleSys.atCheck("/dev/ttyUSB2", "at+cgmr\r\n", "CGMR")
-    moduleSys.atCheck("/dev/ttyUSB2", "at+ciccid\r\n", "ICCID")
+    moduleSys.atCheck("/dev/ttyUSB2", "at+cgmr", "CGMR")
+    moduleSys.atCheck("/dev/ttyUSB2", "at+ciccid", "ICCID")
     #EC25
 #    moduleSys.atCheck("/dev/ttyUSB2", "ati\r\n", "Rev")
 #    moduleSys.atCheck("/dev/ttyUSB2", "at+qccid\r\n", "CCID")
