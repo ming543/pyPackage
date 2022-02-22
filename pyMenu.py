@@ -222,9 +222,13 @@ def dosPull():
                 "ping -c 1 -w 1 8.8.8.8", shell=True)
         if response == 0:
             print("PING OK")
+            subprocess.call("cd %s && sudo git remote add origin https://github.com/ming543/V23C_FD.git" % dosFolder, shell=True)
             subprocess.call("cd %s && sudo git fetch --all" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git checkout origin/master -- AUTOEXEC.BAT" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git checkout origin/master -- V23C" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/main -- FDCONFIG.SYS" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/main -- FDAUTO.BAT" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/main -- V23C" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/main -- AICCFG" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/main -- NC" % dosFolder, shell=True)
             print("gitDosPullDone")
             time.sleep(5)
             break
