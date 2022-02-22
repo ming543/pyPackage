@@ -26,7 +26,7 @@ dosFolder = "/usr/lib/live/mount/persistence/sda1/"
 gDos = git.Git(dosFolder)
 # loginfo = g.log('-p', '-1' , '--date=iso')
 loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
-logDos = gDos.log('-m', '-1', '--pretty=format:"%h %s"')
+#logDos = gDos.log('-m', '-1', '--pretty=format:"%h %s"')
 # logData = loginfo.splitlines()
 # rev = logData[2] + logData[4]
 #Check and mount log folder
@@ -57,7 +57,7 @@ def mMenu():
     print(Fore.YELLOW + "%s 主選單 MAIN-MENU" % booted + Fore.RESET, end='')
     print(" Build by EFCO SamLee")
     print("測試程式版本 LINUX Revision %s" % loginfo)
-    print("測試程式版本 DOS Revision %s" % logDos)
+    #print("測試程式版本 DOS Revision %s" % logDos)
     choice = enquiries.choose('PN:%s 選擇測試項目 Choose options:' % pn, options)
 
     if choice == m0:  # pn Setup
