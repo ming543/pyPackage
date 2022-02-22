@@ -12,6 +12,6 @@ sudo cp $userFolder/.git-credentials /root/
 
 sudo apt-get install -y tofrodos
 
-cd $dosFolder && find . -type f \( -name '*.BAT' -o -name '*.TXT' \) -exec todos -v '{}' \;
+cd $dosFolder && sudo find . -type f \( -name '*.BAT' -o -name '*.TXT' \) -exec todos -v '{}' \;
 
 echo "****** system setup update done ******"
