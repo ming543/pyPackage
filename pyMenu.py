@@ -231,6 +231,7 @@ def dosPull():
             subprocess.call("cd %s && sudo git checkout origin/master -- AICCFG" % dosFolder, shell=True)
             subprocess.call("cd %s && sudo git checkout origin/master -- NC" % dosFolder, shell=True)
             print("gitDosPullDone")
+            subprocess.call("cd %s && sh system.sh" % pyFolder, shell=True)
             time.sleep(5)
             break
         else:
