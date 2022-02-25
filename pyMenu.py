@@ -227,6 +227,7 @@ def dosPull():
             subprocess.call("cd %s && sudo git remote add origin https://github.com/ming543/V23C_DOS.git" % dosFolder, shell=True)
             subprocess.call("cd %s && sudo git fetch --all" % dosFolder, shell=True)
             subprocess.call("cd %s && sudo git checkout origin/master -- FDAUTO.BAT" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/master -- FDCONFIG.SYS" % dosFolder, shell=True)
             subprocess.call("cd %s && sudo git checkout origin/master -- V23C_FD" % dosFolder, shell=True)
             subprocess.call("cd %s && sudo git checkout origin/master -- AICCFG" % dosFolder, shell=True)
             print("gitDosPullDone")
