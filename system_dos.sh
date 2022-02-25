@@ -9,6 +9,8 @@ dosFolder="/usr/lib/live/mount/persistence/sda1/"
 
 sudo apt-get install -y tofrodos
 
+sudo dd if=/usr/lib/syslinux/mbr/mbr.bin of=/dev/sda
+
 cd $dosFolder && sudo find . -type f \( -name '*.BAT' -o -name '*.TXT' \) -exec todos -v '{}' \;
 
 echo "****** system setup update done ******"
