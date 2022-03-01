@@ -27,7 +27,8 @@ loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 def mMenu():
     m0 = '返回主選單 BackToMain'
     m1 = '網路更新本機BIOS程式 Update local BIOS folder'
-    options = [m0, m1]
+    m2 = '修復DOS開機 Fix MBR for DOS boot'
+    options = [m0, m1, m2]
 
     os.system('clear')
     print(Fore.YELLOW + "%s 其他選單 OTHER-MENU" % booted + Fore.RESET, end='')
@@ -39,6 +40,8 @@ def mMenu():
         pyMenu()
     elif choice == m1:  # biosFolderUpdate
         biosFolderUpdate()
+    elif choice == m2:  # fix MBR
+        fixMbr()
     
 
 def pyMenu():
@@ -64,4 +67,17 @@ def biosFolderUpdate():
     subprocess.call("cp %s %s" %(scr, des), shell=True)
     mMenu()
 
+def fixMbr():
+    os.system('clear')
+    ifFile = "/usr/lib/syslinux/mbr/mbr.bin"
+    ofFile = "/dev/sda"
+    response = subprocess.call(
+        "sudo dd if=%s of=%s" % (ifFile, ofFile), shell=True)
+    if response == 0:
+        print("更新成功")
+    else:
+        print("更新失敗")
+    input("按任意鍵繼續 Press any key continue...")
+    mMenu()
+    
 mMenu()
