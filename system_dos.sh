@@ -9,7 +9,8 @@ dosFolder="/usr/lib/live/mount/persistence/sda1/"
 
 sudo apt-get install -y tofrodos
 
-sudo dd if=/usr/lib/syslinux/mbr/mbr.bin of=/dev/sda
+#MBR更新由other-test 執行
+#sudo dd if=/usr/lib/syslinux/mbr/mbr.bin of=/dev/sda
 
 cd $dosFolder && sudo find . -type f \( -name '*.BAT' -o -name '*.TXT' \) -exec todos -v '{}' \;
 
