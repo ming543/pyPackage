@@ -45,6 +45,22 @@ def alsabatTest():
         logging.error("Audio Loopback Test: Fail, Response = " + response)
         failRed("確認AUDIO LOOPBACK FAIL")
 
+def arecordTest():
+    response = subprocess.check_call("arecord -d 5 -vvv -f dat /dev/null", shell=True)
+    if response == 0:
+        logging.info('Audio arecord Test: Pass')
+    else:
+        logging.error("Audio arecord Test: Fail, Response = " + response)
+        failRed("確認AUDIO arecord FAIL")
+
+def aplayTest():
+    response = subprocess.check_call("aplay -vvv -d 5 /home/stux/pyPackage/tools/default_dual.wav", shell=True)
+    if response == 0:
+        logging.info('Audio aplay Test: Pass')
+    else:
+        logging.error("Audio aplay Test: Fail, Response = " + response)
+        failRed("確認AUDIO aplay FAIL")
+
 def audioPlay():
     #隱藏一些報錯，這些不影響程式的執行
     os.close(sys.stderr.fileno())

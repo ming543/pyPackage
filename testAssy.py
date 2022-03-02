@@ -41,6 +41,7 @@ def AIM(sPoe, sFan, sDio, sLan, sCom):
     for i in range(sCom):
         j = i + 1
         moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
+    moduleSys.alsabatTest()
 
 
 def AIH(sPoe, sFan, sDio, sLan, sCom):
@@ -81,6 +82,7 @@ def AIH(sPoe, sFan, sDio, sLan, sCom):
     for i in range(sCom):
         j = i + 1
         moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
+    moduleSys.alsabatTest()
 
 def Q715QA5():
     modelName = inspect.currentframe().f_code.co_name
@@ -133,6 +135,8 @@ def U7130():
     moduleSys.usbCheck("DataTraveler|JetFlash", 1)
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
     moduleSys.uartLoop("/dev/ttyS0")
+    moduleSys.aplayTest()
+    moduleSys.arecordTest()
     moduleSys.cpuTempCheck(20, 60)
 
 def U7150():
