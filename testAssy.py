@@ -132,7 +132,7 @@ def U7130():
     moduleSys.usbCheck("JMS567", 1)
     moduleSys.usbCheck("DataTraveler|JetFlash", 1)
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
-    moduleSys.uartLoopCheck("/dev/ttyS0", 1)
+    moduleSys.uartLoop("/dev/ttyS0")
     moduleSys.cpuTempCheck(20, 60)
 
 def U7150():
