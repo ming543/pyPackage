@@ -39,9 +39,11 @@ else:
 
 def alsabatTest():
     response = subprocess.check_call("alsabat -Dplughw:0,0", shell=True)
-    if response != 0:
-            logging.error("Audio Loopback test: FAIL, Response = " + response)
-            failRed("確認AUDIO LOOPBACK FAIL")
+    if response == 0:
+        logging.info('Audio Loopback Test: Pass')
+    else:
+        logging.error("Audio Loopback Test: Fail, Response = " + response)
+        failRed("確認AUDIO LOOPBACK FAIL")
 
 def audioPlay():
     #隱藏一些報錯，這些不影響程式的執行
@@ -407,7 +409,7 @@ def uartLoopCheck(comPort, num):
     input("按任意鍵繼續 Press any key continue...")
     subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
     mySerial = serial.Serial(comPort, 115200, timeout=1)
-    for num  in range(1, 6):
+    for num in range(1, 6):
         sendData = bytes([num])
         result = mySerial.write(sendData)
         recvData = mySerial.readline()
@@ -419,7 +421,20 @@ def uartLoopCheck(comPort, num):
     logging.info('Test_UART: %s loopback test passed!' % comPort)
 
 
-
+def uartLoop(comPort):
+    os.system('clear')
+    subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
+    mySerial = serial.Serial(comPort, 115200, timeout=1)
+    for num in range(1, 6):
+        sendData = bytes([num])
+        result = mySerial.write(sendData)
+        recvData = mySerial.readline()
+        if sendData != recvData:
+            logging.error('Tese_UART: %s loopback test failed!' % comPort)
+            failRed("%s COM PORT LOOPBACK測試失敗" % comPort)
+            print('test fail')
+        print('COM PORT LOOPBACK TEST %s' % num)
+    logging.info('Test_UART: %s loopback test passed!' % comPort)
 
 
 def failRed(issueCheck):

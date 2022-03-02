@@ -14,7 +14,8 @@ import pexpect
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
 
-moduleSys.alsabatTest()
+moduleSys.uartLoop("/dev/ttyS0")
+#moduleSys.alsabatTest()
 
 def atCheck(comPort, atCommand, atBack):
     atLog = "/tmp/at.log"
