@@ -37,7 +37,9 @@ if os.path.isdir(logPath):
 else:
     subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True)
 
-def audioPlay()
+def audioPlay():
+    #隱藏一些報錯，這些不影響程式的執行
+    os.close(sys.stderr.fileno())
     frequency=1000
     t=3
     sampleRate=44100
@@ -53,46 +55,40 @@ def audioPlay()
     stream.write(data.astype(np.float32).tostring())
     stream.close()
     p.terminate()
-    
 
-def sine(frequency, t, sampleRate):
-    '''
-    產生 sin wave
-    :Args:
-     - frequency: 欲產生的頻率 Hz
-     - t: 播放時間長度 seconds
-     - sampleRate: 取樣頻率 1/s
-    '''
-    # 播放數量
-    n = int(t * sampleRate)
-    # 每秒轉動的角度再細分為取樣間隔
-    interval = 2 * np.pi * frequency / sampleRate
-    return np.sin(np.arange(n) * interval)
+def audioWire():
+    """
+    PyAudio Example: Make a wire between input and output (i.e., record a
+    few samples and play them back immediately).
+    """
+    CHUNK = 1024
+    WIDTH = 2
+    CHANNELS = 2
+    RATE = 44100
+    RECORD_SECONDS = 5
 
-def play_tone(stream, frequency=440, t=1, sampleRate=44100):
-    '''
-    播放特定頻率
-    :Args:
-     - stream: 
-     - frequency: 欲產生的頻率 Hz
-     - t: 播放時間長度 seconds
-     - sampleRate: 取樣頻率 1/s
-    '''
-    data = sine(frequency, t, sampleRate)
-    # 因 format 為  pyaudio.paFloat32，故轉換為 np.float32 並轉換為 bytearray
-    stream.write(data.astype(np.float32).tostring())
-
-if __name__ == '__main__':
     p = pyaudio.PyAudio()
-    stream = p.open(format=pyaudio.paFloat32,
-                    channels=1, rate=44100, output=True)
- 
-    play_tone(stream, 
-     frequency=1000, #Hz
-     t=3) #seconds
- 
+
+    stream = p.open(format=p.get_format_from_width(WIDTH),
+                channels=CHANNELS,
+                rate=RATE,
+                input=True,
+                output=True,
+                frames_per_buffer=CHUNK)
+
+    print("* recording")
+
+    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+        data = stream.read(CHUNK)
+        stream.write(data, CHUNK)
+
+    print("* done")
+
+    stream.stop_stream()
     stream.close()
+
     p.terminate()
+    
     
         
 def atCheck(comPort, atCommand, atBack):

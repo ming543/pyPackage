@@ -14,6 +14,8 @@ import pexpect
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
 
+moduleSys.audioWire()
+
 def atCheck(comPort, atCommand, atBack):
     atLog = "/tmp/at.log"
     if os.path.exists(atLog):
@@ -42,7 +44,7 @@ def atCheck(comPort, atCommand, atBack):
 
 
 
-atCheck("/dev/ttyUSB2", "at\r\n", "OK")
+#atCheck("/dev/ttyUSB2", "at\r\n", "OK")
 
 
 def uartLoopCheck(comPort):
