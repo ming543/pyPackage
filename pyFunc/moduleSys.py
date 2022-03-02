@@ -35,7 +35,13 @@ logPath = "/home/partimag/log/"
 if os.path.isdir(logPath):
     print(" ")
 else:
-    subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True)
+    subprocess.call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True)
+
+def alsabatTest():
+    response = subprocess.check_call("alsabat -Dplughw:0,0", shell=True)
+    if response != 0:
+            logging.error("Audio Loopback test: FAIL, Response = " + response)
+            failRed("確認AUDIO LOOPBACK FAIL")
 
 def audioPlay():
     #隱藏一些報錯，這些不影響程式的執行
@@ -82,34 +88,6 @@ def audioWire():
     stream.close()
     p.terminate()
 
-def audioCallback():
-    WIDTH = 2
-    CHANNELS = 2
-    RATE = 44100
-
-    p = pyaudio.PyAudio()
-
-    def callback(in_data, frame_count, time_info, status):
-        return (in_data, pyaudio.paContinue)
-
-    stream = p.open(format=p.get_format_from_width(WIDTH),
-                channels=CHANNELS,
-                rate=RATE,
-                input=True,
-                output=True,
-                stream_callback=callback)
-
-    stream.start_stream()
-
-    while stream.is_active():
-    time.sleep(0.1)
-
-    stream.stop_stream()
-    stream.close()
-
-    p.terminate()
-    
-    
         
 def atCheck(comPort, atCommand, atBack):
     atCommandrn = atCommand + '\\r\\n'

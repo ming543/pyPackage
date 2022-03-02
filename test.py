@@ -14,7 +14,7 @@ import pexpect
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
 
-moduleSys.audioWire()
+moduleSys.alsabatTest()
 
 def atCheck(comPort, atCommand, atBack):
     atLog = "/tmp/at.log"
