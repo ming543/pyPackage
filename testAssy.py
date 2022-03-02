@@ -116,7 +116,24 @@ def U713064G():
     print("Not Ready")
 
 def U7130():
-    print("Not Ready")
+    modelName = inspect.currentframe().f_code.co_name
+    moduleSys.snGet(pn, modelName)
+    moduleSys.dmidecodeLog("bios-version")
+    moduleSys.dmidecodeLog("baseboard-product-name")
+    moduleSys.dmidecodeLog("baseboard-serial-number")
+    moduleSys.rtcCheck()
+    moduleSys.cpuGet()
+    moduleSys.memoryGet()
+    moduleSys.storageGet()
+    moduleSys.lanCheck("eth0", "80:7b:85")
+    moduleSys.lanCheck("eth1", "00:13:95")
+    moduleSys.usbCheck("Keyboard|Holtek", 1)
+    moduleSys.usbCheck("Mouse", 1)
+    moduleSys.usbCheck("JMS567", 1)
+    moduleSys.usbCheck("DataTraveler|JetFlash", 1)
+    moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
+    moduleSys.uartLoopCheck("/dev/ttyS0", 1)
+    moduleSys.cpuTempCheck(20, 60)
 
 def U7150():
     print("Not Ready")
@@ -166,6 +183,7 @@ elif pn == "20010-000191-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
 elif pn == "20010-000194-A.2": AIH(4, "noFan", "1D", 6, 6) #AIH-DIO
 elif pn == "20010-000197-A.1": AIH(4, "2Fan", "1D", 6, 6) #AIH-EP1
 elif pn == "20010-000199-A.1": AIH(4, "2Fan", "1I2D", 6, 2) #AIHDP-i
+elif pn == "20010-000335-A.0": U7130()
 elif pn == "10300-000001-A.0": AIH(4, "2Fan", "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
 else: default()
 
