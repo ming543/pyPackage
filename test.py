@@ -13,8 +13,10 @@ import pexpect
 #sys.path.append("..")
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
+from pyFunc import moduleCg
 
-moduleSys.uartLoop("/dev/ttyS0")
+moduleCg.i2cGpio()
+#moduleSys.uartLoop("/dev/ttyS0")
 #moduleSys.alsabatTest()
 
 def atCheck(comPort, atCommand, atBack):
