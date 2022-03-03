@@ -1,0 +1,1 @@
+AFUWINx64.EXE V2CE-1.20.bin /p /b /n

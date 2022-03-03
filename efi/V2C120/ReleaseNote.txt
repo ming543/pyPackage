@@ -1,0 +1,186 @@
+//======================================================================
+//BIOS Update Release Notes
+//======================================================================
+//======================================================================
+// Project: A3S268
+// Platform: Intel Skylake U
+// Project Name: "V2C"
+// BIOS Version: "1.20"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME FW: 11.8.50.3470
+// Date: 2019/11/11
+// BIN File Checksum: 0xB971ACD9
+----------------------------------------------------------------------
+Fixed:
+1.Intel internal graphics is enabled by default.
+  System Agent(SA) Configuration->Graphics Configuration->Internal Graphics[Enabled]
+2.Fixed issue where PS2 KB/MS are not working.
+3.Fixed issue where system will be auto wake up when system power off by power button on non ACPI mode.
+4.The OPI Link Speed is changed from 2GT/s to 4GT/s which improves CPU interface performance.
+5.Added solution for 921600 bps support of COM1.
+  It is disabled by default. Enable this feature from the SETUP path below.
+  Device driver is required on Windows OS.
+  Advanced->Super IO Configuration->Serial Port 1 Configuration->High Speed Serial Port[Disabled]
+6.Removed POST error beep when no console in devices are found.
+7.Updated CPU microcode from revision 0xC2 to 0xCC for CPUID 406E3 processor.
+8.Added solution for system delay before putting system in ACPI S5 sleeping state.
+  BIOS option:
+  Advanced -> ACPI Power Off Delay -> ACPI Power Off Delay Time[0-255 seconds]
+9.The RTC default year, month and day are changed to 2018/01/01.
+  RTC will be reset to this value if current date is invalid.
+10.Fixed issue where system POST has no display when multiple display devices are attached.
+
+//======================================================================
+// Project: A3S268
+// Platform: Intel Skylake U
+// Project Name: "V2C"
+// BIOS Version: "1.10"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME FW: 11.8.50.3470
+// Date: 2019/06/18
+// BIN File Checksum: 0xB96E40E8
+----------------------------------------------------------------------
+Fixed:
+1.Keep SETUP data if RTC_PWR_STS bit is cleared.
+2.Added solution for AIC USB port power control in BIOS SETUP.
+3.Native PCIE power management is disabled by default.
+  =>Advanced->Intel RC ACPI Settings->Native PCIE Enable[Disabled]
+  =>Advanced->Intel RC ACPI Settings->Native ASPM[Disabled]
+4.Fixed issue where AIC version information may be absent in BIOS SETUP menu.
+5.Added solution for PCIe/mSATA selection by SETUP options.
+  AIC->PCIe Mini Card Configuration->Slot1->Function Select[mSATA]
+  AIC->PCIe Mini Card Configuration->Slot3->Function Select[mSATA]
+
+//======================================================================
+// Project: A3S268
+// Platform: Intel Skylake U
+// Project Name: "V2C"
+// BIOS Version: "1.00"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME FW: 11.8.50.3470
+// Date: 2019/05/16
+// BIN File Checksum: 0xB96B31F6
+----------------------------------------------------------------------
+Fixed:
+1.Added "Project Name" information on the SETUP Main menu and POST screen.
+2.Fixed issue where DMCT "COM Setting" will be overwritten by BIOS according to the SETUP settings.
+3.Fixed issue where DMCT "Power Setting" will be overwritten by BIOS according to the SETUP settings.
+4.Fixed issue where DMCT "USB Setting" will be overwritten by BIOS according to the SETUP settings.
+5.CPU Turbo Mode is disabled by default.
+  =>Advanced->Power & Performance->CPU - Power Management Control->Turbo Mode[Disabled]
+
+//======================================================================
+ Project: A3S268
+ Platform: Intel Skylake U
+ BIOS Version: "A3S268-101"
+ VBIOS: 9.0.1054
+ GOP: 9.0.1069
+ RAID: 
+ PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+ ME FW: 11.8.50.3470
+ Date: 2019/01/29
+----------------------------------------------------------------------
+Fixed:
+1. Remove PowerOnModeSelection in DXE and 
+   Sync Power Mode variable in elink UpdatePowerModetoAIC
+2. Disable VBIOS setting "KVMR Session/Fake DVI Display Support to fixed issue.
+   Issue: Plug VGA(eDP) with DP1 and DP2 will cause POST hang up and postcode is 0xB2
+3. Add LAN UEFI driver for I219(Intel Phy Lan) and I210 LAN
+4. Cpoy token "SETUP_GROUP_DYNAMIC_PAGES" and "DRIVER_HEALTH_SUPPORT" in Project Board
+   and make sure enable
+5. Enable EdkShellBinPkg_SUPPORT for BUILT_IN_SHELL_SUPPORT.
+6. Add Watt symbol support for AIC System Health Monitor
+
+//======================================================================
+ Project: A3S268
+ Platform: Intel Skylake U
+ BIOS Version: "A3S268-100"
+ VBIOS: 9.0.1054
+ GOP: 9.0.1069
+ RAID: 
+ PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+ ME FW: 11.8.50.3470
+ Date: 2018/12/26
+----------------------------------------------------------------------
+Fixed:
+1. Remove "ESC" hotkey for BIOS menu entry key for PS2 Keyboard noise cause
+   system auto boot into BIOS menu issue.
+
+//======================================================================
+// Project: AES368
+// Platform: Intel Skylake S
+// BIOS Version: "AES368XT04"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE ROM: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME Firmware: 11.8.50.3470
+// Date: 2018/08/06
+----------------------------------------------------------------------
+Fixed:
+1.Fixed issue where USB device is not working on Windows 7 32 bit OS.
+2.Update Intel RAID OpRom/Uefi driver to compatible with Intel Gen6/Gen7 PCH.
+3.Intel AMT remote access supported on the target system if there is no console out device on the system.
+
+//======================================================================
+// Project: A3S268
+// Platform: Intel Skylake U
+// BIOS Version: "A3S268XT03"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// RAID: 
+// PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME FW: 11.8.50.3470
+// Date: 2018/07/05
+----------------------------------------------------------------------
+Fixed:
+1.Set Storage and Other PCI devices OpRom execution policy as Legacy by default.
+  =>Advanced->CSM Configuration->Storage[Legacy]
+  =>Advanced->CSM Configuration->Other PCI devices[Legacy]
+
+2.Added "Power On Mode" status information to the AIC System Power Up Configuration page.
+  =>AIC->System Power Up Configuration->Power On Mode
+
+3.Added "CPU Temperature" information to the AIC System Health Monitor page.
+  =>AIC->System Health Monitor->CPU Temperature
+
+4.Bios SETUP layout restructure.
+
+5.Modified SIO COM port help string.
+  =>Advanced->Super IO Configuration->Serial Port X Configuration
+
+//======================================================================
+// Project: A3S268
+// Platform: Intel Skylake U
+// BIOS Version: "A3S268XT02"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// RAID: 
+// PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME FW: 11.8.50.3470
+// Date: 2018/06/19
+----------------------------------------------------------------------
+Fixed:
+1.Added DIO setting to DIO Port Configuration page in BIOS.
+  =>Chipset->DIO Port Configuration
+
+2.Added System Temperature information to the AIC System Health Monitor page.
+  =>AIC->System Health Monitor->System Temperature
+
+//======================================================================
+// Project: A3S268
+// Platform: Intel Skylake U
+// BIOS Version: "A3S268XT01"
+// ME FW Version: 11.8.50.3470
+// ME FW SKU: Corporate SKU
+// Date: 2018/06/08
+----------------------------------------------------------------------
+Fixed:
+1.Initial BIOS release.
+
+//======================================================================

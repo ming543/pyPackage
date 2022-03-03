@@ -1,0 +1,4 @@
+File name:	v3c-1.20.bin
+File date:	2020/11/11 09:35
+File size:	16777216, 0x1000000 (16MB)
+Checksum:	0xBCEE68B3

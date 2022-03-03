@@ -1,0 +1,1 @@
+AFUWINx64.EXE V3C-1.20.bin /p /b /n

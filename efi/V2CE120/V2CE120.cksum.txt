@@ -1,0 +1,4 @@
+File name:	V2CE-1.20.bin
+File date:	2019/11/11 13:50
+File size:	16777216, 0x1000000 (16MB)
+Checksum:	0xB96EADC1

@@ -1,0 +1,4 @@
+File name:	V2C-1.20.bin
+File date:	2019/11/11 13:34
+File size:	16777216, 0x1000000 (16MB)
+Checksum:	0xB971ACD9

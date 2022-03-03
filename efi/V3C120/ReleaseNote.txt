@@ -1,0 +1,166 @@
+//======================================================================
+//BIOS Update Release Notes
+//======================================================================
+// Project: AES368
+// Platform: Intel Skylake S
+// Project Name: "V3C"
+// BIOS Version: "1.20"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME FW: 11.8.50.3470
+// Date: 2020/11/11
+// BIN File Checksum: 0xBCEE68B3
+----------------------------------------------------------------------
+Support SBC List
+V3C, V3CE, V3CD, V3CDP Series
+Modify Item
+1.Imporve CPU Performance
+2.Correct Intel Gen6/7 Core i and Xeno E3-1275v5 CPU Power Reprot
+3.Add AIC FAN Control Function
+  Auto Mode  Tempture Level 1 30°C FAN PWM Level 1 20%
+             Tempture Level 2 45°C FAN PWM Level 2 40%
+             Tempture Level 3 55°C FAN PWM Level 3 70% 
+             Tempture Level 4 65°C FAN PWM Level 4 100%  
+  Manual Mode, Define on customer
+
+//======================================================================
+// Project: AES368
+// Platform: Intel Skylake S
+// Project Name: "V3C"
+// BIOS Version: "1.10"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME FW: 11.8.50.3470
+// Date: 2019/11/11
+// BIN File Checksum: 0xBAF16C4C
+----------------------------------------------------------------------
+Fixed:
+1.Fixed issue where AIC version information may be absent in BIOS SETUP menu.
+2.Intel internal graphics is enabled by default.
+  System Agent(SA) Configuration->Graphics Configuration->Internal Graphics[Enabled]
+3.Fixed issue where MXM card has no display when legacy vbios is used.
+4.Added NVMe support.
+5.Removed POST error beep when no console in devices are found.
+6.Updated CPU microcode from revision 0xC6 to 0xCC for CPUID 506E3 processor.
+  Updated CPU microcode from revision 0x8E to 0xB4 for CPUID 906E9 processor.
+7.Added solution for system delay before putting system in ACPI S5 sleeping state.
+  BIOS option:
+  Advanced -> ACPI Power Off Delay -> ACPI Power Off Delay Time[0-255 seconds]
+8.The RTC default year, month and day are changed to 2018/01/01.
+  RTC will be reset to this value if current date is invalid.
+9.Fixed issue where system POST has no display when multiple display devices are attached.
+10.Added +V12SB and +V12S voltages display in System Health Monitor.
+
+//======================================================================
+// Project: AES368
+// Platform: Intel Skylake S
+// Project Name: "V3C"
+// BIOS Version: "1.00"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME FW: 11.8.50.3470
+// Date: 2019/05/22
+// BIN File Checksum: 0xBB0CDBD0
+----------------------------------------------------------------------
+Fixed:
+1.Keep SETUP data if RTC_PWR_STS bit is cleared.
+2.Added solution for AIC USB port power control in BIOS SETUP.
+3.Native PCIE power management is disabled by default.
+  =>Advanced->Intel RC ACPI Settings->Native PCIE Enable[Disabled]
+  =>Advanced->Intel RC ACPI Settings->Native ASPM[Disabled]
+
+//======================================================================
+// Project: AES368
+// Platform: Intel Skylake S
+// Project Name: "V3CE6"
+// BIOS Version: "1.00"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME FW: 11.8.50.3470
+// Date: 2019/04/22
+// BIN File Checksum: 0xBB0B3690
+----------------------------------------------------------------------
+Fixed:
+1.Added "Project Name" information on the SETUP Main menu.
+2.Fixed issue where there is no removable icon when USB device is connected to the USB 3.0 Port 6.
+
+//======================================================================
+// Project: AES368
+// Platform: Intel Skylake S
+// BIOS Version: "AES368XT04"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE ROM: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME Firmware: 11.8.50.3470
+// Date: 2018/08/06
+----------------------------------------------------------------------
+Fixed:
+1.Fixed issue where USB device is not working on Windows 7 32 bit OS.
+2.Update Intel RAID OpRom/Uefi driver to compatible with Intel Gen6/Gen7 PCH.
+3.Intel AMT remote access supported on the target system if there is no console out device on the system.
+
+//======================================================================
+// Project: AES368
+// Platform: Intel Skylake S
+// BIOS Version: "AES368XT03"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE ROM: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME Firmware: 11.8.50.3470
+// Date: 2018/07/05
+----------------------------------------------------------------------
+Fixed:
+1.Set Storage and Other PCI devices OpRom execution policy as Legacy by default.
+  =>Advanced->CSM Configuration->Storage[Legacy]
+  =>Advanced->CSM Configuration->Other PCI devices[Legacy]
+
+2.Added "Power On Mode" status information to the AIC System Power Up Configuration page.
+  =>AIC->System Power Up Configuration->Power On Mode
+
+3.Added "CPU Temperature" information to the AIC System Health Monitor page.
+  =>AIC->System Health Monitor->CPU Temperature
+
+4.Bios SETUP layout restructure.
+
+5.Modified SIO COM port help string.
+  =>Advanced->Super IO Configuration->Serial Port X Configuration
+
+6.Fixed issue where DIO2 GPO6/GPO7 output level are not as expect settings in Setup.
+
+//======================================================================
+// Project: AES368
+// Platform: Intel Skylake S
+// BIOS Version: "AES368XT02"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE ROM: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME Firmware: 11.8.50.3470
+// Date: 2018/06/19
+----------------------------------------------------------------------
+Fixed:
+1.Added DIO setting to DIO Port Configuration page in BIOS.
+  =>Chipset->DIO Port Configuration
+
+2.Added System Temperature information to the AIC System Health Monitor page. 
+  =>AIC->System Health Monitor->System Temperature
+
+//======================================================================
+
+//======================================================================
+// Project: AES368
+// Platform: Intel Skylake S
+// BIOS Version: "AES368XT01"
+// VBIOS: 9.0.1054
+// GOP: 9.0.1069
+// PXE ROM: I210=>Intel(R) Boot Agent GE V1.5.78
+// ME Firmware: 11.8.50.3470
+// Date: 2018/06/13
+----------------------------------------------------------------------
+Fixed:
+1.Initial BIOS release.
+
+//======================================================================

@@ -1,0 +1,1 @@
+Cksum X830A0B7.bin >X830A0B7.cksum.txt

@@ -1,0 +1,1 @@
+AFUDOS.EXE V3C-120U.bin /p /b /n
