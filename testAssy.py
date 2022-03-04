@@ -6,7 +6,7 @@ import subprocess
 from colorama import Fore
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
-#from pyFunc import moduleCg
+from pyFunc import moduleCg
 
 startTest = "/home/stux/pyPackage/t.sh"
 #Get PN from db
