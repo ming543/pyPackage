@@ -265,6 +265,7 @@ def snGet(pn, modelName):
 
         logger.addHandler(ch)
         logger.addHandler(fh)
+        logging.info('Test_Rev: ' + loginfo)
         logging.info('Test_Model: ' + modelName)
         logging.info('Test_PN: ' + pn)
         logging.info('Test_SN: ' + sn)
@@ -553,11 +554,12 @@ def storageGet():
         check = True
     if check == False:
         print("系統查無儲存裝置 No storage find at system")
+        logging.info('Storage_Info: No storage find at system')
     print(Fore.YELLOW + "確認儲存裝置與BOM是否相符 " + Fore.RESET, end='')
     print(Fore.YELLOW + "Check Storage with BOM" + Fore.RESET)
     print("按n鍵結束,其他鍵繼續  ", end='')
-    check = input("Failed press 'n', other key continue: ").lower()
-    if check == ("n"):
+    checkN = input("Failed press 'n', other key continue: ").lower()
+    if checkN == ("n"):
         logging.error('Storage_Info: not match BOM')
         failRed("儲存裝置規格不符")
 
