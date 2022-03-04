@@ -206,12 +206,12 @@ def aicDio(port, data):
             dataCheck = int(dataCheck)
             #print(fanCheck)
     if portCheck == port:
-        logging.info('AIC_IDIO: %s SPEC: %s' % (j, port))
+        logging.info('AIC_DIO: %s SPEC: %s' % (j, port))
     else:
-        logging.error('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
-        failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+        logging.error('AIC_DIO_Fail: %s SPEC: %s' % (j, port))
+        failRed('AIC_DIO_Fail: %s SPEC: %s' % (j, port))
     if dataCheck != data:
-        logging.error('AIC_IDIO_Data_Fail: %s SPEC: %s' % (j, port))
-        failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+        logging.error('AIC_DIO_Data_Fail: %s SPEC: %s' % (j, port))
+        failRed('AIC_DIO_Fail: %s SPEC: %s' % (j, port))
 #    else:
 #        logging.info('AIC_IDIO_Data:%s SPEC:%s' % (j, data))

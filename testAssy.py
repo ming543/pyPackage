@@ -27,7 +27,11 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom):
             moduleEbk.aicPoe("PoE  %s Present:" % i)
 #    moduleEbk.aicFan("Fan 1 RPM:")
 #    moduleEbk.aicFan("Fan 2 RPM:")
-    moduleEbk.aicDio(sDio, 00)
+    if sDio == "1I":
+        moduleEbk.aicIdio("DIO1", 00)
+    elif sDio == "1D":
+        moduleEbk.aicDio("GPIO1", 00)
+            
     moduleSys.rtcCheck()
 #    moduleSys.cpuGet()
     moduleSys.cpuCheck(sCPU)
@@ -62,13 +66,13 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom):
         moduleEbk.aicDio("GPIO1", 00)
         moduleEbk.aicDio("GPIO2", 00)
     elif sDio == "1I2D":
-        moduleEbk.aicDio("DIO1", 00)
+        moduleEbk.aicIdio("DIO1", 00)
         moduleEbk.aicDio("GPIO2", 00)
     elif sDio == "1I2I":
-        moduleEbk.aicDio("DIO1", 00)
-        moduleEbk.aicDio("DIO2", 00)
+        moduleEbk.aicIdio("DIO1", 00)
+        moduleEbk.aicIdio("DIO2", 00)
     elif sDio == "1I":
-        moduleEbk.aicDio("DIO1", 00)
+        moduleEbk.aicIdio("DIO1", 00)
     elif sDio == "1D":
         moduleEbk.aicDio("GPIO1", 00)
     moduleSys.rtcCheck()
@@ -179,7 +183,7 @@ elif pn == "10500-000340-A.0": U713064G()
 elif pn == "10902-000097-A.0": AIM(4, "noFan", "DIO1", 4, 4)
 elif pn == "10951-000004-A.0": U7130()
 elif pn == "10953-000001-B.0": U650()
-elif pn == "20010-000160-A.0": AIM(6600, 4, "noFan", "DIO1", 4, 4)
+elif pn == "20010-000160-A.0": AIM("6600", 4, "noFan", "1I", 4, 4)
 elif pn == "20010-000161-A.0": AIM(4, "noFan", "DIO1", 4, 4)
 elif pn == "20010-000162-A.0": AIM(4, "noFan", "DIO1", 4, 4)
 elif pn == "20010-000170-A.0": AIH(4, "2Fan", "1D2D", 6, 2)
