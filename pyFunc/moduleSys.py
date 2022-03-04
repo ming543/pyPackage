@@ -539,12 +539,14 @@ def memoryGet():
 def storageGet():
     os.system('clear')
     output = subprocess.check_output(
-            'lsblk -o type,name,model,size', shell=True)
+            'lsblk -o type,name,model,size,tran', shell=True)
     output = str(output).lstrip('b\'').split('\\n')
     options = []
+#disk開頭，不以USB結尾，加入選單
     for line in output:
         if line.lower().startswith('disk'):
-            options.append(line)
+            if not line.lower().endswith('usb'):
+                options.append(line)
     check = False
     for i in range(1, len(options)):
         logging.info('Storage_Info: ' + options[i])
