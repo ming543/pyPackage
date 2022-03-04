@@ -123,7 +123,7 @@ def U7130PAS():
 def U713064G():
     print("Not Ready")
 
-def U7130():
+def U7130(sCPU):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
@@ -147,10 +147,10 @@ def U7130():
     moduleSys.arecordTest()
     moduleSys.cpuTempCheck(20, 60)
 
-def U7150():
+def U7150(sCPU):
     print("Not Ready")
 
-def U6500():
+def U6500(sCPU):
     print("Not Ready")
 
 
@@ -162,8 +162,11 @@ def default():
     subprocess.call("sh %s" % startTest, shell=True)
 
 
-def debug():
-    print("debug")
+def debug(sCPU):
+    modelName = inspect.currentframe().f_code.co_name
+    moduleSys.snGet(pn, modelName)
+    moduleSys.cpuCheck(sCPU)
+    
 
 os.system('clear')
 print(Fore.YELLOW + "組裝測試選單 ASSY-MENU" + Fore.RESET, end='')
@@ -172,31 +175,31 @@ print("測試PN:", pn)
 
 #DIO=GPIO1 IDIO=DIO1
 #1-CPU, Poe, fan, dio, Lan, Com
-if pn == "10300-000000-A.0": debug()
-elif pn == "10300-000004-A.3": Q715QA5()
-elif pn == "10300-000004-A.4": Q715QA5()
-elif pn == "10300-000007-A.0": Q715QA5()
-elif pn == "10400-000004-B.2": U7130PAS()
-elif pn == "10400-000009-A.0": U7150()
-elif pn == "10400-000010-A.0": U7150()
-elif pn == "10500-000340-A.0": U713064G()
-elif pn == "10902-000097-A.0": AIM(4, "noFan", "DIO1", 4, 4)
-elif pn == "10951-000004-A.0": U7130()
-elif pn == "10953-000001-B.0": U650()
+if pn == "10300-000000-A.0": debug("NA")
+elif pn == "10300-000004-A.3": Q715QA5("NA")
+elif pn == "10300-000004-A.4": Q715QA5("NA")
+elif pn == "10300-000007-A.0": Q715QA5("NA")
+elif pn == "10400-000004-B.2": U7130PAS("NA")
+elif pn == "10400-000009-A.0": U7150("NA")
+elif pn == "10400-000010-A.0": U7150("NA")
+elif pn == "10500-000340-A.0": U713064G("NA")
+elif pn == "10902-000097-A.0": AIM("6300", 4, "noFan", "DIO1", 4, 4)
+elif pn == "10951-000004-A.0": U7130("NA")
+elif pn == "10953-000001-B.0": U650("NA")
 elif pn == "20010-000160-A.0": AIM("6600", 4, "noFan", "1I", 4, 4)
-elif pn == "20010-000161-A.0": AIM(4, "noFan", "DIO1", 4, 4)
-elif pn == "20010-000162-A.0": AIM(4, "noFan", "DIO1", 4, 4)
-elif pn == "20010-000170-A.0": AIH(4, "2Fan", "1D2D", 6, 2)
-elif pn == "20010-000173-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
-elif pn == "20010-000177-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
-elif pn == "20010-000179-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
-elif pn == "20010-000181-A.2": AIH(4, "2Fan", "1I2I", 6, 2) #AIHDP-i2
-elif pn == "20010-000191-A.1": AIM(0, "noFan", "DIO1", 2, 4) #AIML-I
-elif pn == "20010-000194-A.2": AIH(4, "noFan", "1D", 6, 6) #AIH-DIO
-elif pn == "20010-000197-A.1": AIH(4, "2Fan", "1D", 6, 6) #AIH-EP1
-elif pn == "20010-000199-A.1": AIH(4, "2Fan", "1I2D", 6, 2) #AIHDP-i
-elif pn == "20010-000335-A.0": U7130()
-elif pn == "10300-000001-A.0": AIH(4, "2Fan", "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
+elif pn == "20010-000161-A.0": AIM("6300", 4, "noFan", "1I", 4, 4)
+elif pn == "20010-000162-A.0": AIM("6100", 4, "noFan", "1I", 4, 4)
+elif pn == "20010-000170-A.0": AIH("NA", 4, "2Fan", "1D2D", 6, 2)
+elif pn == "20010-000173-A.1": AIM("6600", 0, "noFan", "1I", 2, 4) #AIML-I
+elif pn == "20010-000177-A.1": AIM("6300", 0, "noFan", "1I", 2, 4) #AIML-I
+elif pn == "20010-000179-A.1": AIM("3955", 0, "noFan", "1I", 2, 4) #AIML-I
+elif pn == "20010-000181-A.2": AIH("NA", 4, "2Fan", "1I2I", 6, 2) #AIHDP-i2
+elif pn == "20010-000191-A.1": AIM("7300", 0, "noFan", "1I", 2, 4) #AIML-I
+elif pn == "20010-000194-A.2": AIH("NA", 4, "noFan", "1D", 6, 6) #AIH-DIO
+elif pn == "20010-000197-A.1": AIH("NA", 4, "2Fan", "1D", 6, 6) #AIH-EP1
+elif pn == "20010-000199-A.1": AIH("NA", 4, "2Fan", "1I2D", 6, 2) #AIHDP-i
+elif pn == "20010-000335-A.0": U7130("NA")
+elif pn == "10300-000001-A.0": AIH("", 4, "2Fan", "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
 else: default()
 
 moduleSys.passGreen()

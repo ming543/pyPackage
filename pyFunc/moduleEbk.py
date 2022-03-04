@@ -182,6 +182,7 @@ def aicIdio(port, data):
     if dataCheck != data:
         logging.error('AIC_IDIO_Data_Fail: %s SPEC: %s' % (j, port))
         failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+## Not check DIO data for now
 #    else:
 #        logging.info('AIC_IDIO_Data:%s SPEC:%s' % (j, data))
 

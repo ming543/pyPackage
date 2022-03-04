@@ -496,11 +496,23 @@ def passGreen():
 
 def cpuCheck(specA):
     c = cpuinfo.get_cpu_info()['brand_raw']
-    if re.search(specA, c):
-        logging.info('CPU_Info: ' + c + " SPEC: " + specA)
-    else:
-        logging.error('CPU_Info: Fail ' + c + " SPEC: " + specA)
-        failRed("CPU規格不符")
+    if specA == "NA":
+        os.system('clear')
+        print("CPU_Info: " + c)
+        print(Fore.YELLOW + "確認CPU型號與BOM是否相符 " + Fore.RESET, end='')
+        print(Fore.YELLOW + "Check CPU with BOM" + Fore.RESET)
+        print("按n鍵結束,其他鍵繼續  ", end='')
+        check = input("Failed press 'n', other key continue: ").lower()
+        if check == "n":
+            logging.error('CPU_Info: ' + c + ' not match BOM')
+            failRed("CPU型號不符")
+        logging.info('CPU_Info: ' + c)
+    else:    
+        if re.search(specA, c):
+            logging.info('CPU_Info: ' + c + " SPEC: " + specA)
+        else:
+            logging.error('CPU_Info: Fail ' + c + " SPEC: " + specA)
+            failRed("CPU規格不符")
     
 def cpuGet():
     os.system('clear')
