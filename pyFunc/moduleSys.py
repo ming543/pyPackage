@@ -509,6 +509,29 @@ def cpuGet():
     logging.info('CPU_Info: ' + c)
 
 
+def memoryCheck(specA, specB):
+    memory = subprocess.check_output(
+            "sudo dmidecode -t memory | grep Size", shell=True)
+    memory = str(memory).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
+    mCheck = []
+    for line in memory:
+        if line.startswith('Size:'):
+#            logging.info('Memory_' + line)
+            mCheck.append(line)
+    if re.search(specA, mCheck[0]):
+        logging.info('Memory_Check: Pass ' + mCheck[0] + " SPEC: " + specA)
+    else:
+        logging.error('Memory_Check: Fail ' + mCheck[0] + " SPEC: " + specA)
+        failRed("Size規格不符")
+    if re.search(specB, mCheck[1]):
+        logging.info('Memory_Check: Pass ' + mCheck[1] + " SPEC: " + specB)
+    else:
+        logging.error('Memory_Check: Fail ' + mCheck[1] + " SPEC: " + specB)
+        failRed("Size規格不符")
+            
+    
+
+    
 def memoryGet():
     os.system('clear')
     memoryA = subprocess.check_output(
@@ -549,7 +572,7 @@ def storageGet():
             if not line.lower().endswith('usb'):
                 options.append(line)
     check = False
-    for i in range(1, len(options)):
+    for i in range(len(options)):
         logging.info('Storage_Info: ' + options[i])
         check = True
     if check == False:

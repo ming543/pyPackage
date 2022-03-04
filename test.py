@@ -15,9 +15,9 @@ from pyFunc import moduleSys
 from pyFunc import moduleEbk
 from pyFunc import moduleCg
 
-moduleCg.i2cGpio()
+#moduleCg.i2cGpio()
 #moduleSys.uartLoop("/dev/ttyS0")
-#moduleSys.alsabatTest()
+moduleSys.memoryCheck("8192 MB","No Module")
 
 def atCheck(comPort, atCommand, atBack):
     atLog = "/tmp/at.log"
