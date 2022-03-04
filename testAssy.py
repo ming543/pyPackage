@@ -13,7 +13,7 @@ startTest = "/home/stux/pyPackage/t.sh"
 with shelve.open('/home/stux/pyPackage/dataBase') as db:
     pn = db['pnSave']
 
-def AIM(sPoe, sFan, sDio, sLan, sCom):
+def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
@@ -25,12 +25,12 @@ def AIM(sPoe, sFan, sDio, sLan, sCom):
     if sPoe == 4:
         for i in range(1, sPoe + 1):
             moduleEbk.aicPoe("PoE  %s Present:" % i)
-#    moduleEbk.aicPoe("PoE  1 Present:")
 #    moduleEbk.aicFan("Fan 1 RPM:")
 #    moduleEbk.aicFan("Fan 2 RPM:")
     moduleEbk.aicDio(sDio, 00)
     moduleSys.rtcCheck()
-    moduleSys.cpuGet()
+#    moduleSys.cpuGet()
+    moduleSys.cpuCheck(sCPU)
     moduleSys.memoryGet()
     moduleSys.storageGet()
     for i in range(sLan):
@@ -44,7 +44,7 @@ def AIM(sPoe, sFan, sDio, sLan, sCom):
     moduleSys.alsabatTest()
 
 
-def AIH(sPoe, sFan, sDio, sLan, sCom):
+def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
@@ -72,7 +72,8 @@ def AIH(sPoe, sFan, sDio, sLan, sCom):
     elif sDio == "1D":
         moduleEbk.aicDio("GPIO1", 00)
     moduleSys.rtcCheck()
-    moduleSys.cpuGet()
+#    moduleSys.cpuGet()
+    moduleSys.cpuCheck(sCPU)
     moduleSys.memoryGet()
     moduleSys.storageGet()
     for i in range(sLan):
@@ -84,14 +85,15 @@ def AIH(sPoe, sFan, sDio, sLan, sCom):
         moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
     moduleSys.alsabatTest()
 
-def Q715QA5():
+def Q715QA5(sCPU):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
     moduleSys.dmidecodeLog("baseboard-serial-number")
     moduleSys.rtcCheck()
-    moduleSys.cpuGet()
+#    moduleSys.cpuGet()
+    moduleSys.cpuCheck(sCPU)
     moduleSys.memoryGet()
     moduleSys.storageGet()
     moduleSys.lanCheck("eth0", "80:7b:85")
@@ -124,7 +126,8 @@ def U7130():
     moduleSys.dmidecodeLog("baseboard-product-name")
     moduleSys.dmidecodeLog("baseboard-serial-number")
     moduleSys.rtcCheck()
-    moduleSys.cpuGet()
+#    moduleSys.cpuGet()
+    moduleSys.cpuCheck(sCPU)
     moduleSys.memoryGet()
     moduleSys.storageGet()
     moduleSys.lanCheck("eth0", "80:7b:85")
@@ -156,13 +159,7 @@ def default():
 
 
 def debug():
-    modelName = inspect.currentframe().f_code.co_name
-    moduleSys.snGet(pn, modelName)
-    moduleSys.rtcCheck()
-    moduleSys.cpuGet()
-    moduleSys.memoryCheck("8192 MB","No Module")
-    moduleSys.memoryGet()
-    
+    print("debug")
 
 os.system('clear')
 print(Fore.YELLOW + "組裝測試選單 ASSY-MENU" + Fore.RESET, end='')
@@ -170,7 +167,7 @@ print(" Build by EFCO SamLee")
 print("測試PN:", pn)
 
 #DIO=GPIO1 IDIO=DIO1
-#1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
+#1-CPU, Poe, fan, dio, Lan, Com
 if pn == "10300-000000-A.0": debug()
 elif pn == "10300-000004-A.3": Q715QA5()
 elif pn == "10300-000004-A.4": Q715QA5()
@@ -182,7 +179,7 @@ elif pn == "10500-000340-A.0": U713064G()
 elif pn == "10902-000097-A.0": AIM(4, "noFan", "DIO1", 4, 4)
 elif pn == "10951-000004-A.0": U7130()
 elif pn == "10953-000001-B.0": U650()
-elif pn == "20010-000160-A.0": AIM(4, "noFan", "DIO1", 4, 4)
+elif pn == "20010-000160-A.0": AIM(6600, 4, "noFan", "DIO1", 4, 4)
 elif pn == "20010-000161-A.0": AIM(4, "noFan", "DIO1", 4, 4)
 elif pn == "20010-000162-A.0": AIM(4, "noFan", "DIO1", 4, 4)
 elif pn == "20010-000170-A.0": AIH(4, "2Fan", "1D2D", 6, 2)

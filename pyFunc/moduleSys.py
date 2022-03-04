@@ -494,7 +494,14 @@ def passGreen():
     os.system('systemctl poweroff')
 
 
-
+def cpuCheck(specA):
+    c = cpuinfo.get_cpu_info()['brand_raw']
+    if re.search(specA, c):
+        logging.info('CPU_Info: ' + c + " SPEC: " + specA)
+    else:
+        logging.error('CPU_Info: Fail ' + c + " SPEC: " + specA)
+        failRed("CPU規格不符")
+    
 def cpuGet():
     os.system('clear')
     c = cpuinfo.get_cpu_info()['brand_raw']
@@ -531,7 +538,6 @@ def memoryCheck(specA, specB):
             
     
 
-    
 def memoryGet():
     os.system('clear')
     memory = subprocess.check_output(
