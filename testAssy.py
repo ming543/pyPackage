@@ -134,6 +134,7 @@ def U7130():
     moduleSys.usbCheck("JMS567", 1)
     moduleSys.usbCheck("DataTraveler|JetFlash", 1)
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
+    moduleCg.i2cGpio()
     moduleSys.uartLoop("/dev/ttyS0")
     moduleSys.aplayTest()
     moduleSys.arecordTest()
