@@ -156,7 +156,13 @@ def default():
 
 
 def debug():
-    print("debug")
+    modelName = inspect.currentframe().f_code.co_name
+    moduleSys.snGet(pn, modelName)
+    moduleSys.rtcCheck()
+    moduleSys.cpuGet()
+    moduleSys.memoryCheck("8192 MB","No Module")
+    moduleSys.memoryGet()
+    
 
 os.system('clear')
 print(Fore.YELLOW + "組裝測試選單 ASSY-MENU" + Fore.RESET, end='')

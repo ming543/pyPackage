@@ -534,22 +534,12 @@ def memoryCheck(specA, specB):
     
 def memoryGet():
     os.system('clear')
-    memoryA = subprocess.check_output(
-            "sudo dmidecode -t memory | grep 'ChannelA\|Size\|Part\|Serial'", shell=True)
-    memoryA = str(memoryA).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
-    memoryB = subprocess.check_output(
-            "sudo dmidecode -t memory | grep 'ChannelB\|Size\|Part\|Serial'", shell=True)
-    memoryB = str(memoryB).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
-    for i in range(4):
-        logging.info('Memory_A ' + memoryA[i])
-    print(" ")
-    try:
-        for i in range(4):
-            logging.info('Memory_B ' + memoryB[i])
-        print(" ")
-    except:
-        logging.info('Memory_B not find')
-        print(" ")
+    memory = subprocess.check_output(
+            "sudo dmidecode -t memory | grep Size", shell=True)
+    memory = str(memory).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
+    for line in memory:
+        if line.startswith('Size:'):
+            logging.info('Memory_' + line)
 
     print(Fore.YELLOW + "確認記憶體規格與BOM是否相符 " + Fore.RESET, end='')
     print(Fore.YELLOW + "Check Memory with BOM" + Fore.RESET)
