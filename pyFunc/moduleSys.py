@@ -417,25 +417,27 @@ def usbCheck(spec, num):
         failRed("Check USB %s x %s 規格不符 SPEC: %s " % (spec, usbNum, num))		
 
 
-def uartLoopCheck(comPort, num):
-    os.system('clear')
-    print(" ")
-    print("COM LOOPBACK 單一接頭測試 ")
-    print("確認 LOOPBACK 位於 COM - %s" % num)
-    print(" ")
-    input("按任意鍵繼續 Press any key continue...")
-    subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
-    mySerial = serial.Serial(comPort, 115200, timeout=1)
-    for num in range(1, 6):
-        sendData = bytes([num])
-        result = mySerial.write(sendData)
-        recvData = mySerial.readline()
-        if sendData != recvData:
-            logging.error('Tese_UART: %s loopback test failed!' % comPort)
-            failRed("%s COM PORT LOOPBACK測試失敗" % comPort)
-            print('test fail')
-        print('COM PORT LOOPBACK TEST %s' % num)
-    logging.info('Test_UART: %s loopback test passed!' % comPort)
+def uartLoopCheck(sCom):
+    for i in range(sCom):
+        j = i + 1
+        os.system('clear')
+        print(" ")
+        print("COM LOOPBACK 單一接頭測試 ")
+        print("確認 LOOPBACK 位於 COM - %s" % j)
+        print(" ")
+        input("按任意鍵繼續 Press any key continue...")
+        subprocess.call("sudo chmod 666 /dev/ttyS%s" % sCom, shell=True )
+        mySerial = serial.Serial("/dev/ttyS%s" % sCom, 115200, timeout=1)
+        for num in range(1, 6):
+            sendData = bytes([num])
+            result = mySerial.write(sendData)
+            recvData = mySerial.readline()
+            if sendData != recvData:
+                logging.error('Test_UART: COM %s loopback test failed!' % j)
+                failRed("COM %s LOOPBACK測試失敗" % j)
+                print('test fail')
+            print('COM PORT LOOPBACK TEST %s' % j)
+        logging.info('Test_UART: COM %s loopback test passed!' % j)
 
 
 def uartLoop(comPort):

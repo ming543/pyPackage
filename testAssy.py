@@ -60,9 +60,7 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom):
         moduleSys.lanCheck("eth%s" % i, "80:7b:85")
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("hub", 3)
-    for i in range(sCom):
-        j = i + 1
-        moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
+    moduleSys.uartLoopCheck(sCom)
     moduleSys.alsabatTest()
 
 def Q715QA5(sCPU):
