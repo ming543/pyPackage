@@ -136,15 +136,20 @@ def aicFan(port):
     process.expect(pexpect.EOF)
     result = process.before
     result = str(result).splitlines()
-    for i in range(len(result)):
-        for j in range(1, port + 1):
-            if re.search("Fan %s RPM:" %j, result[i]):
-                logging.error('Fan %s RPM:' % j)
-                failRed('Fan %s RPM:' % j)
-                #print(result[i])
-            else:
-                logging.info(result[i])
-     
+    for i in range(1, port + 1):
+        for j in range(len(result)):
+            if re.search(r' Fan %s RPM:' %i, result[j]):
+                fanCheck = True
+                fanNum = %j
+                fanLog = result[j]
+                fanRpm = result[j].split()[4]
+                fanRpm = int(fanRpm)
+                logging.info(fanLog)
+
+        if fanCheck != True:
+            logging.error('Fan %s Fail:' %i + fanLog)
+            failRed(' Fan %s Fail:' %i)
+        
 def aicDioSelect(sDio):
     if sDio == "1D2D":
         moduleEbk.aicDio("GPIO1", 00)
