@@ -116,17 +116,24 @@ def aicPoe(port):
     result = process.before
     result = str(result).splitlines()
     for i in range(len(result)):
-        if re.search(port, result[i]):
+        for j in range(1, port + 1):
+            if re.search("PoE  %s Present: Disconnected" % j, resule[i]):
+                logging.error('PoE  %s Present: Disconnected' % j)
+                failRed('PoE  %s Present: Disconnected' % j)
+            else:
+                logging.info(result[i])
+    #for i in range(len(result)):
+    #    if re.search(port, result[i]):
             #print(result[i])
-            j = result[i]
-            poeCheck = result[i].split()[3]
-            poeCheck = str(poeCheck)
+    #        j = result[i]
+    #        poeCheck = result[i].split()[3]
+    #        poeCheck = str(poeCheck)
             #print(poeCheck)
-    if poeCheck != "Disconnected" :
-        logging.info('AIC_PoE: %s' % j)
-    else:
-        logging.error('AIC_PoE_Fail: %s' % j)
-        failRed('AIC_PoE_Fail: %s' % j)
+    #if poeCheck != "Disconnected" :
+    #    logging.info('AIC_PoE: %s' % j)
+    #else:
+    #    logging.error('AIC_PoE_Fail: %s' % j)
+    #    failRed('AIC_PoE_Fail: %s' % j)
 
 
 def aicFan(port):
