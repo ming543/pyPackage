@@ -17,7 +17,8 @@ from pyFunc import moduleCg
 
 #moduleCg.i2cGpio()
 #moduleSys.uartLoop("/dev/ttyS0")
-moduleSys.memoryCheck("8192 MB","No Module")
+#moduleSys.memoryCheck("8192 MB","No Module")
+moduleEbk.aicFan(2)
 
 def atCheck(comPort, atCommand, atBack):
     atLog = "/tmp/at.log"
