@@ -22,9 +22,7 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom):
     moduleEbk.aicDdmLogo()
     moduleEbk.aicTemp(20, 60)
     moduleEbk.aicRtc(2.999, 3.333)
-    if sPoe == 4:
-        for i in range(1, sPoe + 1):
-            moduleEbk.aicPoe("PoE  %s Present:" % i)
+    moduleEbk.aicPoe(sPoe)
 #    moduleEbk.aicFan("Fan 1 RPM:")
 #    moduleEbk.aicFan("Fan 2 RPM:")
     if sDio == "1I":
@@ -57,8 +55,8 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom):
     moduleEbk.aicDdmLogo()
     moduleEbk.aicTemp(20, 60)
     moduleEbk.aicRtc(2.999, 3.333)
-    for i in range(1, sPoe + 1):
-        moduleEbk.aicPoe("PoE  %s Present:" % i)
+    moduleEbk.aicPoe(sPoe)
+    
     if sFan == "2Fan":
         moduleEbk.aicFan("Fan 1 RPM:")
         moduleEbk.aicFan("Fan 2 RPM:")
