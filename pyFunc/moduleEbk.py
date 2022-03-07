@@ -120,6 +120,7 @@ def aicPoe(port):
             if re.search("PoE  %s Present: Disconnected" % j, result[i]):
                 logging.error('PoE  %s Present: Disconnected' % j)
                 failRed('PoE  %s Present: Disconnected' % j)
+                #print(result[i])
             else:
                 logging.info(result[i])
 
@@ -136,19 +137,29 @@ def aicFan(port):
     result = process.before
     result = str(result).splitlines()
     for i in range(len(result)):
-        if re.search(port, result[i]):
-            #print(result[i])
-            j = result[i]
-            fanCheck = result[i].split()[3]
-            fanCheck = int(fanCheck)
-            #fanCheck = str(fanCheck)
-            print(fanCheck)
-    if fanCheck != 0 :
-        logging.info('AIC_Fan: %s' % j)
-    else:
-        logging.error('AIC_Fan_Fail: %s' % j)
-        failRed('AIC_Fan_Fail: %s' % j)
-
+        for j in range(1, port + 1):
+            if re.search("Fan %s RPM:" %j, result[i]):
+                logging.error('Fan %s RPM:' % j)
+                failRed('Fan %s RPM:' % j)
+                #print(result[i])
+            else:
+                logging.info(result[i])
+     
+def aicDioSelect(sDio):
+    if sDio == "1D2D":
+        moduleEbk.aicDio("GPIO1", 00)
+        moduleEbk.aicDio("GPIO2", 00)
+    elif sDio == "1I2D":
+        moduleEbk.aicIdio("DIO1", 00)
+        moduleEbk.aicDio("GPIO2", 00)
+    elif sDio == "1I2I":
+        moduleEbk.aicIdio("DIO1", 00)
+        moduleEbk.aicIdio("DIO2", 00)
+    elif sDio == "1I":
+        moduleEbk.aicIdio("DIO1", 00)
+    elif sDio == "1D":
+        moduleEbk.aicDio("GPIO1", 00)
+    
 
 def aicIdio(port, data):
     process = pexpect.spawn('make run', cwd=ekitFolder, timeout=2, encoding='utf-8' )

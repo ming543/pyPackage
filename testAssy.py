@@ -23,15 +23,9 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom):
     moduleEbk.aicTemp(20, 60)
     moduleEbk.aicRtc(2.999, 3.333)
     moduleEbk.aicPoe(sPoe)
-#    moduleEbk.aicFan("Fan 1 RPM:")
-#    moduleEbk.aicFan("Fan 2 RPM:")
-    if sDio == "1I":
-        moduleEbk.aicIdio("DIO1", 00)
-    elif sDio == "1D":
-        moduleEbk.aicDio("GPIO1", 00)
-            
+#    moduleEbk.aicFan(sFan)
+    moduleEbk.aicDioSelect(sDio)
     moduleSys.rtcCheck()
-#    moduleSys.cpuGet()
     moduleSys.cpuCheck(sCPU)
     moduleSys.memoryGet()
     moduleSys.storageGet()
@@ -56,25 +50,9 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom):
     moduleEbk.aicTemp(20, 60)
     moduleEbk.aicRtc(2.999, 3.333)
     moduleEbk.aicPoe(sPoe)
-    
-    if sFan == "2Fan":
-        moduleEbk.aicFan("Fan 1 RPM:")
-        moduleEbk.aicFan("Fan 2 RPM:")
-    if sDio == "1D2D":
-        moduleEbk.aicDio("GPIO1", 00)
-        moduleEbk.aicDio("GPIO2", 00)
-    elif sDio == "1I2D":
-        moduleEbk.aicIdio("DIO1", 00)
-        moduleEbk.aicDio("GPIO2", 00)
-    elif sDio == "1I2I":
-        moduleEbk.aicIdio("DIO1", 00)
-        moduleEbk.aicIdio("DIO2", 00)
-    elif sDio == "1I":
-        moduleEbk.aicIdio("DIO1", 00)
-    elif sDio == "1D":
-        moduleEbk.aicDio("GPIO1", 00)
+    moduleEbk.aicFan(sFan)
+    moduleEbk.aicDioSelect(sDio)
     moduleSys.rtcCheck()
-#    moduleSys.cpuGet()
     moduleSys.cpuCheck(sCPU)
     moduleSys.memoryGet()
     moduleSys.storageGet()
@@ -187,17 +165,17 @@ elif pn == "10953-000001-B.0": U650("NA")
 elif pn == "20010-000160-A.0": AIM("6600", 4, "noFan", "1I", 4, 4)
 elif pn == "20010-000161-A.0": AIM("6300", 4, "noFan", "1I", 4, 4)
 elif pn == "20010-000162-A.0": AIM("6100", 4, "noFan", "1I", 4, 4)
-elif pn == "20010-000170-A.0": AIH("NA", 4, "2Fan", "1D2D", 6, 2)
+elif pn == "20010-000170-A.0": AIH("NA", 4, 2, "1D2D", 6, 2)
 elif pn == "20010-000173-A.1": AIM("6600", 0, "noFan", "1I", 2, 4) #AIML-I
 elif pn == "20010-000177-A.1": AIM("6300", 0, "noFan", "1I", 2, 4) #AIML-I
 elif pn == "20010-000179-A.1": AIM("3955", 0, "noFan", "1I", 2, 4) #AIML-I
-elif pn == "20010-000181-A.2": AIH("NA", 4, "2Fan", "1I2I", 6, 2) #AIHDP-i2
+elif pn == "20010-000181-A.2": AIH("NA", 4, 2, "1I2I", 6, 2) #AIHDP-i2
 elif pn == "20010-000191-A.1": AIM("7300", 0, "noFan", "1I", 2, 4) #AIML-I
 elif pn == "20010-000194-A.2": AIH("NA", 4, "noFan", "1D", 6, 6) #AIH-DIO
-elif pn == "20010-000197-A.1": AIH("NA", 4, "2Fan", "1D", 6, 6) #AIH-EP1
-elif pn == "20010-000199-A.1": AIH("NA", 4, "2Fan", "1I2D", 6, 2) #AIHDP-i
+elif pn == "20010-000197-A.1": AIH("NA", 4, 2, "1D", 6, 6) #AIH-EP1
+elif pn == "20010-000199-A.1": AIH("NA", 4, 2, "1I2D", 6, 2) #AIHDP-i
 elif pn == "20010-000335-A.0": U7130("NA")
-elif pn == "10300-000001-A.0": AIH("", 4, "2Fan", "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
+elif pn == "10300-000001-A.0": AIH("", 4, 2, "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
 else: default()
 
 moduleSys.passGreen()
