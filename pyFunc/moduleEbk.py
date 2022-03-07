@@ -115,14 +115,22 @@ def aicPoe(port):
     process.expect(pexpect.EOF)
     result = process.before
     result = str(result).splitlines()
-    for i in range(len(result)):
-        for j in range(1, port + 1):
-            if re.search("PoE  %s Present: Disconnected" % j, result[i]):
-                logging.error('PoE  %s Present: Disconnected' % j)
-                failRed('PoE  %s Present: Disconnected' % j)
-                #print(result[i])
-            else:
-                logging.info(result[i])
+    for i in range(1, port + 1):
+        poeCheck = False
+        for j in range(len(result)):
+            if re.search(r"PoE  %s Present:" % i, result[j]):
+                poeCheck =True
+                poePower = result[j].split()[3]
+                logging.info(result[j])
+        if poePower == "Disconnected":
+            logging.error('PoE %s Fail: ' % i + result[j])
+            failRed('PoE %s Fail: ' % i + result[j])
+                
+        if poeCheck != True:
+            logging.error('PoE  %s Present: Fail' % i)
+            failRed('PoE  %s Present: Disconnected' % i)
+            
+                
 
 
 def aicFan(port):
@@ -137,18 +145,22 @@ def aicFan(port):
     result = process.before
     result = str(result).splitlines()
     for i in range(1, port + 1):
+        fanCheck = False
         for j in range(len(result)):
             if re.search(r' Fan %s RPM:' %i, result[j]):
                 fanCheck = True
-                fanNum = %j
                 fanLog = result[j]
-                fanRpm = result[j].split()[4]
+                fanRpm = result[j].split()[3]
                 fanRpm = int(fanRpm)
                 logging.info(fanLog)
-
+        if fanRpm == 0:
+            logging.error('Fan %s RPM Fail:' %i + fanLog)
+            failRed(' Fan %s RPM Fail: ' %i + fanLog)
+    
         if fanCheck != True:
-            logging.error('Fan %s Fail:' %i + fanLog)
-            failRed(' Fan %s Fail:' %i)
+            logging.error('Fan %s not find!' %i)
+            failRed(' Fan %s not find!' %i)
+        
         
 def aicDioSelect(sDio):
     if sDio == "1D2D":
