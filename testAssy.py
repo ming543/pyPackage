@@ -29,14 +29,10 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom):
     moduleSys.cpuCheck(sCPU)
     moduleSys.memoryGet()
     moduleSys.storageGet()
-    for i in range(sLan):
-        moduleSys.lanCheck("eth%s" % i, "80:7b:85")
+    moduleSys.lanSelect(sLan)
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("hub", 3)
-    #moduleSys.uartLoopCheck("/dev/ttyS0", "1")
-    for i in range(sCom):
-        j = i + 1
-        moduleSys.uartLoopCheck("/dev/ttyS%s" % i, "%s" % j)
+    moduleSys.uartLoopCheck(sCom)
     moduleSys.alsabatTest()
 
 
@@ -56,8 +52,7 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom):
     moduleSys.cpuCheck(sCPU)
     moduleSys.memoryGet()
     moduleSys.storageGet()
-    for i in range(sLan):
-        moduleSys.lanCheck("eth%s" % i, "80:7b:85")
+    moduleSys.lanSelect(sLan)
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("hub", 3)
     moduleSys.uartLoopCheck(sCom)
@@ -127,6 +122,10 @@ def U7150(sCPU):
 def U6500(sCPU):
     print("Not Ready")
 
+def debug(sCPU):
+    modelName = inspect.currentframe().f_code.co_name
+    moduleSys.snGet(pn, modelName)
+    moduleSys.cpuCheck(sCPU)
 
 def default():
     print("此PN無對應測試程式")
@@ -135,12 +134,6 @@ def default():
         f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
     subprocess.call("sh %s" % startTest, shell=True)
 
-
-def debug(sCPU):
-    modelName = inspect.currentframe().f_code.co_name
-    moduleSys.snGet(pn, modelName)
-    moduleSys.cpuCheck(sCPU)
-    
 
 os.system('clear')
 print(Fore.YELLOW + "組裝測試選單 ASSY-MENU" + Fore.RESET, end='')

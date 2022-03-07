@@ -335,6 +335,9 @@ def lanMacCheck(ethN, macH):
         logging.error('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
         failRed("MAC不符")
 
+def lanSelect(sLan):
+    for i in range(sLan):
+        lanCheck("eth%s" %i, "80:7b:85")
 
 def lanCheck(ethN, macH):
     #test MAC
@@ -426,8 +429,8 @@ def uartLoopCheck(sCom):
         print("確認 LOOPBACK 位於 COM - %s" % j)
         print(" ")
         input("按任意鍵繼續 Press any key continue...")
-        subprocess.call("sudo chmod 666 /dev/ttyS%s" % sCom, shell=True )
-        mySerial = serial.Serial("/dev/ttyS%s" % sCom, 115200, timeout=1)
+        subprocess.call("sudo chmod 666 /dev/ttyS%s" % i, shell=True )
+        mySerial = serial.Serial("/dev/ttyS%s" % i, 115200, timeout=1)
         for num in range(1, 6):
             sendData = bytes([num])
             result = mySerial.write(sendData)
