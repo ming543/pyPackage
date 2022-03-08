@@ -430,7 +430,11 @@ def uartLoopCheck(sCom):
         print(" ")
         input("按任意鍵繼續 Press any key continue...")
         subprocess.call("sudo chmod 666 /dev/ttyS%s" % i, shell=True )
-        mySerial = serial.Serial("/dev/ttyS%s" % i, 115200, timeout=1)
+        try:
+            mySerial = serial.Serial("/dev/ttyS%s" % i, 115200, timeout=1)    
+        except:
+            logging.error('/dev/ttyS%s failed!' % i)
+            failRed("/dev/ttyS%s fail" % i )
         for num in range(1, 6):
             sendData = bytes([num])
             result = mySerial.write(sendData)
