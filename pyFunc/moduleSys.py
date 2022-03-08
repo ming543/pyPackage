@@ -588,8 +588,10 @@ def storageCheck(specA):
                     logging.info('Storage_Check: ' + line + " SPEC: " + specA)
     if check == False:
         print("系統查無儲存裝置 No storage find at system")
+        for line in output:
+            print(line)
         logging.error("No storage find at system SPEC: " + specA)
-        failRed("系統查無儲存裝置 SOEC: " + specA)
+        failRed("系統查無儲存裝置 SPEC: " + specA)
 
 def storageGet():
     os.system('clear')
