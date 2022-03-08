@@ -431,20 +431,21 @@ def uartLoopCheck(sCom):
         input("按任意鍵繼續 Press any key continue...")
         subprocess.call("sudo chmod 666 /dev/ttyS%s" % i, shell=True )
         try:
-            mySerial = serial.Serial("/dev/ttyS%s" % i, 115200, timeout=1)    
+            mySerial = serial.Serial("/dev/ttyS%s" % i, 115200, timeout=1)
+            for num in range(1, 6):
+                sendData = bytes([num])
+                result = mySerial.write(sendData)
+                recvData = mySerial.readline()
+                if sendData != recvData:
+                    logging.error('Test_UART: COM %s loopback test failed!' % j)
+                    failRed("COM %s LOOPBACK測試失敗" % j)
+                    print('test fail')
+                print('COM PORT LOOPBACK TEST %s' % j)
+            logging.info('Test_UART: COM %s loopback test passed!' % j)
         except:
             logging.error('/dev/ttyS%s failed!' % i)
             failRed("/dev/ttyS%s fail" % i )
-        for num in range(1, 6):
-            sendData = bytes([num])
-            result = mySerial.write(sendData)
-            recvData = mySerial.readline()
-            if sendData != recvData:
-                logging.error('Test_UART: COM %s loopback test failed!' % j)
-                failRed("COM %s LOOPBACK測試失敗" % j)
-                print('test fail')
-            print('COM PORT LOOPBACK TEST %s' % j)
-        logging.info('Test_UART: COM %s loopback test passed!' % j)
+       
 
 
 def uartLoop(comPort):
