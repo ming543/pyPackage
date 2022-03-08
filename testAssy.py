@@ -34,6 +34,7 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom):
     moduleSys.usbCheck("hub", 3)
     moduleSys.uartLoopCheck(sCom)
     moduleSys.alsabatTest()
+    moduleSys.cpuTempCheck(20, 60)
 
 
 def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom):
@@ -57,6 +58,7 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom):
     moduleSys.usbCheck("hub", 3)
     moduleSys.uartLoopCheck(sCom)
     moduleSys.alsabatTest()
+    moduleSys.cpuTempCheck(20, 60)
 
 def Q715QA5(sCPU):
     modelName = inspect.currentframe().f_code.co_name
@@ -136,6 +138,7 @@ def U7150(sCPU):
     moduleSys.uartLoop("/dev/ttyS0")
     moduleSys.aplayTest()
     moduleSys.arecordTest()
+    moduleSys.alsabatTest()
     moduleSys.cpuTempCheck(20, 60)
 
 def U6500(sCPU):
@@ -166,8 +169,8 @@ elif pn == "10300-000004-A.3": Q715QA5("NA")
 elif pn == "10300-000004-A.4": Q715QA5("NA")
 elif pn == "10300-000007-A.0": Q715QA5("NA")
 elif pn == "10400-000004-B.2": U7130PAS("NA")
-elif pn == "10400-000009-A.0": U7150("NA")
-elif pn == "10400-000010-A.0": U7150("NA")
+elif pn == "10400-000009-A.0": U7150("N4200")
+elif pn == "10400-000010-A.0": U7150("N4200")
 elif pn == "10500-000340-A.0": U713064G("NA")
 elif pn == "10902-000097-A.0": AIM("6300", 4, "noFan", "DIO1", 4, 4)
 elif pn == "10951-000004-A.0": U7130("NA")
