@@ -136,7 +136,7 @@ def U7150(sCPU):
     moduleSys.usbCheck("DataTraveler|JetFlash", 1)
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
     moduleCg.i2cGpio()
-    moduleSys.uartLoop("/dev/ttyS0")
+    moduleSys.uartLoop("/dev/ttyS5")
     moduleSys.aplayTest()
     moduleSys.arecordTest()
     moduleSys.alsabatTest()
