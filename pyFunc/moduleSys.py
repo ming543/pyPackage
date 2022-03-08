@@ -573,6 +573,24 @@ def memoryGet():
         failRed("記憶體規格不符")
     
 
+def storageCheck(specA):
+    os.system('clear')
+    output = subprocess.check_output(
+            'lsblk -o type,name,model,size,tran', shell=True)
+    output = str(output).lstrip('b\'').split('\\n')
+    check = False
+#disk開頭，不以USB結尾
+    for line in output:
+        if line.lower().startswith('disk'):
+            if not line.lower().endswith('usb'):
+                if re.search(specA, line):
+                    check = True
+                    logging.info('Storage_Check: ' + line + " SPEC: " + specA)
+    if check == False:
+        print("系統查無儲存裝置 No storage find at system")
+        logging.error("No storage find at system SPEC: " + specA)
+        failRed("系統查無儲存裝置 SOEC: " + specA)
+
 def storageGet():
     os.system('clear')
     output = subprocess.check_output(
@@ -603,12 +621,13 @@ def storageGet():
 def diskGet():
     os.system('clear')
     output = subprocess.check_output(
-            'lsblk -o type,name,model,size', shell=True)
+            'lsblk -o type,name,model,size,tran', shell=True)
     output = str(output).lstrip('b\'').split('\\n')
     options = []
     for line in output:
         if line.lower().startswith('disk'):
-            options.append(line)
+            if not line.lower().endswith('usb'):
+                options.append(line)
     print("選取回寫入儲存裝置(克隆目標) ")
     diskShow = enquiries.choose(' Choose clone disk options: ', options)
     diskGet = diskShow.split(' ')[1]
