@@ -38,7 +38,7 @@ else:
     subprocess.call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True)
 
 def alsabatTest():
-    response = subprocess.check_call("alsabat -Dplughw:0,0", shell=True)
+    response = subprocess.call("alsabat -Dplughw:0,0", shell=True)
     if response == 0:
         logging.info('Audio Loopback Test: Pass')
     else:
@@ -148,10 +148,10 @@ def cpuTempCheck(cpuL, cpuH):
             cpuT = str(f'{line}').split(':')[1]
             cpuT = int(float(cpuT))
     if cpuL < cpuT < cpuH:
-        logging.info("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+        logging.info("Check CPU temp %s ! SPEC: %s to %s C" % (cpuT, cpuL, cpuH))
     else:
-        logging.error("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
-        failRed("確認 CPU 溫度 %s C ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+        logging.error("Check CPU temp %s ! SPEC: %s to %s C" % (cpuT, cpuL, cpuH))
+        failRed("確認 CPU 溫度 %s C ! SPEC: %s to %s C" % (cpuT, cpuL, cpuH))
 
 def pnGet():
     print(Fore.YELLOW + " 選取測試PN " + Fore.RESET, end='')

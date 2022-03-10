@@ -139,7 +139,6 @@ def U7150(sCPU):
     moduleSys.uartLoop("/dev/ttyS5")
     moduleSys.aplayTest()
     moduleSys.arecordTest()
-    moduleSys.alsabatTest()
     moduleSys.cpuTempCheck(20, 60)
 
 def U6500(sCPU):
