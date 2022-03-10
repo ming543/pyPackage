@@ -51,6 +51,10 @@ def pyMenu():
 
 
 def biosFolderUpdate():
+    scrConfig = '/home/stux/pyPackage/tools/rclone.conf'
+    desConfig = '/home/stux/.config/rclone/rclone.conf'
+    shutil.copyfile(scrConfig, desConfig)
+    
     os.system('clear')
     rcloneFolder = "EFCO_test_script:/V23C_DOS/BIOS"
     localFolder = "/home/partimag/BIOS/"
