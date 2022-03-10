@@ -42,7 +42,7 @@ def alsabatTest():
     if response == 0:
         logging.info('Audio Loopback Test: Pass')
     else:
-        logging.error("Audio Loopback Test: Fail, Response = " + response)
+        logging.error("Audio Loopback Test: Fail, Response = " + str(response))
         failRed("確認AUDIO LOOPBACK FAIL")
 
 def arecordTest():
