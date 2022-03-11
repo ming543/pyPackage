@@ -67,7 +67,6 @@ def serialTest():
 def biStress():
     biTotal = 12
     biCount = 0
-    #cpuT = getCpuTemp()
     cpuH = getcpuH()    
     cpuL = 20
     #-c N, --cpu N start N workers spinning on sqrt(rand())
@@ -88,8 +87,8 @@ def biStress():
             print("BI run %s, Total run 12 times" % biCount)
             print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
             print(" ")
-            print("Time Now:", time.ctime(nowTime))
-            print("BI run %s end time:" % biCount, time.ctime(endTime))
+            print("BI run %s Time End:" % biCount, time.ctime(endTime))
+            print("BI run %s Time Now:" % biCount, time.ctime(nowTime))
             time.sleep(1)
 
         if cpuL < cpuT < cpuH:
@@ -98,6 +97,7 @@ def biStress():
         else:
             print("TempHigh")
             logging.error("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+            failRed("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
 
         serialTest()
         biCount = biCount + 1 
@@ -105,6 +105,7 @@ def biStress():
     if biCount < biTotal:
         print("bicountFail", biCount)
         logging.error('Check BI total run %s failed!' % biCount)
+        failRed('Check BI total run %s failed!' % biCount)
     else:
         print("bicount OK", biCount)
         logging.info('Check BI total run %s passed!' % biCount)

@@ -14,6 +14,7 @@ import pexpect
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
 from pyFunc import moduleCg
+import json
 
 #moduleCg.i2cGpio()
 #moduleSys.uartLoop("/dev/ttyS0")
