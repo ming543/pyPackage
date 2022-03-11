@@ -88,7 +88,7 @@ def biStress():
             print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
             print(" ")
             print("now time:", time.ctime(nowTime))
-            print("end time:", time.ctime(endTime))
+            print("BI run %s end time:" % biCount, time.ctime(endTime))
             time.sleep(1)
 
         if cpuL < cpuT < cpuH:
