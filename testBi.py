@@ -78,7 +78,7 @@ def biStress():
     serialTest()
     while biCount <= biTotal:
         nowTime = int(time.time())
-        endTime = int(time.time() + 10)
+        endTime = int(time.time() + 600)
         while nowTime < endTime:
             os.system('clear')
             nowTime = int(time.time())
@@ -91,7 +91,7 @@ def biStress():
             print("end time:", time.ctime(endTime))
             time.sleep(1)
 
-        if cpuT > cpuL and cpuT < cpuH:
+        if cpuL < cpuT < cpuH:
             print("ok")
             logging.info("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
         else:
