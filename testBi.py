@@ -6,6 +6,7 @@ import re
 import shelve
 import subprocess
 import time
+import json
 #sys.path.append("..")
 from pyFunc import moduleSys
 
@@ -28,13 +29,12 @@ def biFuncCheck():
         return "BI-120M"
 
 def getCpuTemp():
+    #sensor -j > json type
     sensors = subprocess.check_output(
-            "sensors -u", shell=True) 
-    sensors = sensors.decode().splitlines()
-    for line in sensors:
-        if re.search('temp2_input', line):
-            cpuT = str(f'{line}').split(':')[1]
-            cpuT = int(float(cpuT))
+            "sensors -j", shell=True) 
+    sensors = json.loads(sensors)
+    cpuT = sensors['coretemp-isa-0000']['Core 0']['temp2_input']
+    cpuT = int(float(cpuT))
     return cpuT
 
 def getCpuMips():

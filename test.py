@@ -18,7 +18,19 @@ from pyFunc import moduleCg
 #moduleCg.i2cGpio()
 #moduleSys.uartLoop("/dev/ttyS0")
 #moduleSys.memoryCheck("8192 MB","No Module")
-moduleEbk.aicFan(2)
+#moduleEbk.aicFan(2)
+
+def getCpuTemp():
+    #sensor -j > json type
+    sensors = subprocess.check_output(
+            "sensors -j", shell=True) 
+    sensors = json.loads(sensors)
+    cpuT = sensors['coretemp-isa-0000']['Core 0']['temp2_input']
+    cpuT = int(float(cpuT))
+    print(cpuT)
+    return cpuT
+
+getCpuTemp()
 
 def atCheck(comPort, atCommand, atBack):
     atLog = "/tmp/at.log"
