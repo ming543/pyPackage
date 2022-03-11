@@ -79,40 +79,37 @@ def biStress():
         nowTime = int(time.time())
         endTime = int(time.time() + 600)
         while nowTime < endTime:
-            os.system('clear')
-            nowTime = int(time.time())
             cpuT = getCpuTemp()
-            print(" ")
-            print("Test PN:%s SN:%s" % (pn, sn))
-            print("BI run %s, Total run 12 times" % biCount)
-            print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
-            print(" ")
-            print("BI run %s Time End:" % biCount, time.ctime(endTime))
-            print("BI run %s Time Now:" % biCount, time.ctime(nowTime))
-            time.sleep(1)
-
-        if cpuL < cpuT < cpuH:
-            print("ok")
-            logging.info("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
-        else:
-            print("TempHigh")
-            logging.error("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
-            failRed("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
-
+            if cpuL < cpuT < cpuH:
+                os.system('clear')
+                nowTime = int(time.time())
+                print(" ")
+                print("Test PN:%s SN:%s" % (pn, sn))
+                print("BI run %s, Total run 12 times" % biCount)
+                print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+                print(" ")
+                print("BI run %s Time End:" % biCount, time.ctime(endTime))
+                print("BI run %s Time Now:" % biCount, time.ctime(nowTime))
+                time.sleep(1)              
+            else:
+                print("TempHigh")
+                logging.error("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+                moduleSys.failRed("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
         serialTest()
-        biCount = biCount + 1 
+        biCount = biCount + 1
+        logging.info("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
 
     if biCount < biTotal:
         print("bicountFail", biCount)
         logging.error('Check BI total run %s failed!' % biCount)
-        failRed('Check BI total run %s failed!' % biCount)
+        moduleSys.failRed('Check BI total run %s failed!' % biCount)
     else:
         print("bicount OK", biCount)
         logging.info('Check BI total run %s passed!' % biCount)
 
 
 ### Stript start here ###
-
+os.system('clear')
 with shelve.open('/home/stux/pyPackage/dataBase') as db:
     pn = db['pnSave']
 modelName = biFuncCheck()
