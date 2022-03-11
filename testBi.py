@@ -67,7 +67,7 @@ def serialTest():
 def biStress():
     biTotal = 12
     biCount = 0
-    cpuT = getCpuTemp()
+    #cpuT = getCpuTemp()
     cpuH = getcpuH()    
     cpuL = 20
     #-c N, --cpu N start N workers spinning on sqrt(rand())
@@ -83,11 +83,12 @@ def biStress():
             os.system('clear')
             nowTime = int(time.time())
             cpuT = getCpuTemp()
+            print(" ")
             print("Test PN:%s SN:%s" % (pn, sn))
             print("BI run %s, Total run 12 times" % biCount)
             print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
             print(" ")
-            print("now time:", time.ctime(nowTime))
+            print("Time Now:", time.ctime(nowTime))
             print("BI run %s end time:" % biCount, time.ctime(endTime))
             time.sleep(1)
 
