@@ -45,7 +45,7 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
 
 
 os.system('clear')
-modelName = "CLONE-OS"
+modelName = "CLONEOS"
 print("Clone_Disk: ", diskShow)
 print("Clone_OS: ", osGet)
 moduleSys.snGet(pn, modelName)

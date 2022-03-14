@@ -699,12 +699,20 @@ def diskGet():
         if line.lower().startswith('disk'):
             if not line.lower().endswith('usb'):
                 options.append(line)
-    print("選取回寫入儲存裝置(克隆目標) ")
-    diskShow = enquiries.choose(' Choose clone disk options: ', options)
-    diskGet = diskShow.split(' ')[1]
-    with shelve.open('/home/stux/pyPackage/dataBase') as db:
-        db['diskSave'] = diskGet
-        db['diskShow'] = diskShow
+    try:
+        print("選取回寫入儲存裝置(克隆目標) ")
+        diskShow = enquiries.choose(' Choose clone disk options: ', options)
+        diskGet = diskShow.split(' ')[1]
+        with shelve.open('/home/stux/pyPackage/dataBase') as db:
+            db['diskSave'] = diskGet
+            db['diskShow'] = diskShow
+    except:
+        print("系統無DISK儲存裝置(克隆目標) ")
+        print(output)
+        input("按任意鍵繼續 Press any key continue...")
+        with open(startTest, "w") as f:
+            f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
+        subprocess.call("sh %s" % startTest, shell=True)
 
 
 def osGet():
