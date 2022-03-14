@@ -707,7 +707,9 @@ def diskGet():
             db['diskSave'] = diskGet
             db['diskShow'] = diskShow
     except:
-        print(Fore.YELLOW + "系統查無回寫入DISK儲存裝置(克隆目標)" + Fore.RESET)
+        print(Fore.YELLOW + "系統查無可供寫入儲存裝置(DISK)" + Fore.RESET)
+        print(Fore.YELLOW + "Can't find DISK for OS restore" + Fore.RESET)
+        print(" ")
         input("按任意鍵繼續 Press any key continue...")
         with open(startTest, "w") as f:
             f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
@@ -725,15 +727,14 @@ def osGet():
         print("選取回寫作業系統 ")
         osGet = enquiries.choose(' Choose clone OS options: ', index)
     except ValueError:
-        print(Fore.YELLOW + "未發現作業系統 No OS find " + Fore.RESET, end='')
-        print("需先執行OS複製程式...")
+        print(Fore.YELLOW + "未發現回寫作業系統" + Fore.RESET)
+        print(Fore.YELLOW + "No Restore OS find" + Fore.RESET)
+        print("需使用母碟先執行OS複製程式...")
         print(" ")
-        osGet = "NO_OS"
         input("按任意鍵繼續 Press any key continue...")
-    with shelve.open('/home/stux/pyPackage/dataBase') as db:
-        db['osSave'] = osGet
-
-
+        with open(startTest, "w") as f:
+            f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
+        subprocess.call("sh %s" % startTest, shell=True)
 
 
 def cloneCheck():
