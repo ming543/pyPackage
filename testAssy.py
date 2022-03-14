@@ -163,7 +163,7 @@ def default():
 
 os.system('clear')
 print(Fore.YELLOW + "組裝測試選單 ASSY-MENU" + Fore.RESET, end='')
-print(" Build by EFCO SamLee")
+print(" Build by EFCO SamLee明")
 print("測試PN:", pn)
 
 #DIO=GPIO1 IDIO=DIO1

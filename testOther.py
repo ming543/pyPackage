@@ -32,7 +32,7 @@ def mMenu():
 
     os.system('clear')
     print(Fore.YELLOW + "%s 其他選單 OTHER-MENU" % booted + Fore.RESET, end='')
-    print(" Build by EFCO SamLee")
+    print(" Build by EFCO SamLee明")
     print("測試程式版本 Revision %s" % loginfo)
     choice = enquiries.choose(' 選擇測試項目 Choose options:', options)
 

@@ -80,7 +80,7 @@ def default():
 
 os.system('clear')
 print(Fore.YELLOW + "PCBA測試選單 PCBA-MENU" + Fore.RESET, end='')
-print(" Build by EFCO SamLee")
+print(" Build by EFCO SamLee明")
 print("測試PN:", pn)
 
 #DIO=GPIO1 IDIO=DIO1

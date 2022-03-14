@@ -55,7 +55,7 @@ def mMenu():
 
     os.system('clear')
     print(Fore.YELLOW + "%s 主選單 MAIN-MENU" % booted + Fore.RESET, end='')
-    print(" Build by EFCO SamLee")
+    print(" Build by EFCO SamLee明")
     print("測試程式版本 LINUX Revision %s" % loginfo)
     #print("測試程式版本 DOS Revision %s" % logDos)
     choice = enquiries.choose('PN:%s 選擇測試項目 Choose options:' % pn, options)
@@ -106,7 +106,7 @@ def aMenu2():
     index = []
     aPath = pyFolder + "testAssy"
     print(Fore.YELLOW + "%s 組裝測試選單 ASSY-MENU" % booted + Fore.RESET, end='')
-    print(" Build by EFCO SamLee")
+    print(" Build by EFCO SamLee明")
     print("Revision %s" % loginfo)
     for filename in os.listdir(aPath):
         index += [filename]
