@@ -707,8 +707,7 @@ def diskGet():
             db['diskSave'] = diskGet
             db['diskShow'] = diskShow
     except:
-        print("系統無DISK儲存裝置(克隆目標) ")
-        print(output)
+        print(Fore.YELLOW + "系統查無回寫入DISK儲存裝置(克隆目標)" + Fore.RESET)
         input("按任意鍵繼續 Press any key continue...")
         with open(startTest, "w") as f:
             f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
