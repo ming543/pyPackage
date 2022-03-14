@@ -156,7 +156,7 @@ def cpuTempCheck(cpuL, cpuH):
 def pnGet():
     print(Fore.YELLOW + " 選取測試PN " + Fore.RESET, end='')
     print(Fore.YELLOW + " Choose PN number for Test and Log! " + Fore.RESET)
-    index = ['10300-', '10400-', '10500-', '10901-', '10902-', '10951-', '10953-', '20010-']
+    index = ['10300-', '10400-', '10500-', '10901-', '10902-', '10951-', '10953-', '20010-', '20020-', '20030-', '20040-', '20070-']
     indexChoice = enquiries.choose('  Choose options: ', index)
     body = []
     for i in range(0, 10):
@@ -274,6 +274,66 @@ def snGet(pn, modelName):
         # logging.warning('warning')
         # logging.error('error')
         # logging.critical('critical')
+    return sn
+
+
+# pn input form label
+def snGetPcba():
+    os.system('clear')
+    print(" ")
+    print("按n鍵結束  ", end='')
+    print("Back to menu press 'n' ")
+    print(Fore.YELLOW + "輸入序號開始測試 " + Fore.RESET, end='')
+    print(Fore.YELLOW + "Input SN start test: " + Fore.RESET)
+    global sn
+    sn = input()
+    sn = str(sn)
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        db['snSave'] = sn
+    pn = sn[:8]
+    #取序號貼紙前8碼為PN ex.000999A1SB010101 > 000999A1
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        db['pnSave'] = pn
+    if sn == "n":
+        print("Start Test is " + startTest)
+        with open(startTest, "w") as f:
+            f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
+        subprocess.call("sh %s" % startTest, shell=True)
+    else:
+        # setup test start time
+        startTime = time.strftime("%Y%m%d-%H%M%S", time.localtime())
+        # setup test log month folder
+        logMonth = time.strftime("%Y%m", time.localtime())
+        logFilename = sn + "-" + startTime + ".log"
+        global log
+        log = logPath + pn + "/" + logMonth + "/" + logFilename
+        os.makedirs(os.path.dirname(log), exist_ok=True)  # Create log folder
+        # save log name and location to database
+        # with shelve.open('snTemp') as db:
+        with shelve.open('/home/stux/pyPackage/dataBase') as db:
+            db['log'] = log
+        logger = logging.getLogger()
+        # Setup logging level
+        logger.setLevel(logging.DEBUG)
+        formatter = logging.Formatter(
+                '[%(levelname)1.1s %(asctime)s %(module)s:%(lineno)d] %(message)s',
+                datefmt='%Y%m%d %H:%M:%S')
+        # Setup log show on stream and file both
+        ch = logging.StreamHandler()
+        # ch.setLevel(logging.DEBUG)
+        ch.setLevel(logging.INFO)
+        ch.setFormatter(formatter)
+        fh = logging.FileHandler(log)
+        # fh.setLevel(logging.DEBUG)
+        fh.setLevel(logging.INFO)
+        fh.setFormatter(formatter)
+
+        logger.addHandler(ch)
+        logger.addHandler(fh)
+        logging.info('Test_Rev: ' + loginfo)
+        logging.info('Test_Model: ' + modelName)
+        logging.info('Test_PN: ' + pn)
+        logging.info('Test_SN: ' + sn)
     return sn
 
 #dmiFunc ex.baseboard-product-name

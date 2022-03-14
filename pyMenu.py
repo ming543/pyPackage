@@ -120,21 +120,9 @@ def aMenu2():
 
 #pcbaTest
 def pMenu():
-    os.system('clear')
-    p1 = 'p1'
-    p2 = 'p2'
-    pl = 'Back to MAIN-MENU'
-    options = [p1, p2, pl]
-    print(Fore.YELLOW + "%s PCBA-MENU" % booted + Fore.RESET, end='')
-    print(" Build by EFCO SamLee")
-    print("Revision %s" % loginfo)
-    choice = enquiries.choose('  Choose options: ', options)
-    if choice == p1:
-        print("p1 is")
-    elif choice == p2:
-        print("p2 is")
-    elif choice == pl:
-        mMenu()
+    with open(startTest, "w") as f:
+        f.write("cd /home/stux/pyPackage && python3 testPcba.py")
+    subprocess.call("sh %s" % startTest, shell=True)
 
 #otherTest
 def oMenu():

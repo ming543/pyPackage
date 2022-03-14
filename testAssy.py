@@ -80,7 +80,7 @@ def Q715QA5(sCPU):
     moduleSys.lanSpeedSet(2, 100)
     moduleSys.lanLedCheck("綠", "橘")
     moduleSys.lanLedOffCheck("滅", "滅")
-    moduleSys.usbCheck("Keyboard|Holtek", 1)
+    moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("JMS567", 1)
     #SIM7600
     moduleSys.atCheck("/dev/ttyUSB2", "ati", "Rev")
