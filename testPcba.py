@@ -17,6 +17,13 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
 def IOM2GR(sCPU):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
+    moduleSys.lanCheck("eth0", "80:7b:85")
+    moduleSys.lanCheck("eth2", "80:7b:85")
+    moduleSys.lanSpeedSet(4, 100)
+    moduleSys.lanLedCheck(" 綠Green - 橘Orange ")
+    moduleSys.lanSpeedSet(4, 1000)
+    moduleSys.lanLedCheck(" 橘Orange - 橘Orange ")
+    moduleSys.lanLedCheck(" PoE - 綠Green ")
     print("Not Ready")
 
 def IOMH4GR(sCPU):
@@ -30,7 +37,7 @@ def Q715VT2(sCPU):
     moduleSys.lanCheck("eth0", "80:7b:85")
     moduleSys.lanCheck("eth1", "00:13:95")
     moduleSys.lanSpeedSet(2, 100)
-    moduleSys.lanLedCheck("綠", "橘")
+    moduleSys.lanLedCheck(" 綠Green - 橘Orange ")
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("JMS567", 1)
     #SIM7600
@@ -50,19 +57,35 @@ def Q718PAS(sCPU):
     moduleSys.snGet(pn, modelName)
     print("Not Ready")
   
-def V2C(sCPU):
+def V2C(sCPU, sLan):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
+    moduleSys.biosReleaseCheck("11/11/2019")
+    moduleEbk.aicVersion("AIC-1.04")
+    moduleSys.cpuCheck(sCPU)
+    moduleSys.lanSelect(sLan)
     print("Not Ready")
 
-def V2CE(sCPU):
+
+def V2CL(sCPU, sLan):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
+    moduleSys.biosReleaseCheck("08/12/2021")
+    moduleEbk.aicVersion("AIC-1.04")
+    moduleSys.cpuCheck(sCPU)
+    moduleSys.lanSelect(sLan)
     print("Not Ready")
 
-def V2CL(sCPU):
+
+def V3C(sCPU, sLan):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
+    moduleSys.biosReleaseCheck("11/11/2020")
+    moduleEbk.aicVersion("AIC-1.04")
+    moduleEbk.aicFan(2)
+    moduleSys.cpuCheck(sCPU)
+    moduleSys.memoryCheck("4096","4096")
+    moduleSys.lanSelect(sLan)
     print("Not Ready")
 
 def debug(sCPU):
@@ -84,19 +107,19 @@ print(" Build by EFCO SamLee明")
 print("測試PN:", pn)
 
 #DIO=GPIO1 IDIO=DIO1
-#1-CPU, Poe, fan, dio, Lan, Com
+#1-CPU, Lan
 if pn == "10300-000000-A.0": debug("NA")
 elif pn == "20030-000020-A.1": Q715VT2("NA")
-elif pn == "20040-000049-A.1": V2CL("7600")
-elif pn == "20040-000050-A.1": V2CL("7300")
-elif pn == "20040-000051-A.1": V2CL("7100")
+elif pn == "20040-000049-A.1": V2CL("7600", 4)
+elif pn == "20040-000050-A.1": V2CL("7300", 4)
+elif pn == "20040-000051-A.1": V2CL("7100", 4)
 elif pn == "20070-000412-2.2": Q718B("NA")
 elif pn == "20070-000519-A.0": Q718PAS("NA")
-elif pn == "20070-000556-A.3": V2C("6600")
-elif pn == "20070-000557-A.3": V2C("6300")
-elif pn == "20070-000558-A.3": V2C("6100")
+elif pn == "20070-000556-A.3": V2C("6600", 4)
+elif pn == "20070-000557-A.3": V2C("6300", 4)
+elif pn == "20070-000558-A.3": V2C("6100", 4)
 elif pn == "20070-000568-A.1": IOM2GR("NA")
-elif pn == "20070-000639-A.1": V2CE("6100")
+elif pn == "20070-000639-A.1": V2C("6100", 2)
 elif pn == "20070-000675-A.1": IOMH4GR("NA")
 else: default()
 

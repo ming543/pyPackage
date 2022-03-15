@@ -430,36 +430,36 @@ def lanSpeedSet(sLan, sSpeed):
     for i in range(sLan):
         subprocess.call(
             "sudo ethtool -s eth%s speed %s duplex full autoneg on" % (i, sSpeed), shell=True )
-        subprocess.call(
-            "ping 8.8.8.8 -c 20 > /dev/null &", shell=True )
+    subprocess.call(
+        "ping 8.8.8.8 -c 20 > /dev/null &", shell=True )
     logging.info('LAN_SPEED_SET: eth%s to %s' %(i, sSpeed))
 
     
-def lanLedCheck(ledL, ledR):
+def lanLedCheck(ledCheck):
     os.system('clear')
     print(" ")
     print("網路燈號確認 LAN LED Check")
-    print("確認網路孔燈號是否顯示 - %s %s" % (ledL, ledR))
+    print("確認網路孔燈號是否顯示 - %s" % ledCheck)
     print(" ")
     print("不良按n鍵結束,其他鍵繼續  ", end='')
     check = input("Failed press 'n', other key continue: ").lower()
     if check == ("n"):
-        logging.error('LAN_LED_ON: Not display as normal')
-        failRed("LAN LED 燈號不良")
-    logging.info('LAN_LED_ON: Display OK')
+        logging.error('LAN_LED_Check: Fail %s' %ledCheck)
+        failRed("LAN LED 燈號不良 %s" % ledCheck)
+    logging.info('LAN_LED_ON: Display OK %s' %ledCheck)
 
 
-def lanLedOffCheck(ledL, ledR):
+def lanLedOffCheck(ledCheck):
     os.system('clear')
     print(" ")
     print("網路燈號確認 LAN LED OFF Check")
     print("移除網路線 Remove LAN Cable")
-    print("確認網路孔燈號是否顯示 - %s %s" % (ledL, ledR))
+    print("確認網路孔燈號是否顯示 - %s" % ledCheck)
     print(" ")
     print("不良按n鍵結束,其他鍵繼續  ", end='')
     check = input("Failed press 'n', other key continue: ").lower()
     if check == ("n"):
-        logging.error('LAN_LED_OFF: Not display as normal')
+        logging.error('LAN_LED_OFF: Fail %s' % ledCheck)
         failRed("LAN LED_OFF 燈號未熄滅")
     logging.info('LAN_LED_OFF: Remove LAN Cable and LED OFF')
 

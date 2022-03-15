@@ -78,8 +78,8 @@ def Q715QA5(sCPU):
     moduleSys.lanCheck("eth0", "80:7b:85")
     moduleSys.lanCheck("eth1", "00:13:95")
     moduleSys.lanSpeedSet(2, 100)
-    moduleSys.lanLedCheck("綠", "橘")
-    moduleSys.lanLedOffCheck("滅", "滅")
+    moduleSys.lanLedCheck(" 綠Green - 橘Orange ")
+    moduleSys.lanLedOffCheck(" 滅Off - 滅Off")
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("JMS567", 1)
     #SIM7600
