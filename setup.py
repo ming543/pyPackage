@@ -6,7 +6,7 @@ import os
 
 REQUIRED = {
   'GitPython', 'enquiries', 'colorama', 'getch', 'getmac', 
-  'py-cpuinfo', 'netifaces', 'pyusb', 'pyserial', 'pynum'
+  'py-cpuinfo', 'netifaces', 'pyusb', 'pyserial', 'numpy'
 }
 
 installed = {pkg.key for pkg in pkg_resources.working_set}
