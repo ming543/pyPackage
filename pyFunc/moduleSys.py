@@ -30,11 +30,19 @@ loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 
 #sT = "/home/production/pyPackage/t.sh"
 startTest = "/home/stux/pyPackage/t.sh"
+deviceModel = 'USB3.0'
+output = subprocess.check_output('lsblk -o name,model', shell=True)
+output = str(output).lstrip('b\'').split('\\n')
+for line in output:
+    if re.search(deviceModel, line):
+        global diskpy
+        diskPy = line[:3]
+        
 logPath = "/home/partimag/log/"
 if os.path.isdir(logPath):
     print(" ")
 else:
-    subprocess.call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True)
+    subprocess.call("sudo mount /dev/%s2 /home/partimag -o umask=000" % diskPy, shell=True)
 
 def alsabatTest():
     response = subprocess.call("alsabat -Dplughw:0,0", shell=True)
