@@ -1,4 +1,3 @@
-@echo -off
 fs0:
 cd efiScript
 cd q715

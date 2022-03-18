@@ -725,6 +725,8 @@ def osGet():
     try:
         print("選取回寫作業系統 ")
         osGet = enquiries.choose(' Choose clone OS options: ', index)
+        with shelve.open('/home/stux/pyPackage/dataBase') as db:
+            db['osSave'] = osGet
     except ValueError:
         print(Fore.YELLOW + "未發現回寫作業系統" + Fore.RESET)
         print(Fore.YELLOW + "No Restore OS find" + Fore.RESET)
