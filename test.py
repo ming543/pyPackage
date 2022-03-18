@@ -31,7 +31,7 @@ def getCpuTemp():
     print(cpuT)
     return cpuT
 
-getCpuTemp()
+#getCpuTemp()
 
 def atCheck(comPort, atCommand, atBack):
     atLog = "/tmp/at.log"
@@ -87,18 +87,16 @@ def uartLoopCheck(comPort):
 #uartLoopCheck("/dev/ttyUSB2")
 
 def diskChoose():
-    os.system('clear')
+    deviceModel = 'USB3.0'
     output = subprocess.check_output(
-            'lsblk -o type,name,model,size', shell=True)
+            'lsblk -o name,model', shell=True)
     output = str(output).lstrip('b\'').split('\\n')
-    options = []
     for line in output:
-        if line.lower().startswith('disk'):
-            options.append(line)
-    print("選取回寫入儲存裝置(克隆目標) ")
-    diskShow = enquiries.choose(' Choose clone disk options: ', options)
-    global diskGet
-    diskGet = diskShow.split(' ')[1]
+        if re.search(deviceModel, line):
+            print(line)
+    diskGet = 0
+
+diskChoose()
 
 def sizeCheck():
     output = subprocess.check_output(
