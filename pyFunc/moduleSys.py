@@ -35,7 +35,7 @@ output = subprocess.check_output('lsblk -o name,model', shell=True)
 output = str(output).lstrip('b\'').split('\\n')
 for line in output:
     if re.search(deviceModel, line):
-        global diskpy
+        global diskPy
         diskPy = line[:3]
         
 logPath = "/home/partimag/log/"
