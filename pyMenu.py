@@ -16,13 +16,20 @@ from pyFunc import moduleSys
 # start test file
 pyFolder = "/home/stux/pyPackage/"
 startTest = pyFolder + "t.sh"
+deviceModel = 'USB3.0'
+output = subprocess.check_output('lsblk -o name,model', shell=True)
+output = str(output).lstrip('b\'').split('\\n')
+for line in output:
+    if re.search(deviceModel, line):
+        diskGet = line[:3]
+     
 
 # Check system boot by UEFI or LEGACY mode
 booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
 
 # Get revision
 g = git.Git('.')
-dosFolder = "/usr/lib/live/mount/persistence/sda1/"
+dosFolder = "/usr/lib/live/mount/persistence/%s1/" % diskGet
 gDos = git.Git(dosFolder)
 # loginfo = g.log('-p', '-1' , '--date=iso')
 loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
@@ -34,7 +41,7 @@ logFolder = "/home/partimag/log"
 if os.path.isdir(logFolder):
     print("Logfolder exist")
 else:
-    subprocess.check_call("sudo mount /dev/sda2 /home/partimag -o umask=000", shell=True, stdin=sys.stdin)
+    subprocess.check_call("sudo mount /dev/%s2 /home/partimag -o umask=000" % diskGet, shell=True, stdin=sys.stdin)
 
 #Get PN from db
 with shelve.open(pyFolder + 'dataBase') as db:
