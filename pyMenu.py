@@ -158,11 +158,11 @@ def copyLog():
             rC = subprocess.call("rclone -v copy %s %s -P" % (lF, oF), shell=True)
             if rC == 0:  # check rclone pass or fail
                 print(Fore.GREEN + "日誌檔案上傳成功 Log copy to onedrive done!!!" + Fore.RESET)
-                time.sleep(5)
+                input("按任意鍵繼續 Press any key continue...")
                 break
             else:
                 print(Fore.RED + "日誌檔案上傳失敗 Log copy to onedrive Fail!!!" + Fore.RESET)
-                time.sleep(5)
+                input("按任意鍵繼續 Press any key continue...")
                 break
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
@@ -184,9 +184,15 @@ def gitPull():
             g.clean('-f', '-d')
             g.pull()
             print("gitPullDone")
-            subprocess.call("cd %s && sh system.sh" % pyFolder, shell=True)
-            time.sleep(3)
-            break
+            rC = subprocess.call("cd %s && sh system.sh" % pyFolder, shell=True)
+            if rC == 0:  # check rclone pass or fail
+                print(Fore.GREEN + "更新成功 Update done!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
+            else:
+                print(Fore.RED + "更新失敗 Update Fail!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(5)

@@ -61,9 +61,15 @@ def dosPull():
             subprocess.call("cd %s && sudo git checkout origin/master -- V23C" % dosFolder, shell=True)
             subprocess.call("cd %s && sudo git checkout origin/master -- AICCFG" % dosFolder, shell=True)
             print("gitDosPullDone")
-            subprocess.call("cd %s && sh system_dos.sh" % pyFolder, shell=True)
-            time.sleep(5)
-            break
+            rC = subprocess.call("cd %s && sh system_dos.sh" % pyFolder, shell=True)
+            if rC == 0:  # check rclone pass or fail
+                print(Fore.GREEN + "DOS更新成功 Update done!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
+            else:
+                print(Fore.RED + "DOS更新失敗 Update Fail!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(5)
