@@ -9,7 +9,7 @@ import enquiries
 import time
 import shelve
 # import shutil
-# import re
+import re
 from colorama import Fore
 from pyFunc import moduleSys
 
