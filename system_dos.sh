@@ -13,6 +13,7 @@ sudo apt-get install -y tofrodos
 #sudo dd if=/usr/lib/syslinux/mbr/mbr.bin of=/dev/sda
 
 cd $dosFolder && sudo find . -type f \( -name '*.BAT' -o -name '*.TXT' \) -exec todos -v '{}' \;
-sudo cp $pyFolder/efi/startup.nsh $dosFolder/startup.nsh
+sudo cp $pyFolder/efiScript/startup.nsh $dosFolder/startup.nsh
+sudo cp -r $pyFolder/efiScript $dosFolder
 
 echo "****** system setup update done ******"
