@@ -27,7 +27,7 @@ booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
 g = git.Git('.')
 loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 
-
+pyFolder = "/home/stux/pyPackage/"
 #sT = "/home/production/pyPackage/t.sh"
 startTest = "/home/stux/pyPackage/t.sh"
 deviceModel = 'USB3.0'
