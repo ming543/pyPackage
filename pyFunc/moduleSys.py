@@ -1,7 +1,7 @@
 #!/bin/python3
 import git
 import os
-# import sys
+import sys
 import logging
 import shelve
 import getmac
