@@ -23,13 +23,9 @@ booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
 
 # Get revision
 g = git.Git('.')
-dosFolder = "/usr/lib/live/mount/persistence/%s1/" % diskPy
-gDos = git.Git(dosFolder)
+
 # loginfo = g.log('-p', '-1' , '--date=iso')
 loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
-#logDos = gDos.log('-m', '-1', '--pretty=format:"%h %s"')
-# logData = loginfo.splitlines()
-# rev = logData[2] + logData[4]
 
 #Get PN from db
 with shelve.open(pyFolder + 'dataBase') as db:
@@ -71,8 +67,8 @@ def mMenu():
         copyLog()
     elif choice == m7:  # Update Linux script
         gitPull()
-    elif choice == m8:  # Update Linux script
-        dosPull()
+    elif choice == m8:  # Update DOS script
+        moduleSys.dosPull()
     # Last of list
     elif choice == ml:  # power off system
         print("系統關機 The system will shutdown after 5 secs!")
@@ -198,29 +194,7 @@ def gitPull():
     os.execv(sys.executable, ["python3"] + sys.argv)
 
 
-#DOS Update 
-def dosPull():   
-    os.system('clear')
-    for i in range(5):  # ping 5 times
-        response = subprocess.call(
-                "ping -c 1 -w 1 8.8.8.8", shell=True)
-        if response == 0:
-            print("PING OK")
-            subprocess.call("cd %s && sudo git init" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git remote add origin https://github.com/ming543/V23C_DOS.git" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git fetch --all" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git checkout origin/master -- AUTOEXEC.BAT" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git checkout origin/master -- V23C" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git checkout origin/master -- AICCFG" % dosFolder, shell=True)
-            print("gitDosPullDone")
-            subprocess.call("cd %s && sh system_dos.sh" % pyFolder, shell=True)
-            time.sleep(5)
-            break
-        else:
-            print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
-            time.sleep(5)
-    sys.stdout.flush()
-    os.execv(sys.executable, ["python3"] + sys.argv)
+
 
 
 mMenu()

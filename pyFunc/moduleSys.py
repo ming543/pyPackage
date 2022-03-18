@@ -35,14 +35,39 @@ output = subprocess.check_output('lsblk -o name,model', shell=True)
 output = str(output).lstrip('b\'').split('\\n')
 for line in output:
     if re.search(deviceModel, line):
-        global diskPy
         diskPy = line[:3]
         
+dosFolder = "/usr/lib/live/mount/persistence/%s1/" % diskPy
 logPath = "/home/partimag/log/"
 if os.path.isdir(logPath):
     print(" ")
 else:
     subprocess.call("sudo mount /dev/%s2 /home/partimag -o umask=000" % diskPy, shell=True)
+
+#DOS Update 
+def dosPull():   
+    os.system('clear')
+    for i in range(5):  # ping 5 times
+        response = subprocess.call(
+                "ping -c 1 -w 1 8.8.8.8", shell=True)
+        if response == 0:
+            print("PING OK")
+            subprocess.call("cd %s && sudo git init" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git remote add origin https://github.com/ming543/V23C_DOS.git" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git fetch --all" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/master -- AUTOEXEC.BAT" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/master -- V23C" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/master -- AICCFG" % dosFolder, shell=True)
+            print("gitDosPullDone")
+            subprocess.call("cd %s && sh system_dos.sh" % pyFolder, shell=True)
+            time.sleep(5)
+            break
+        else:
+            print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
+            time.sleep(5)
+    sys.stdout.flush()
+    os.execv(sys.executable, ["python3"] + sys.argv)
+
 
 def alsabatTest():
     response = subprocess.call("alsabat -Dplughw:0,0", shell=True)
