@@ -30,19 +30,21 @@ loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 pyFolder = "/home/stux/pyPackage/"
 #sT = "/home/production/pyPackage/t.sh"
 startTest = "/home/stux/pyPackage/t.sh"
-deviceModel = 'USB3.0'
-output = subprocess.check_output('lsblk -o name,model', shell=True)
+
+output = subprocess.check_output('lsblk -o kname,label', shell=True)
 output = str(output).lstrip('b\'').split('\\n')
 for line in output:
-    if re.search(deviceModel, line):
-        diskPy = line[:3]
+    if re.search('DOS_G20B', line):
+        diskDos = line[:4]
+    if re.search('G_DATA', line):
+        diskData = line[:4]
         
-dosFolder = "/usr/lib/live/mount/persistence/%s1/" % diskPy
+dosFolder = "/usr/lib/live/mount/persistence/%s/" % diskDos
 logPath = "/home/partimag/log/"
 if os.path.isdir(logPath):
     print(" ")
 else:
-    subprocess.call("sudo mount /dev/%s2 /home/partimag -o umask=000" % diskPy, shell=True)
+    subprocess.call("sudo mount /dev/%s /home/partimag -o umask=000" % diskData, shell=True)
 
 #DOS Update 
 def dosPull():   
