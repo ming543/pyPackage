@@ -15,7 +15,6 @@ import netifaces
 import serial
 from colorama import Fore
 import numpy as np
-import pyaudio
 
 # logging.basicConfig(level=logging.DEBUG)
 # log_filename = datetime.datetime.now().strftime(sn + "-%Y-%m-%d-%H:%M:%S.log")
