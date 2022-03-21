@@ -9,7 +9,6 @@ dosFolder="/usr/lib/live/mount/persistence/sda1/"
 
 sudo cp $userFolder/.gitconfig /root/
 sudo cp $userFolder/.git-credentials /root/
-
-
+sudo apt-get install -y tofrodos
 
 echo "****** system setup update done ******"
