@@ -4,7 +4,7 @@ import os
 import sys
 import logging
 import shelve
-import shutil
+#import shutil
 import getmac
 import time
 # import datetime
@@ -62,9 +62,8 @@ def dosPull():
             subprocess.call("cd %s && sudo git checkout origin/master -- V23C" % dosFolder, shell=True)
             subprocess.call("cd %s && sudo git checkout origin/master -- AICCFG" % dosFolder, shell=True)
             print("gitDosPullDone")
-            sre = pyFolder + efiScript
-            dst = dosFolder + efiScript
-            shutil.copy(scr, dst)
+            subprocess.call("sudo cp -r %sefiScript %s" % (pyFolder, dosFolder), shell=True)
+
             rC = subprocess.call(
                 "cd %s && sudo find . -type f \( -name '*.BAT' -o -name '*.TXT' \) -exec todos -v '{}' \;" % dosFolder, shell=True)
             if rC == 0:  # check rclone pass or fail
