@@ -28,7 +28,7 @@ booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
 g = git.Git('.')
 loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 
-pyFolder = "/home/stux/pyPackage"
+pyFolder = "/home/stux/pyPackage/"
 #sT = "/home/production/pyPackage/t.sh"
 startTest = "/home/stux/pyPackage/t.sh"
 
@@ -40,7 +40,7 @@ for line in output:
     if re.search('G_DATA', line):
         diskData = line[:4]
         
-dosFolder = "/usr/lib/live/mount/persistence/%s" % diskDos
+dosFolder = "/usr/lib/live/mount/persistence/%s/" % diskDos
 logPath = "/home/partimag/log/"
 if os.path.isdir(logPath):
     print(" ")
@@ -62,7 +62,7 @@ def dosPull():
             subprocess.call("cd %s && sudo git checkout origin/master -- V23C" % dosFolder, shell=True)
             subprocess.call("cd %s && sudo git checkout origin/master -- AICCFG" % dosFolder, shell=True)
             print("gitDosPullDone")
-            shutil.copy(pyFolder/efiScript, dosFolder/efiScript)
+            shutil.copy(pyFolder + efiScript, dosFolder + efiScript)
             rC = subprocess.call(
                 "cd %s && sudo find . -type f \( -name '*.BAT' -o -name '*.TXT' \) -exec todos -v '{}' \;" % dosFolder, shell=True)
             if rC == 0:  # check rclone pass or fail
