@@ -208,6 +208,7 @@ elif pn == "20010-000191-A.1": AIM("7300", 0, "noFan", "1I", 2, 4) #AIML-I
 elif pn == "20010-000194-A.2": AIH("NA", 4, "noFan", "1D", 6, 6) #AIH-DIO
 elif pn == "20010-000197-A.1": AIH("NA", 4, 2, "1D", 6, 6) #AIH-EP1
 elif pn == "20010-000199-A.1": AIH("NA", 4, 2, "1I2D", 6, 2) #AIHDP-i
+elif pn == "20010-000303-A.1": AIH("NA", 4, 2, "1I2D", 6, 2) #AIHD-P4E2-i
 elif pn == "20010-000335-A.0": U7130("NA")
 elif pn == "10300-000001-A.0": AIH("", 4, 2, "1I2I", 6, 2) #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
 else: default()
