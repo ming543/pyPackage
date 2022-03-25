@@ -93,7 +93,24 @@ def Q715QA5(sCPU):
     moduleSys.cpuTempCheck(20, 60)
 
 def U7130PAS():
-    print("Not Ready")
+    modelName = inspect.currentframe().f_code.co_name
+    moduleSys.snGet(pn, modelName)
+    moduleSys.dmidecodeLog("bios-version")
+    moduleSys.dmidecodeLog("baseboard-product-name")
+    moduleSys.dmidecodeLog("baseboard-serial-number")
+    moduleSys.rtcCheck()
+    moduleSys.cpuCheck(sCPU)
+    moduleSys.memoryGet()
+    moduleSys.storageGet()
+    moduleSys.lanCheck("eth0", "80:7b:85")
+    moduleSys.lanCheck("eth1", "00:13:95")
+    moduleSys.usbCheck("Keyboard", 1)
+    moduleSys.usbCheck("Mouse", 1)
+    moduleSys.usbCheck("JMS567", 1)
+    moduleSys.usbCheck("DataTraveler|JetFlash", 1)
+    moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
+    moduleSys.uartLoop("/dev/ttyS0")
+    moduleSys.cpuTempCheck(20, 60)
 
 def U713064G():
     print("Not Ready")
