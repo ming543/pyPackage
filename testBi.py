@@ -59,6 +59,7 @@ def serialTest():
                 "sudo /home/stux/tools/serial-test -p /dev/ttyS0 -b 115200 -o 1 -i 3", shell=True)
         if serialTest != 0:
             logging.error("RS232 serial loop test fail code:%s" % serialTest)
+            moduleSys.failRed("RS232 serial loop test fail code:%s" % serialTest)
 #           exit()
         else:
             logging.info("RS232 serial loop test pass code:%s" % serialTest)
