@@ -16,6 +16,12 @@ from pyFunc import moduleEbk
 from pyFunc import moduleCg
 import json
 
+
+moduleSys.storageCheck("opCheck")
+moduleSys.storageCheck("64G")
+moduleSys.storageGet()
+
+
 #moduleCg.i2cGpio()
 #moduleSys.uartLoop("/dev/ttyS0")
 #moduleSys.memoryCheck("8192 MB","No Module")

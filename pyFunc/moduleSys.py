@@ -506,7 +506,7 @@ def lanLedOffCheck(ledCheck):
         logging.error('LAN_LED_OFF: Fail %s' % ledCheck)
         failRed("LAN LED_OFF 燈號未熄滅")
     logging.info('LAN_LED_OFF: Remove LAN Cable and LED OFF')
-
+     
 
 def usbCheck(spec, num):
     usbList = subprocess.check_output("lsusb", shell=True)
@@ -522,6 +522,20 @@ def usbCheck(spec, num):
         for i in range(len(usbSplit)-1):
             logging.error('Check USB %s x %s Fail! SPEC: %s ' % (spec, usbNum, num) + usbSplit[i] )
         failRed("Check USB %s x %s 規格不符 SPEC: %s " % (spec, usbNum, num))		
+
+
+#not use for now,the BIOS also need select of AIMH
+def usbSelect(sUsb):
+    if sUsb == "AIM":
+        usbCheck("Keyboard", 1)
+        usbCheck("JMS567", 1)
+        usbCheck("DataTraveler|JetFlash", 1)
+        usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
+    elif sUsb =="AIH":
+        usbCheck("Keyboard", 1)
+        usbCheck("JMS567", 1)
+        usbCheck("DataTraveler|JetFlash", 3)
+        usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
 
 
 def uartLoopCheck(sCom):
@@ -687,6 +701,9 @@ def memoryGet():
     
 
 def storageCheck(specA):
+    if specA == "opCheck":
+        print("opCheck")
+        return
     os.system('clear')
     output = subprocess.check_output(
             'lsblk -o type,name,model,size,tran', shell=True)
