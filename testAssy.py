@@ -199,14 +199,14 @@ print("測試PN:", pn)
 #1-CPU, Poe, fan, dio, Lan, Com, Disk
 #U7XXX
 #1-CPU, Disk
-if pn == "10300-000000-A.0": debug("NA", "59.6G")
+if pn == "10300-000000-A.0": debug("NA", "opCheck")
 elif pn == "10300-000004-A.3": Q715QA5("NA")
 elif pn == "10300-000004-A.4": Q715QA5("NA")
 elif pn == "10300-000007-A.0": Q715QA5("NA")
 elif pn == "10400-000004-B.2": U7130PAS("NA")
 elif pn == "10400-000009-A.0": U7150("N4200")
 elif pn == "10400-000010-A.0": U7150("N4200")
-elif pn == "10500-000340-A.0": U7130("N2870", "64G")
+elif pn == "10500-000340-A.0": U7130("N2870", "59.6G")
 elif pn == "10902-000097-A.0": AIM("6300", 4, "noFan", "1I", 4, 4, "opCheck")
 elif pn == "10951-000004-A.0": U7130("NA")
 elif pn == "10953-000001-B.0": U650("NA")
