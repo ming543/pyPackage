@@ -17,9 +17,8 @@ from pyFunc import moduleCg
 import json
 
 
-moduleSys.storageCheck("opCheck")
-moduleSys.storageCheck("64G")
-moduleSys.storageGet()
+moduleSys.lanNicCheck(1, "001395")
+
 
 
 #moduleCg.i2cGpio()

@@ -29,6 +29,7 @@ g = git.Git('.')
 loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 
 pyFolder = "/home/stux/pyPackage/"
+eeFolder = "/home/stux/pyPackage/tools/intel/Linux_x64/OEM_Mfg/"
 #sT = "/home/production/pyPackage/t.sh"
 startTest = "/home/stux/pyPackage/t.sh"
 
@@ -430,6 +431,15 @@ def rtcCheck():
         logging.error('RTC_Time: ' + rtcTime + " SPEC: " + y)
         failRed("rtc年份不符")
 
+def lanNicCheck(nNumber, spec): #(1,"001395")
+    nCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /MAC_DUMP" % (eeFolder, nNumber), shell=True)
+    nCheck = str(nCheck).lstrip('b\'').split('\\n')[0]
+    if re.search(spec, nCheck):
+        logging.info('NIC_Check: ' + nCheck + " SPEC: " + spec)
+        return True
+    else:
+        logging.error('NIC_Check: ' + nCheck + " SPEC: " + spec)
+        failRed("規格不符")
 
 def lanMacCheck(ethN, macH):
     ethMac = getmac.get_mac_address(interface=ethN)
