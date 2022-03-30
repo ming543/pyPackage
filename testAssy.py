@@ -173,10 +173,12 @@ def U6500(sCPU):
     print("Not Ready")
 
 
-def debug(sCPU):
+def debug(sCPU, sDisk):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     moduleSys.cpuCheck(sCPU)
+    moduleSys.storageCheck(sDisk)
+    moduleSys.storageGet()
 
 
 def default():
@@ -197,7 +199,7 @@ print("測試PN:", pn)
 #1-CPU, Poe, fan, dio, Lan, Com, Disk
 #U7XXX
 #1-CPU, Disk
-if pn == "10300-000000-A.0": debug("NA")
+if pn == "10300-000000-A.0": debug("NA", "59.6G")
 elif pn == "10300-000004-A.3": Q715QA5("NA")
 elif pn == "10300-000004-A.4": Q715QA5("NA")
 elif pn == "10300-000007-A.0": Q715QA5("NA")
