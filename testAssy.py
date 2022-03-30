@@ -231,7 +231,6 @@ elif pn == "20010-000355-A.0": U7150("N4200", "opCheck")
 elif pn == "20010-000401-A.0": AIM("7600", 4, "noFan", "1I", 6, 2, "opCheck") #AIMG7
 elif pn == "20010-000404-A.1": AIM("7200", 0, "noFan", "1I", 2, 4, "opCheck") #AIML-I
 elif pn == "20010-000407-A.0": AIM("7200", 0, "noFan", "1D", 2, 4, "opCheck") #AIML-D
-elif pn == "10300-000001-A.0": AIH("", 4, 2, "1I2I", 6, 2, "opCheck") #1-Poe 2-fan, 3-dio, 4-Lan, 5-Com
 else: default()
 
 moduleSys.passGreen()
