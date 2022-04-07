@@ -441,30 +441,78 @@ def lanNicCheck(nNumber, spec): #(1,"001395")
         return True
     else:
         logging.error('NIC_Check: ' + nCheck + " SPEC: " + spec)
-        failRed("規格不符")
+        failRed("NIC規格不符")
 
 
 def lanEepromCheck(nNumber, spec): #(2,"3.25")
-    IdCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /EEPROMVER" % (eeFolder, nNumber), shell=True)
-    IdCheck = str(IdCheck).lstrip('b\'').split('\\n')[-2]
-    if re.search(spec, IdCheck):
-        logging.info('NIC_EEPROM_Check: ' + nNumber + IdCheck + " SPEC: " + spec)
+    eeCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /EEPROMVER" % (eeFolder, nNumber), shell=True)
+    eeCheck = str(eeCheck).lstrip('b\'').split('\\n')[-2]
+    if re.search(spec, eeCheck):
+        logging.info('NIC_EEPROM_Check: ' + eeCheck + " SPEC: " + spec)
         return True
     else:
-        logging.error('NIC_EEPROM_Check: ' + nNumber + IdCheck + " SPEC: " + spec)
-        failRed("規格不符")
+        eeProg = subprocess.call("sudo %seeupdate64e /NIC=%s /D I210_325.bin /calcchksum" % (eeFolder, nNumber), shell=True)
+        if eeProg == 0:
+            logging.info('NIC_EEPROM_Prog: I210_325.bin Done')
+            print("LAN EEPROM燒錄完成 按任意鍵關機  斷電十秒後重開機")
+            input("Press any key power off")
+            os.system('systemctl poweroff')
+        else:
+            logging.error('NIC_EEPROM_Prog: Fail' + eeCheck)
+            failRed("LAN EEPROM 燒錄失敗")
 
 
-def lanMacProg(nNumber, spec): #(1,"1531")
-    IdCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /MAC_DUMP" % (eeFolder, nNumber), shell=True)
-    IdCheck = str(IdCheck).lstrip('b\'').split('\\n')[-2]
-    if re.search(spec, IdCheck):
-        logging.info('ID_Check: ' + IdCheck + " SPEC: " + spec)
-        return True
+def lanMacProg(nNumber, spec): #(2,"807B85")
+    macCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /MAC_DUMP" % (eeFolder, nNumber), shell=True)
+    macCheck = str(macCheck).lstrip('b\'').split('\\n')[-2]
+    if re.search(spec, macCheck):
+        logging.info('MAC_Check: ' + macCheck + " SPEC: " + spec)
+        check = input("MAC已存在 n鍵重新燒錄 其他鍵繼續").lower()
+        if check == ("n"):
+            print("Program MAC")    
+        else:
+            return True
     else:
-        logging.error('ID_Check: ' + IdCheck + " SPEC: " + spec)
-        failRed("規格不符")
-
+        print("Program MAC")
+        
+    os.system('clear')
+    print(" ")
+    print("網路MAC燒錄 LAN MAC PROGRAM")
+    print(" ")
+    print(Fore.YELLOW + "使用刷槍輸入MAC ex.%s" + Fore.RESET % spec) 
+    macAddr = input("Scan MAC address to continue: ").upper()
+    logging.info('Input_MAC: ' + macAddr)
+    checkLen = len(macAddr) # should be 12
+    while checkLen != 12:
+        print("輸入MAC長度與規格不符 %s %s sepc: 12" %(macAddr, checkLen))
+        print(Fore.YELLOW + "使用刷槍輸入MAC ex.%s" + Fore.RESET % spec)
+        macAddr = input("n鍵結束測試 Scan MAC address to continue, input n stop.").upper()
+        logging.info('Input_MAC: ' + macAddr)
+        checkLen = len(macAddr) # should be 12
+        if macAddr == ("n"):
+            logging.error('NIC_MAC_Prog: Len check Fail' + checkLen)
+            failRed("LAN MAC Len check Fail MAC長度不符")
+                  
+    checkHead = macAddr[:6]
+    if checkHead == spec:
+        macProg = subprocess.call("sudo %seeupdate64e /NIC=%s /A %s /calcchksum" % (eeFolder, nNumber, macAddr), shell=True)
+        if macProg == 0:
+            logging.info('NIC_MAC_Prog: %s %s' % (nNumber, macAddr))
+            print("LAN MAC燒錄完成 按任意鍵關機  斷電十秒後重開機")
+            input("Press any key power off")
+            os.system('systemctl poweroff')
+        else:
+            logging.error('NIC_MAC_Prog: Fail ' + macAddr + 'SPEC: ' + spec)
+            failRed("LAN MAC %s 不符SPEC: %s" % (macAddr, spec))
+            
+        
+def lanMacProg(nNumber, macH): #(2, "80:7b:85")
+    ethMac = getmac.get_mac_address(interface=ethN)
+    if re.search(macH, ethMac):
+        logging.info('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
+    else:
+        logging.error('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
+        failRed("MAC不符")
 
 
 def lanMacCheck(ethN, macH):

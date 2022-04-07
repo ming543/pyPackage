@@ -16,10 +16,12 @@ from pyFunc import moduleEbk
 from pyFunc import moduleCg
 import json
 
+modelName = test
+moduleSys.snGet(pn, modelName)
 
-moduleSys.lanNicCheck(1, "001395")
-moduleSys.lanIdCheck(1, "1531")
-
+moduleSys.lanNicCheck(1, "001395") # Check CPU NIC MAC
+moduleSys.lanEepromCheck(2, "3.25") # Check NIC Eeprom revision
+moduleSys.lanMacProg(2, "807B85")
 
 
 #moduleCg.i2cGpio()
