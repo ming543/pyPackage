@@ -277,7 +277,9 @@ def snGet(pn, modelName):
         subprocess.call("sh %s" % startTest, shell=True)
     else:
         # setup test start time
-        startTime = time.strftime("%Y%m%d-%H%M%S", time.localtime())
+        # startTime = time.strftime("%Y%m%d-%H%M%S", time.localtime())
+        # setup test start date-only
+        startTime = time.strftime("%Y%m%d", time.localtime())
         # setup test log month folder
         logMonth = time.strftime("%Y%m", time.localtime())
         logFilename = sn + "-" + modelName + "-" + startTime + ".log"
@@ -433,13 +435,37 @@ def rtcCheck():
 
 def lanNicCheck(nNumber, spec): #(1,"001395")
     nCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /MAC_DUMP" % (eeFolder, nNumber), shell=True)
-    nCheck = str(nCheck).lstrip('b\'').split('\\n')[0]
+    nCheck = str(nCheck).lstrip('b\'').split('\\n')[-2]
     if re.search(spec, nCheck):
         logging.info('NIC_Check: ' + nCheck + " SPEC: " + spec)
         return True
     else:
         logging.error('NIC_Check: ' + nCheck + " SPEC: " + spec)
         failRed("規格不符")
+
+
+def lanIdCheck(nNumber, spec): #(1,"1531")
+    IdCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /MAC_DUMP" % (eeFolder, nNumber), shell=True)
+    IdCheck = str(IdCheck).lstrip('b\'').split('\\n')[-2]
+    if re.search(spec, IdCheck):
+        logging.info('ID_Check: ' + IdCheck + " SPEC: " + spec)
+        return True
+    else:
+        logging.error('ID_Check: ' + IdCheck + " SPEC: " + spec)
+        failRed("規格不符")
+
+
+def lanMacProg(nNumber, spec): #(1,"1531")
+    IdCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /MAC_DUMP" % (eeFolder, nNumber), shell=True)
+    IdCheck = str(IdCheck).lstrip('b\'').split('\\n')[-2]
+    if re.search(spec, IdCheck):
+        logging.info('ID_Check: ' + IdCheck + " SPEC: " + spec)
+        return True
+    else:
+        logging.error('ID_Check: ' + IdCheck + " SPEC: " + spec)
+        failRed("規格不符")
+
+
 
 def lanMacCheck(ethN, macH):
     ethMac = getmac.get_mac_address(interface=ethN)
