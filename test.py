@@ -18,6 +18,7 @@ import json
 
 
 moduleSys.lanNicCheck(1, "001395")
+moduleSys.lanIdCheck(1, "1531")
 
 
 
