@@ -15,6 +15,7 @@ from pyFunc import moduleSys
 from pyFunc import moduleEbk
 from pyFunc import moduleCg
 import json
+import shelve
 
 #Get PN from db
 with shelve.open('/home/stux/pyPackage/dataBase') as db:
