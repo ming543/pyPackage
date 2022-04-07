@@ -444,14 +444,14 @@ def lanNicCheck(nNumber, spec): #(1,"001395")
         failRed("規格不符")
 
 
-def lanIdCheck(nNumber, spec): #(1,"1531")
-    IdCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /MAC_DUMP" % (eeFolder, nNumber), shell=True)
+def lanEepromCheck(nNumber, spec): #(2,"3.25")
+    IdCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /EEPROMVER" % (eeFolder, nNumber), shell=True)
     IdCheck = str(IdCheck).lstrip('b\'').split('\\n')[-2]
     if re.search(spec, IdCheck):
-        logging.info('ID_Check: ' + IdCheck + " SPEC: " + spec)
+        logging.info('NIC_EEPROM_Check: ' + nNumber + IdCheck + " SPEC: " + spec)
         return True
     else:
-        logging.error('ID_Check: ' + IdCheck + " SPEC: " + spec)
+        logging.error('NIC_EEPROM_Check: ' + nNumber + IdCheck + " SPEC: " + spec)
         failRed("規格不符")
 
 
