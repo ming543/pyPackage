@@ -16,7 +16,10 @@ from pyFunc import moduleEbk
 from pyFunc import moduleCg
 import json
 
-modelName = test
+#Get PN from db
+with shelve.open('/home/stux/pyPackage/dataBase') as db:
+    pn = db['pnSave']
+modelName = "test"
 moduleSys.snGet(pn, modelName)
 
 moduleSys.lanNicCheck(1, "001395") # Check CPU NIC MAC
