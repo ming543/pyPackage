@@ -482,19 +482,20 @@ def lanMacProg(nNumber, spec): #(2,"807B85")
     print(Fore.YELLOW + "使用刷槍輸入MAC ex.%s" + Fore.RESET % spec) 
     macAddr = input("Scan MAC address to continue: ").upper()
     logging.info('Input_MAC: ' + macAddr)
-    checkLen = len(macAddr) # should be 12
-    while checkLen != 12:
-        print("輸入MAC長度與規格不符 %s %s sepc: 12" %(macAddr, checkLen))
+    lenCheck = len(macAddr) # should be 12
+    while lenCheck != 12:
+        print("輸入MAC長度與規格不符 %s %s sepc: 12" %(macAddr, lenCheck))
         print(Fore.YELLOW + "使用刷槍輸入MAC ex.%s" + Fore.RESET % spec)
         macAddr = input("n鍵結束測試 Scan MAC address to continue, input n stop.").upper()
         logging.info('Input_MAC: ' + macAddr)
-        checkLen = len(macAddr) # should be 12
+        lenCheck = len(macAddr) # should be 12
         if macAddr == ("n"):
             logging.error('NIC_MAC_Prog: Len check Fail' + checkLen)
             failRed("LAN MAC Len check Fail MAC長度不符")
+            
                   
-    checkHead = macAddr[:6]
-    if checkHead == spec:
+    headCheck = macAddr[:6]
+    if headCheck == spec:
         macProg = subprocess.call("sudo %seeupdate64e /NIC=%s /A %s /calcchksum" % (eeFolder, nNumber, macAddr), shell=True)
         if macProg == 0:
             logging.info('NIC_MAC_Prog: %s %s' % (nNumber, macAddr))
@@ -504,15 +505,12 @@ def lanMacProg(nNumber, spec): #(2,"807B85")
         else:
             logging.error('NIC_MAC_Prog: Fail ' + macAddr + 'SPEC: ' + spec)
             failRed("LAN MAC %s 不符SPEC: %s" % (macAddr, spec))
+    else:
+        logging.error('NIC_MAC_Head_Check_Fail: ' + headCheck + 'SPEC: ' + spec)
+        failRed("LAN MAC Head %s 不符SPEC: %s" % (headCheck, spec))
             
         
-def lanMacProg(nNumber, macH): #(2, "80:7b:85")
-    ethMac = getmac.get_mac_address(interface=ethN)
-    if re.search(macH, ethMac):
-        logging.info('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
-    else:
-        logging.error('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
-        failRed("MAC不符")
+
 
 
 def lanMacCheck(ethN, macH):
