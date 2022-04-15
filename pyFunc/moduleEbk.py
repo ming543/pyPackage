@@ -226,10 +226,12 @@ def aicDio(port, data):
     result = str(result).splitlines()
     for i in range(len(result)):
         if re.search(port, result[i]):
-            #print(result[i])
+            print(result[i])
             j = result[i]
             portCheck = result[i].split()[0]
+            print("portCheck" + portCheck)
             dataCheck = result[i].split()[1]
+            print("dataCheck" + dataCheck)
             dataCheck = int(dataCheck)
             #print(fanCheck)
     try:
