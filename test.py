@@ -18,20 +18,20 @@ import json
 import shelve
 
 #Get PN from db
-with shelve.open('/home/stux/pyPackage/dataBase') as db:
-    pn = db['pnSave']
+#with shelve.open('/home/stux/pyPackage/dataBase') as db:
+#    pn = db['pnSave']
+pn = "test"
 modelName = "test"
 moduleSys.snGet(pn, modelName)
 
-moduleSys.lanNicCheck(1, "001395") # Check CPU NIC MAC
-moduleSys.lanEepromCheck(2, "3.25") # Check NIC Eeprom revision
-moduleSys.lanMacProg(2, "807B85")
-
-
+#moduleSys.lanNicCheck(1, "001395") # Check CPU NIC MAC
+#moduleSys.lanEepromCheck(2, "3.25") # Check NIC Eeprom revision
+#moduleSys.lanMacProg(2, "807B85")
 #moduleCg.i2cGpio()
 #moduleSys.uartLoop("/dev/ttyS0")
 #moduleSys.memoryCheck("8192 MB","No Module")
 #moduleEbk.aicFan(2)
+moduleEbk.aicDio("GPIO1", 00)
 
 def getCpuTemp():
     #sensor -j > json type

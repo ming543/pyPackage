@@ -190,18 +190,20 @@ def aicIdio(port, data):
     process.expect(pexpect.EOF)
     result = process.before
     result = str(result).splitlines()
-    for i in range(len(result)):
-        if re.search(port, result[i]):
-            #print(result[i])
-            j = result[i]
-            portCheck = result[i].split()[0]
-            dataCheck = result[i].split()[1]
-            dataCheck = int(dataCheck)
-            #print(fanCheck)
     try:
-        if portCheck == port:
-            logging.info('AIC_IDIO: %s SPEC: %s' % (j, port))
+        for i in range(len(result)):
+            if re.search(port, result[i]):
+                j = result[i]
+                portCheck = result[i].split()[0]
+                dataCheck = result[i].split()[1]
+                dataCheck = int(dataCheck)
     except:
+        logging.error('IDIO_PORT_CHECK: failed SPEC: %s' % port)
+        failRed('IDIO_PORT_CHECK: failed SPEC: %s' % port)
+                
+    if portCheck == port:
+        logging.info('AIC_IDIO: %s SPEC: %s' % (j, port))
+    else:
         logging.error('IDIO_PORT_CHECK: %s failed SPEC: %s' % (j, port))
         failRed('IDIO_PORT_CHECK: %s failed SPEC: %s' % (j, port))
 
@@ -224,20 +226,20 @@ def aicDio(port, data):
     process.expect(pexpect.EOF)
     result = process.before
     result = str(result).splitlines()
-    for i in range(len(result)):
-        if re.search(port, result[i]):
-            print(result[i])
-            j = result[i]
-            portCheck = result[i].split()[0]
-            print("portCheck" + portCheck)
-            dataCheck = result[i].split()[1]
-            print("dataCheck" + dataCheck)
-            dataCheck = int(dataCheck)
-            #print(fanCheck)
     try:
-        if portCheck == port:
-            logging.info('AIC_DIO: %s SPEC: %s' % (j, port))
+        for i in range(len(result)):
+            if re.search(port, result[i]):
+                j = result[i]
+                portCheck = result[i].split()[0]
+                dataCheck = result[i].split()[1]
+                dataCheck = int(dataCheck)
     except:
+        logging.error('DIO_PORT_CHECK: failed SPEC: %s' % port)
+        failRed('DIO_PORT_CHECK: failed SPEC: %s' % port)
+    
+    if portCheck == port:
+        logging.info('AIC_DIO: %s SPEC: %s' % (j, port))
+    else:
         logging.error('DIO_PORT_CHECK: %s failed SPEC: %s' % (j, port))
         failRed('DIO_PORT_CHECK: %s failed SPEC: %s' % (j, port))
             

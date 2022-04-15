@@ -672,8 +672,8 @@ def uartLoop(comPort):
 
 def failRed(issueCheck):
     logging.error('****** TEST_FAILED! ******')
-    logFail = log + ".FAIL"
-    os.replace(log, logFail)
+    #logFail = log + ".FAIL"
+    #os.replace(log, logFail)
     print(Fore.RED + "FFFFFF______A______IIIIII____LL____" + Fore.RESET)
     print(Fore.RED + "FF_______AA___AA_____II______LL____" + Fore.RESET)
     print(Fore.RED + "FFFF_____AA___AA_____II______LL____" + Fore.RESET)
