@@ -312,6 +312,8 @@ def snGet(pn, modelName):
 
         logger.addHandler(ch)
         logger.addHandler(fh)
+        logging.info(' ')
+        logging.info('****** Test_Start ******')
         logging.info('Test_Rev: ' + loginfo)
         logging.info('Test_Model: ' + modelName)
         logging.info('Test_PN: ' + pn)
