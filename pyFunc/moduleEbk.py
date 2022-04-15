@@ -190,9 +190,7 @@ def aicIdio(port, data):
     process.expect(pexpect.EOF)
     result = process.before
     result = str(result).splitlines()
-    global portCheck
     portCheck = ""
-    global dataCheck
     dataCheck = ""
     for i in range(len(result)):
         if re.search(port, result[i]):
@@ -226,9 +224,7 @@ def aicDio(port, data):
     process.expect(pexpect.EOF)
     result = process.before
     result = str(result).splitlines()
-    global portCheck
     portCheck = ""
-    global dataCheck
     dataCheck = ""
     for i in range(len(result)):
         if re.search(port, result[i]):
