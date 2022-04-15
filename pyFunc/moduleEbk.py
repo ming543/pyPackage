@@ -198,11 +198,13 @@ def aicIdio(port, data):
             dataCheck = result[i].split()[1]
             dataCheck = int(dataCheck)
             #print(fanCheck)
-    if portCheck == port:
-        logging.info('AIC_IDIO: %s SPEC: %s' % (j, port))
-    else:
-        logging.error('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
-        failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+    try:
+        if portCheck == port:
+            logging.info('AIC_IDIO: %s SPEC: %s' % (j, port))
+    except:
+        logging.error('IDIO_PORT_CHECK: %s failed SPEC: %s' % (j, port))
+        failRed('IDIO_PORT_CHECK: %s failed SPEC: %s' % (j, port))
+
     if dataCheck != data:
         logging.error('AIC_IDIO_Data_Fail: %s SPEC: %s' % (j, port))
         failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
@@ -230,13 +232,16 @@ def aicDio(port, data):
             dataCheck = result[i].split()[1]
             dataCheck = int(dataCheck)
             #print(fanCheck)
-    if portCheck == port:
-        logging.info('AIC_DIO: %s SPEC: %s' % (j, port))
-    else:
-        logging.error('AIC_DIO_Fail: %s SPEC: %s' % (j, port))
-        failRed('AIC_DIO_Fail: %s SPEC: %s' % (j, port))
+    try:
+        if portCheck == port:
+            logging.info('AIC_DIO: %s SPEC: %s' % (j, port))
+    except:
+        logging.error('DIO_PORT_CHECK: %s failed SPEC: %s' % (j, port))
+        failRed('DIO_PORT_CHECK: %s failed SPEC: %s' % (j, port))
+            
     if dataCheck != data:
         logging.error('AIC_DIO_Data_Fail: %s SPEC: %s' % (j, port))
         failRed('AIC_DIO_Fail: %s SPEC: %s' % (j, port))
+
 #    else:
 #        logging.info('AIC_IDIO_Data:%s SPEC:%s' % (j, data))
