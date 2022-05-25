@@ -29,8 +29,7 @@ def mMenu():
     m1 = '網路更新本機BIOS程式 Update local BIOS folder'
     m2 = '修復DOS開機 Fix MBR for DOS boot'
     m3 = '確認功能 FT232H GPIO test'
-    m4 = '更新本機UEFI程式'
-    options = [m0, m1, m2, m3, m4]
+    options = [m0, m1, m2, m3]
 
     os.system('clear')
     print(Fore.YELLOW + "%s 其他選單 OTHER-MENU" % booted + Fore.RESET, end='')
@@ -46,8 +45,6 @@ def mMenu():
         fixMbr()
     elif choice == m3:  # fix MBR
         ft232hCheck()
-    elif choice == m4: # update UEFI tools
-        uefiFolderUpdate()
 
 def pyMenu():
     with open(startTest, "w") as f:
@@ -119,18 +116,5 @@ def ft232hCheck():
     mMenu()
 
 
-def uefiFolderUpdate():
-    os.system('clear')
-    scrFolder = "/home/stux/pyPackage/tools/uefi"
-    desFolder = "/home/partimag"
-    response = subprocess.call(
-            "rsync -avh %s %s" % (scrFolder, desFolder), shell=True)
-    if response == 0:
-        print("更新成功")
-    else:
-        print("更新失敗")
-    input("按任意鍵繼續 Press any key continue...")
-
-    mMenu()
 
 mMenu()
