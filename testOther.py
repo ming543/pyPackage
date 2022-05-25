@@ -121,10 +121,10 @@ def ft232hCheck():
 
 def uefiFolderUpdate():
     os.system('clear')
-    scrFolder = "/home/stux/pyPackage/tools/uefi"
-    desFolder = "/home/partimag"
+    scrFolder = "/home/stux/pyPackage/tools/uefi/*.*"
+    desFolder = "/home/partimag/"
     response = subprocess.call(
-            "rsync -avh %s %s" % (scrFolder, desFolder), shell=True)
+            "cp -r %s %s" % (scrFolder, desFolder), shell=True)
     if response == 0:
         print("更新成功")
     else:
