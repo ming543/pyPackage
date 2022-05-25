@@ -38,7 +38,7 @@ output = str(output).lstrip('b\'').split('\\n')
 for line in output:
     if re.search('DOS_G20B', line):
         diskDos = line[:4]
-    if re.search('G_DATA', line):
+    if re.search('GDATA', line):
         diskData = line[:4]
         
 dosFolder = "/usr/lib/live/mount/persistence/%s/" % diskDos
