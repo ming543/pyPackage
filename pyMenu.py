@@ -47,12 +47,17 @@ def mMenu():
     os.system('clear')
     print(" ")
     print(Fore.BLUE + Back.WHITE)
-    print(Fore.YELLOW + "%s 主選單 MAIN-MENU" % booted + Fore.RESET, end='')
-    print(Style.RESET_ALL)
+    print("%s 主選單 MAIN-MENU" % booted + Style.RESET_ALL, end='')
+    #print(Style.RESET_ALL)
     print(" Build by EFCO SamLee明")
     print("測試程式版本 LINUX Revision %s" % loginfo)
     #print("測試程式版本 DOS Revision %s" % logDos)
-    choice = enquiries.choose('PN:%s 選擇測試項目 Choose options:' % pn, options)
+    print(Fore.MAGENTA + Back.WHITE)
+    print('目前設定PN:%s' % pn)
+    print(Style.RESET_ALL)
+
+    choice = enquiries.choose('選擇測試項目 Choose options:', options)
+
 
     if choice == m0:  # pn Setup
         pnMenu()
