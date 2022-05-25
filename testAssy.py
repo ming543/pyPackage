@@ -3,7 +3,7 @@ import os
 import shelve
 import inspect
 import subprocess
-from colorama import Fore
+from colorama import Fore, Back, Style
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
 from pyFunc import moduleCg
@@ -190,9 +190,13 @@ def default():
 
 
 os.system('clear')
-print(Fore.YELLOW + "組裝測試選單 ASSY-MENU" + Fore.RESET, end='')
+print(" ")
+print(Fore.BLUE + Back.WHITE)
+print("組裝測試選單 ASSY-MENU" + Style.RESET_ALL, end='')
 print(" Build by EFCO SamLee明")
+print(Fore.MAGENTA + Back.WHITE)
 print("測試PN:", pn)
+print(Style.RESET_ALL)
 
 #AIMH
 #DIO=GPIO1 IDIO=DIO1
