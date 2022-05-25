@@ -10,7 +10,7 @@ import time
 import shelve
 # import shutil
 import re
-from colorama import Fore
+from colorama import Fore, Back, Style
 from pyFunc import moduleSys
 
 # start test file
@@ -45,7 +45,10 @@ def mMenu():
     options = [m0, m1, m2, m3, m4, m5, m6, m7, m8, ml]
 
     os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
     print(Fore.YELLOW + "%s 主選單 MAIN-MENU" % booted + Fore.RESET, end='')
+    print(Style.RESET_ALL)
     print(" Build by EFCO SamLee明")
     print("測試程式版本 LINUX Revision %s" % loginfo)
     #print("測試程式版本 DOS Revision %s" % logDos)
@@ -68,7 +71,8 @@ def mMenu():
     elif choice == m7:  # Update Linux script
         gitPull()
     elif choice == m8:  # Update DOS script
-        moduleSys.dosPull()
+        print("dosPull")
+        #moduleSys.dosPull()
     # Last of list
     elif choice == ml:  # power off system
         print("系統關機 The system will shutdown after 5 secs!")
@@ -96,12 +100,17 @@ def aMenu2():
     os.system('clear')
     index = []
     aPath = pyFolder + "testAssy"
-    print(Fore.YELLOW + "%s 組裝測試選單 ASSY-MENU" % booted + Fore.RESET, end='')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("%s 組裝測試選單 ASSY-MENU" % booted, end='')
+    print(Style.RESET_ALL)
     print(" Build by EFCO SamLee明")
     print("Revision %s" % loginfo)
     for filename in os.listdir(aPath):
         index += [filename]
+    print(Fore.MAGENTA + Back.WHITE)
     choice = enquiries.choose('  選擇測試項目 Choose options: ', index)
+    print(Style.RESET_ALL)
     for i in range(len(index)):
         if choice == index[i]:
             with open(startTest, "w") as f:
