@@ -231,6 +231,7 @@ elif pn == "20010-000197-A.1": AIH("NA", 4, 2, "1D", 6, 6, "opCheck") #AIH-EP1
 elif pn == "20010-000199-A.1": AIH("NA", 4, 2, "1I2D", 6, 2, "opCheck") #AIHDP-i
 elif pn == "20010-000238-A.1": AIM("6100", 0, "noFan", "1D", 2, 4, "opCheck") #AIML-D
 elif pn == "20010-000263-A.1": AIM("6600", 4, "noFan", "1I", 6, 2, "opCheck") #AIMG6
+elif pn == "20010-000294-A.1": AIH("NA", 0, "NoFan", "1I", 2, 6, "opCheck") #AIHL-I
 elif pn == "20010-000303-A.1": AIH("NA", 4, 2, "1I2D", 6, 2, "opCheck") #AIHD-P4E2-i
 elif pn == "20010-000327-A.0": AIM("7200", 4, "noFan", "1I", 4, 2, "opCheck") #AIMD7
 elif pn == "20010-000335-A.0": U7130("N2807", "opCheck")
