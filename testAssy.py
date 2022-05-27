@@ -185,7 +185,7 @@ def default():
     print(" ")
     print(Fore.MAGENTA + Back.WHITE)
     print("此PN無對應測試程式")
-	print(Style.RESET_ALL, end='')
+	print(Style.RESET_ALL)
     check = input("按任意鍵繼續 press any key continue...").lower()
     with open(startTest, "w") as f:
         f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
@@ -199,7 +199,7 @@ print("組裝測試選單 ASSY-MENU" + Style.RESET_ALL, end='')
 print(" Build by EFCO SamLee明")
 print(Fore.MAGENTA + Back.WHITE)
 print("測試PN:", pn)
-print(Style.RESET_ALL, end='')
+print(Style.RESET_ALL)
 
 #AIMH
 #DIO=GPIO1 IDIO=DIO1
