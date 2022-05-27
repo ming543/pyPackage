@@ -199,8 +199,11 @@ def cpuTempCheck(cpuL, cpuH):
         failRed("確認 CPU 溫度 %s C ! SPEC: %s to %s C" % (cpuT, cpuL, cpuH))
 
 def pnGet():
-    print(Fore.YELLOW + " 選取測試PN " + Fore.RESET, end='')
-    print(Fore.YELLOW + " Choose PN number for Test and Log! " + Fore.RESET)
+    print(" ")
+	print(Fore.BLUE + Back.WHITE)
+    print(" 選取測試PN ", end='')
+    print(" Choose PN number for Test and Log! ")
+	print(Style.RESET_ALL)
     index = ['10300-', '10400-', '10500-', '10901-', '10902-', '10951-', '10953-', '20010-', '20020-', '20030-', '20040-', '20070-']
     indexChoice = enquiries.choose('  Choose options: ', index)
     body = []
@@ -244,9 +247,12 @@ def pnCheck():
     os.system('clear')
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         pn = db['pnSave'] 
-    print(Fore.YELLOW + "確認PN是否正確" + Fore.RESET, end='')
-    print(Fore.YELLOW + " Check PN number for Test and Log! " + Fore.RESET)
+	print(" ")
+	print(Fore.MAGENTA + Back.WHITE)
+    print("確認PN是否正確", end='')
+    print(" Check PN number for Test and Log! ")
     print("Test_PN: " + pn)
+	print(Style.RESET_ALL)
     pnCheck = input("任意鍵繼續 Press any key continue: ").lower()
     if pnCheck == "n":
         return False
@@ -257,12 +263,14 @@ def pnCheck():
 # pn input form script
 def snGet(pn, modelName):
 #    os.system('clear')
+    print(Fore.MAGENTA + Back.WHITE)
     print("Test_Model: " + modelName)
+	print(Style.RESET_ALL)
 #    print("Test_PN: " + pn)
     print("按n鍵結束  ", end='')
     print("Back to menu press 'n' ")
-    print(Fore.YELLOW + "輸入序號開始測試 " + Fore.RESET, end='')
-    print(Fore.YELLOW + "Input SN start test: " + Fore.RESET)
+    print(Fore.YELLOW + "輸入序號開始測試 ", end='')
+    print("Input SN start test: " + Fore.RESET)
     global sn
     sn = input()
     sn = str(sn)
@@ -874,9 +882,11 @@ def osGet():
         with shelve.open('/home/stux/pyPackage/dataBase') as db:
             db['osSave'] = osGet
     except ValueError:
-        print(Fore.YELLOW + "未發現回寫作業系統" + Fore.RESET)
-        print(Fore.YELLOW + "No Restore OS find" + Fore.RESET)
+	    print(" ")
+	    print(Fore.MAGENTA + Back.WHITE)
+        print("未發現回寫作業系統 No Restore OS find")
         print("需使用母碟先執行OS複製程式...")
+		print(Style.RESET_ALL)
         print(" ")
         input("按任意鍵繼續 Press any key continue...")
         with open(startTest, "w") as f:
@@ -891,9 +901,13 @@ def cloneCheck():
         diskShow = db['diskShow']
         osGet = db['osSave']
     os.system('clear')
-    print(Fore.YELLOW + "作業系統克隆確認 " + Fore.RESET, end='')
-    print(Fore.YELLOW + "OS Clone Setup Check" + Fore.RESET)
+	print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("作業系統克隆確認 ", end='')
+    print("OS Clone Setup Check")
+	print(Fore.MAGENTA + Back.WHITE)
     print("PN:", pn)
+	print(Style.RESET_ALL)
     print("回寫裝置Clone Disk:", diskShow)
     print("回寫檔案Clone OS:", osGet)
     print("按n鍵結束,其他鍵繼續  ", end='')
