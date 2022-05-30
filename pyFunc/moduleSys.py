@@ -14,7 +14,7 @@ import enquiries
 import cpuinfo
 import netifaces
 import serial
-from colorama import Fore
+from colorama import Fore, Back, Style
 import numpy as np
 
 # logging.basicConfig(level=logging.DEBUG)
