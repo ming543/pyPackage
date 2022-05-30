@@ -722,9 +722,12 @@ def cpuCheck(specA):
     c = cpuinfo.get_cpu_info()['brand_raw']
     if specA == "NA":
         os.system('clear')
+        print(" ")
+        print(Fore.BLUE + Back.WHITE)
+        print("確認CPU型號與BOM是否相符 Check CPU with BOM")
+        print(Fore.MAGENTA + Back.WHITE)
         print("CPU_Info: " + c)
-        print(Fore.YELLOW + "確認CPU型號與BOM是否相符 " + Fore.RESET, end='')
-        print(Fore.YELLOW + "Check CPU with BOM" + Fore.RESET)
+        print(Style.RESET_ALL)
         print("按n鍵結束,其他鍵繼續  ", end='')
         check = input("Failed press 'n', other key continue: ").lower()
         if check == "n":
@@ -741,9 +744,12 @@ def cpuCheck(specA):
 def cpuGet():
     os.system('clear')
     c = cpuinfo.get_cpu_info()['brand_raw']
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("確認CPU型號與BOM是否相符 Check CPU with BOM")
+    print(Fore.MAGENTA + Back.WHITE)
     print("CPU_Info: " + c)
-    print(Fore.YELLOW + "確認CPU型號與BOM是否相符 " + Fore.RESET, end='')
-    print(Fore.YELLOW + "Check CPU with BOM" + Fore.RESET)
+    print(Style.RESET_ALL)
     print("按n鍵結束,其他鍵繼續  ", end='')
     check = input("Failed press 'n', other key continue: ").lower()
     if check == ("n"):
@@ -776,15 +782,17 @@ def memoryCheck(specA, specB):
 
 def memoryGet():
     os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("確認記憶體規格與BOM是否相符 Check Memory with BOM")
+    print(Fore.MAGENTA + Back.WHITE)
     memory = subprocess.check_output(
             "sudo dmidecode -t memory | grep Size", shell=True)
     memory = str(memory).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
     for line in memory:
         if line.startswith('Size:'):
             logging.info('Memory_' + line)
-
-    print(Fore.YELLOW + "確認記憶體規格與BOM是否相符 " + Fore.RESET, end='')
-    print(Fore.YELLOW + "Check Memory with BOM" + Fore.RESET)
+    print(Style.RESET_ALL)
     print("按n鍵結束,其他鍵繼續  ", end='')
     check = input("Failed press 'n', other key continue: ").lower()
     if check == ("n"):
@@ -797,11 +805,13 @@ def storageCheck(specA):
         print("opCheck")
         return
     os.system('clear')
+    print(" ")
+    print(Fore.MAGENTA + Back.WHITE)
     output = subprocess.check_output(
             'lsblk -o type,name,model,size,tran', shell=True)
     output = str(output).lstrip('b\'').split('\\n')
     check = False
-#disk開頭，不以USB結尾
+    #disk開頭，不以USB結尾
     for line in output:
         if line.lower().startswith('disk'):
             if not line.lower().endswith('usb'):
@@ -814,14 +824,19 @@ def storageCheck(specA):
             print(line)
         logging.error("No storage find at system SPEC: " + specA)
         failRed("系統查無儲存裝置 SPEC: " + specA)
+    print(Style.RESET_ALL)
 
 def storageGet():
     os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("確認儲存裝置與BOM是否相符 Check Storage with BOM")
+    print(Fore.MAGENTA + Back.WHITE)
     output = subprocess.check_output(
             'lsblk -o type,name,model,size,tran', shell=True)
     output = str(output).lstrip('b\'').split('\\n')
     options = []
-#disk開頭，不以USB結尾，加入選單
+    #disk開頭，不以USB結尾，加入選單
     for line in output:
         if line.lower().startswith('disk'):
             if not line.lower().endswith('usb'):
@@ -832,9 +847,10 @@ def storageGet():
         check = True
     if check == False:
         print("系統查無儲存裝置 No storage find at system")
+
         logging.info('Storage_Info: No storage find at system')
-    print(Fore.YELLOW + "確認儲存裝置與BOM是否相符 " + Fore.RESET, end='')
-    print(Fore.YELLOW + "Check Storage with BOM" + Fore.RESET)
+    print(Style.RESET_ALL)
+    
     print("按n鍵結束,其他鍵繼續  ", end='')
     checkN = input("Failed press 'n', other key continue: ").lower()
     if checkN == ("n"):
@@ -844,6 +860,8 @@ def storageGet():
 
 def diskGet():
     os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
     output = subprocess.check_output(
             'lsblk -o type,name,model,size,tran', shell=True)
     output = str(output).lstrip('b\'').split('\\n')
@@ -860,9 +878,9 @@ def diskGet():
             db['diskSave'] = diskGet
             db['diskShow'] = diskShow
     except:
-        print(Fore.YELLOW + "系統查無可供寫入儲存裝置(DISK)" + Fore.RESET)
-        print(Fore.YELLOW + "Can't find DISK for OS restore" + Fore.RESET)
-        print(" ")
+        print(Fore.MAGENTA + Back.WHITE)
+        print("系統查無可供寫入儲存裝置(DISK) Can't find DISK for OS restore")
+        print(Style.RESET_ALL)
         input("按任意鍵繼續 Press any key continue...")
         with open(startTest, "w") as f:
             f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
@@ -877,10 +895,13 @@ def osGet():
     for filename in os.listdir(osFolder):
         index += [filename]
     try:
+        print(" ")
+        print(Fore.BLUE + Back.WHITE)
         print("選取回寫作業系統 ")
         osGet = enquiries.choose(' Choose clone OS options: ', index)
         with shelve.open('/home/stux/pyPackage/dataBase') as db:
             db['osSave'] = osGet
+        print(Style.RESET_ALL)
     except ValueError:
         print(" ")
         print(Fore.MAGENTA + Back.WHITE)

@@ -173,19 +173,37 @@ def U6500(sCPU):
     print("Not Ready")
 
 
-def debug(sCPU, sDisk):
+def debug(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
+    #moduleSys.biosVersionCheck("1.20")
+    moduleSys.biosReleaseCheck("11/11/2019")
+    moduleEbk.aicVersion("AIC-1.04")
+    moduleEbk.aicDdmLogo()
+    moduleEbk.aicTemp(20, 60)
+    moduleEbk.aicRtc(2.999, 3.333)
+#    moduleEbk.aicPoe(sPoe)
+#    moduleEbk.aicFan(sFan)
+    moduleEbk.aicDioSelect(sDio)
+    moduleSys.rtcCheck()
     moduleSys.cpuCheck(sCPU)
+    moduleSys.memoryGet()
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
-
+    moduleSys.lanSelect(sLan)
+    moduleSys.usbCheck("Keyboard", 1)
+    moduleSys.usbCheck("JMS567", 1)
+    moduleSys.usbCheck("DataTraveler|JetFlash", 1)
+    moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
+    moduleSys.uartLoopCheck(sCom)
+    moduleSys.alsabatTest()
+    moduleSys.cpuTempCheck(20, 60)
 
 def default():
     print(" ")
     print(Fore.MAGENTA + Back.WHITE)
     print("此PN無對應測試程式")
-	print(Style.RESET_ALL)
+    print(Style.RESET_ALL)
     check = input("按任意鍵繼續 press any key continue...").lower()
     with open(startTest, "w") as f:
         f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
@@ -206,7 +224,7 @@ print(Style.RESET_ALL)
 #1-CPU, Poe, fan, dio, Lan, Com, Disk
 #U7XXX
 #1-CPU, Disk
-if pn == "10300-000000-A.0": debug("NA", "opCheck")
+if pn == "10300-000000-A.0": debug("6600", 4, "noFan", "1I", 4, 4, "opCheck")
 elif pn == "10300-000004-A.3": Q715QA5("NA")
 elif pn == "10300-000004-A.4": Q715QA5("NA")
 elif pn == "10300-000007-A.0": Q715QA5("NA")
