@@ -133,11 +133,16 @@ def aicPoe(port):
             
                 
 
-
 def aicFan(port):
     process = pexpect.spawn('make run', cwd=ekitFolder, timeout=2, encoding='utf-8' )
     process.expect('(10)*') #Fan
     process.sendline("10\r")
+    process.expect("( 2)*") #Fan Config
+    process.sendline("2\r")
+    process.expect("Select one, and config.") #Fan Config
+    process.sendline("2,0,100\r")
+    process.expect("(Quit)*") 
+    process.sendline("q\r")
     process.expect("( 3)*") #Fan Status
     process.sendline("3\r")
     process.expect("(Exit)*") 
