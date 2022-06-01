@@ -149,7 +149,7 @@ def osSync():
     output = str(output).lstrip('b\'').split('\\n')
     #Check /dev/sdx1 part size, 2G > 3.8.0
     partSize = output[1].lstrip()
-    if partSize == "2G":
+    if partSize == "2G" or "3.8G":
         subprocess.check_call("sudo mount /dev/%s5 /mnt" % diskGet, shell=True, stdin=sys.stdin)
         subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE/ /mnt/home/partimag", shell=True, stdin=sys.stdin)
         subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
