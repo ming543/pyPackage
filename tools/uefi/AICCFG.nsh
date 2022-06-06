@@ -18,6 +18,10 @@ endif
 
 cd \AICCFG
 
+if %1 == "10901-000007" then 
+ goto AIH
+endif
+
 if %1 == "10902-000097" then 
  goto AIM-PI
 endif
