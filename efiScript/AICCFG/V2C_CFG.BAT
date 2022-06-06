@@ -1,0 +1,8 @@
+@echo off
+:: AIC Config
+:: V2C Setting
+:: USB:4, COM:2, PoE:4, FAN:0, DIO:1
+
+@SMB w 66 50 AE CD 17 51
+@SMB w 66 40 04 00 04
+@SMB w 66 41 22 21 01 00

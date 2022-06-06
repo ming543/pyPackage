@@ -1,0 +1,7 @@
+Batch File
+
+File Name Rule
+
+ X    X           X           X           X                      X              X X.bat
+ |    |           |           |           |                      l
+ R/W  USB NUMBER  COM NUMBER  POE NUMBER  Isolation DIO Number   FAN Number
