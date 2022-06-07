@@ -198,32 +198,32 @@ def aicIdio(port, data):
     portCheck = ""
     dataCheck = ""
     for i in range(len(result)):
-        if re.search(port, result[i]):
+        if re.search("Low   Low", result[i]):
             j = result[i]
+        if re.search(port, result[i]):
             portCheck = result[i].split()[0]
             dataCheck = result[i].split()[1]
-            dataCheck = int(dataCheck)
                 
     if portCheck == port:
-        logging.info('AIC_IDIO: %s SPEC: %s' % (j, port))
+        logging.info('AIC_IDIO_PORT: %s SPEC: %s %s' % (portCheck, port, data))
     else:
-        logging.error('IDIO_PORT_CHECK: failed SPEC: %s' % port)
-        failRed('IDIO_PORT_CHECK: failed SPEC: %s' % port)
+        logging.error('IDIO_PORT_CHECK_Fail: %s SPEC: %s %s' % (j, port, data))
+        failRed('IDIO_PORT_CHECK: Failed! SPEC: %s %s' % (port, data))
 
     if dataCheck != data:
-        logging.error('AIC_IDIO_Data_Fail: %s SPEC: %s' % (j, port))
-        failRed('AIC_IDIO_Fail: %s SPEC: %s' % (j, port))
+        logging.error('AIC_IDIO_Data_Fail: %s SPEC: %s %s' % (j, port, data))
+        failRed('AIC_IDIO_Fail: Failed! SPEC: %s %s' % (port, data))
 ## Not check DIO data for now
-#    else:
-#        logging.info('AIC_IDIO_Data:%s SPEC:%s' % (j, data))
+    else:
+        logging.info('AIC_IDIO_Data: %s SPEC: %s %s' % (dataCheck, port, data))
 
 
 def aicDio(port, data):
     process = pexpect.spawn('make run', cwd=ekitFolder, timeout=2, encoding='utf-8' )
     process.expect('(11)*') #IO
     process.sendline("11\r")
-    process.expect("( 6)*") #DIO Pins Status
-    process.sendline("6\r")
+    process.expect("( 9)*") #DIO Pins Status
+    process.sendline("9\r")
     process.expect("(Exit)*") 
     process.sendline("exit\r")
     process.expect(pexpect.EOF)
@@ -232,21 +232,23 @@ def aicDio(port, data):
     portCheck = ""
     dataCheck = ""
     for i in range(len(result)):
-        if re.search(port, result[i]):
+        if re.search("Low   Low", result[i]):
             j = result[i]
+        if re.search(port, result[i]):
             portCheck = result[i].split()[0]
             dataCheck = result[i].split()[1]
-            dataCheck = int(dataCheck)
-    
+       # try:
+       #     dataCheck = int(dataCheck)
+       # except:
+       #     logging.error('AIC_DIO_Data_Fail: %s SPEC: %s %s' % (portCheck, port, data))
+       #     failRed('AIC_DIO_Fail: %s SPEC: %s %s' % (portCheck, port, data))
     if portCheck == port:
-        logging.info('AIC_DIO: %s SPEC: %s' % (j, port))
+        logging.info('AIC_DIO_PORT: %s SPEC: %s %s' % (portCheck, port, data))
     else:
-        logging.error('DIO_PORT_CHECK: failed SPEC: %s' % port)
-        failRed('DIO_PORT_CHECK: failed SPEC: %s' % port)
-            
+        logging.error('DIO_PORT_CHECK_Fail: %s SPEC: %s %s' % (j, port, data))
+        failRed('DIO_PORT_CHECK: Failed! SPEC: %s %s' % (port, data))
     if dataCheck != data:
-        logging.error('AIC_DIO_Data_Fail: %s SPEC: %s' % (j, port))
-        failRed('AIC_DIO_Fail: %s SPEC: %s' % (j, port))
-
-#    else:
-#        logging.info('AIC_IDIO_Data:%s SPEC:%s' % (j, data))
+        logging.error('AIC_DIO_Data_Fail: %s SPEC: %s %s' % (j, port, data))
+        failRed('AIC_DIO_Fail: Failed! SPEC: %s %s' % (port, data))
+    else:
+        logging.info('AIC_DIO_Data: %s SPEC: %s %s' % (dataCheck, port, data))

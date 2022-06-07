@@ -31,7 +31,7 @@ moduleSys.snGet(pn, modelName)
 #moduleSys.uartLoop("/dev/ttyS0")
 #moduleSys.memoryCheck("8192 MB","No Module")
 #moduleEbk.aicFan(2)
-moduleEbk.aicDio("GPIO1", 00)
+moduleEbk.aicDio("GPIO1", "0000")
 
 def getCpuTemp():
     #sensor -j > json type
