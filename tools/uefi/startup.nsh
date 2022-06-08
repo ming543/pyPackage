@@ -2,25 +2,25 @@
 ;mode 80 25
 ;foundimage section is simply to locate the correct drive
 cls
-if exist fs0:\AUTOEXEC.MAN then
+if exist fs0:\startup.nsh then
     fs0:
-	echo Found Update Packages on fs0:
-	goto FOUNDIMAGE
+    echo Found Update Packages on fs0:
+    goto FOUNDIMAGE
 endif
-if exist fs1:\AUTOEXEC.MAN then
-	fs1:
-	echo Found Update Packages on fs1:
-	goto FOUNDIMAGE
+if exist fs1:\startup.nsh then
+    fs1:
+    echo Found Update Packages on fs1:
+    goto FOUNDIMAGE
 endif
-if exist fs2:\AUTOEXEC.MAN then
-	fs2:
-	echo Found Update Packages on fs2:
-	goto FOUNDIMAGE
+if exist fs2:\startup.nsh then
+    fs2:
+    echo Found Update Packages on fs2:
+    goto FOUNDIMAGE
 endif
-	echo "Unable to find Update Packages".
-	echo "Please mount the drive with the update package".
-	echo ""
- goto END
+    echo "Unable to find Update Packages".
+    echo "Please mount the drive with the update package".
+    echo ""
+goto END
 
 :FOUNDIMAGE
 echo "============================================================="
