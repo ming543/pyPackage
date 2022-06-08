@@ -131,6 +131,23 @@ def aicPoe(port):
             logging.error('PoE  %s Present: Fail' % i + poeLog)
             failRed('PoE  %s Present: Disconnected' % i + poeLog)
             
+
+def opPoe(port):
+    if port != 0:
+        os.system('clear')
+        print(" ")
+        print(Fore.BLUE + Back.WHITE)
+        print("PoE測具燈號確認 PoE Tester LED Check")
+        print(Fore.MAGENTA + Back.WHITE)
+        print("確認PoE燈號是否顯示 Check PoE tester LED is light")
+        print(Style.RESET_ALL)
+        print("不良按n鍵結束,其他鍵繼續  ", end='')
+        check = input("Failed press 'n', other key continue: ").lower()
+        if check == ("n"):
+            logging.error('PoE_LED_Check: Fail ')
+            failRed("PoE LED 燈號不良")
+        logging.info('PoE_LED_ON: Display OK')
+
                 
 
 def aicFan(port):
@@ -169,7 +186,6 @@ def aicFan(port):
         
         
 def aicDioSelect(sDio):
-
     if sDio == "1D2D":
         aicDio("GPIO1")
         aicDio("GPIO2")

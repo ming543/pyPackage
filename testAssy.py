@@ -22,6 +22,7 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleEbk.aicDdmLogo()
     moduleEbk.aicTemp(20, 60)
     moduleEbk.aicRtc(2.999, 3.333)
+    moduleEbk.opPoe(sPoe)
 #    moduleEbk.aicPoe(sPoe)
 #    moduleEbk.aicFan(sFan)
     moduleEbk.aicDioSelect(sDio)
@@ -49,7 +50,8 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleEbk.aicDdmLogo()
     moduleEbk.aicTemp(20, 60)
     moduleEbk.aicRtc(2.999, 3.333)
-    moduleEbk.aicPoe(sPoe)
+    #moduleEbk.aicPoe(sPoe)
+    moduleEbk.opPoe(sPoe)
     moduleEbk.aicFan(sFan)
     moduleEbk.aicDioSelect(sDio)
     moduleSys.rtcCheck()
@@ -58,12 +60,12 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
     moduleSys.lanSelect(sLan)
+    moduleSys.uartLoopCheck(sCom)
+    moduleSys.alsabatTest()
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("JMS567", 1)
     moduleSys.usbCheck("DataTraveler|JetFlash", 3)
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
-    moduleSys.uartLoopCheck(sCom)
-    moduleSys.alsabatTest()
     moduleSys.cpuTempCheck(20, 60)
 
 
@@ -224,7 +226,7 @@ print(Style.RESET_ALL)
 #1-CPU, Poe, fan, dio, Lan, Com, Disk
 #U7XXX
 #1-CPU, Disk
-if pn == "10300-000000-A.0": debug("6600", 4, "noFan", "1I", 4, 4, "opCheck")
+if pn == "10300-000000-A.0": AIH("6500", 4, 2, "1D", 5, 6, "opCheck")
 elif pn == "10300-000004-A.3": Q715QA5("NA")
 elif pn == "10300-000004-A.4": Q715QA5("NA")
 elif pn == "10300-000007-A.0": Q715QA5("NA")

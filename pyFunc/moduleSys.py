@@ -574,9 +574,11 @@ def lanSpeedSet(sLan, sSpeed):
 def lanLedCheck(ledCheck):
     os.system('clear')
     print(" ")
+    print(Fore.BLUE + Back.WHITE)
     print("網路燈號確認 LAN LED Check")
+    print(Fore.MAGENTA + Back.WHITE)
     print("確認網路孔燈號是否顯示 - %s" % ledCheck)
-    print(" ")
+    print(Style.RESET_ALL)
     print("不良按n鍵結束,其他鍵繼續  ", end='')
     check = input("Failed press 'n', other key continue: ").lower()
     if check == ("n"):
@@ -588,10 +590,12 @@ def lanLedCheck(ledCheck):
 def lanLedOffCheck(ledCheck):
     os.system('clear')
     print(" ")
+    print(Fore.BLUE + Back.WHITE)
     print("網路燈號確認 LAN LED OFF Check")
+    print(Fore.MAGENTA + Back.WHITE)
     print("移除網路線 Remove LAN Cable")
     print("確認網路孔燈號是否顯示 - %s" % ledCheck)
-    print(" ")
+    print(Style.RESET_ALL)
     print("不良按n鍵結束,其他鍵繼續  ", end='')
     check = input("Failed press 'n', other key continue: ").lower()
     if check == ("n"):
@@ -635,9 +639,11 @@ def uartLoopCheck(sCom):
         j = i + 1
         os.system('clear')
         print(" ")
+        print(Fore.BLUE + Back.WHITE)
         print("COM LOOPBACK 單一接頭測試 ")
+        print(Fore.MAGENTA + Back.WHITE)
         print("確認 LOOPBACK 位於 COM - %s" % j)
-        print(" ")
+        print(Style.RESET_ALL)
         input("按任意鍵繼續 Press any key continue...")
         try:
             subprocess.call("sudo chmod 666 /dev/ttyS%s" % i, shell=True )
@@ -656,7 +662,6 @@ def uartLoopCheck(sCom):
             logging.error('/dev/ttyS%s failed!' % i)
             failRed("/dev/ttyS%s fail" % i )
        
-
 
 def uartLoop(comPort):
     os.system('clear')
