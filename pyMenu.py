@@ -40,7 +40,6 @@ def mMenu():
     m5 = '作業系統安裝 OS Clone Setup'
     m6 = '網路上傳日誌檔 Copy Log to Onedrive'
     m7 = '更新本機測試程式 Update Test Script'
-    m8 = '更新DOS測試程式 Update DOS Test Script'
     ml = '系統關機 Power off system'
     options = [m0, m1, m2, m3, m4, m5, m6, m7, m8, ml]
 
@@ -51,7 +50,6 @@ def mMenu():
     #print(Style.RESET_ALL)
     print(" Build by EFCO SamLee明")
     print("測試程式版本 LINUX Revision %s" % loginfo)
-    #print("測試程式版本 DOS Revision %s" % logDos)
     print(Fore.MAGENTA + Back.WHITE)
     print('目前設定PN:%s' % pn)
     print(Style.RESET_ALL)
@@ -75,13 +73,10 @@ def mMenu():
         copyLog()
     elif choice == m7:  # Update Linux script
         gitPull()
-    elif choice == m8:  # Update DOS script
-        print("dosPull")
-        #moduleSys.dosPull()
     # Last of list
     elif choice == ml:  # power off system
-        print("系統關機 The system will shutdown after 5 secs!")
-        time.sleep(5)
+        print("系統關機 The system will shutdown after 2 secs!")
+        time.sleep(2)
         os.system('systemctl poweroff')
 
 

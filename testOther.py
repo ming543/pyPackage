@@ -26,11 +26,12 @@ loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
 
 def mMenu():
     m0 = '返回主選單 BackToMain'
-    m1 = '網路更新本機BIOS程式 Update local BIOS folder'
+    m1 = '更新本機BIOS程式 Update local BIOS folder'
     m2 = '修復DOS開機 Fix MBR for DOS boot'
-    m3 = '確認功能 FT232H GPIO test'
+    m3 = '更新DOS測試程式 Update DOS Test Script'
     m4 = '更新本機UEFI程式'
-    options = [m0, m1, m2, m3, m4]
+    m5 = '確認功能 FT232H GPIO test'
+    options = [m0, m1, m2, m3, m4, m5]
 
     os.system('clear')
     print(Fore.YELLOW + "%s 其他選單 OTHER-MENU" % booted + Fore.RESET, end='')
@@ -44,10 +45,12 @@ def mMenu():
         biosFolderUpdate()
     elif choice == m2:  # fix MBR
         fixMbr()
-    elif choice == m3:  # fix MBR
-        ft232hCheck()
+    elif choice == m3:  # update DOS
+        moduleSys.dosPull()
     elif choice == m4: # update UEFI tools
         uefiFolderUpdate()
+    elif choice == m5:  # ft232Test
+        ft232hCheck()
 
 def pyMenu():
     with open(startTest, "w") as f:
@@ -132,5 +135,40 @@ def uefiFolderUpdate():
     input("按任意鍵繼續 Press any key continue...")
 
     mMenu()
+
+
+#DOS Update 
+def dosPull():   
+    os.system('clear')
+    for i in range(5):  # ping 5 times
+        response = subprocess.call(
+                "ping -c 1 -w 1 8.8.8.8", shell=True)
+        if response == 0:
+            print("PING OK")
+            subprocess.call("cd %s && sudo git init" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git remote add origin https://github.com/ming543/V23C_DOS.git" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git fetch --all" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/master -- AUTOEXEC.BAT" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/master -- V23C" % dosFolder, shell=True)
+            subprocess.call("cd %s && sudo git checkout origin/master -- AICCFG" % dosFolder, shell=True)
+            print("gitDosPullDone")
+            #copy efiScript to DOS folder
+            subprocess.call("sudo cp -r %sefiScript %s" % (pyFolder, dosFolder), shell=True)
+            rC = subprocess.call(
+                "cd %s && sudo find . -type f \( -name '*.BAT' -o -name '*.TXT' \) -exec todos -v '{}' \;" % dosFolder, shell=True)
+            if rC == 0:  # check rclone pass or fail
+                print(Fore.GREEN + "DOS更新成功 Update done!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
+            else:
+                print(Fore.RED + "DOS更新失敗 Update Fail!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
+        else:
+            print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
+            time.sleep(5)
+    sys.stdout.flush()
+    os.execv(sys.executable, ["python3"] + sys.argv)
+
 
 mMenu()
