@@ -137,38 +137,5 @@ def uefiFolderUpdate():
     mMenu()
 
 
-#DOS Update 
-def dosPull():   
-    os.system('clear')
-    for i in range(5):  # ping 5 times
-        response = subprocess.call(
-                "ping -c 1 -w 1 8.8.8.8", shell=True)
-        if response == 0:
-            print("PING OK")
-            subprocess.call("cd %s && sudo git init" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git remote add origin https://github.com/ming543/V23C_DOS.git" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git fetch --all" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git checkout origin/master -- AUTOEXEC.BAT" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git checkout origin/master -- V23C" % dosFolder, shell=True)
-            subprocess.call("cd %s && sudo git checkout origin/master -- AICCFG" % dosFolder, shell=True)
-            print("gitDosPullDone")
-            #copy efiScript to DOS folder
-            subprocess.call("sudo cp -r %sefiScript %s" % (pyFolder, dosFolder), shell=True)
-            rC = subprocess.call(
-                "cd %s && sudo find . -type f \( -name '*.BAT' -o -name '*.TXT' \) -exec todos -v '{}' \;" % dosFolder, shell=True)
-            if rC == 0:  # check rclone pass or fail
-                print(Fore.GREEN + "DOS更新成功 Update done!!!" + Fore.RESET)
-                input("按任意鍵繼續 Press any key continue...")
-                break
-            else:
-                print(Fore.RED + "DOS更新失敗 Update Fail!!!" + Fore.RESET)
-                input("按任意鍵繼續 Press any key continue...")
-                break
-        else:
-            print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
-            time.sleep(5)
-    sys.stdout.flush()
-    os.execv(sys.executable, ["python3"] + sys.argv)
-
 
 mMenu()

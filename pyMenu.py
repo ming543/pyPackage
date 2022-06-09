@@ -41,7 +41,7 @@ def mMenu():
     m6 = '網路上傳日誌檔 Copy Log to Onedrive'
     m7 = '更新本機測試程式 Update Test Script'
     ml = '系統關機 Power off system'
-    options = [m0, m1, m2, m3, m4, m5, m6, m7, m8, ml]
+    options = [m0, m1, m2, m3, m4, m5, m6, m7, ml]
 
     os.system('clear')
     print(" ")
