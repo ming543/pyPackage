@@ -142,7 +142,28 @@ def testerBuild():
     else:
         passGreen()
 
+
 def osSync():
+    #Check client disk
+    diskChoose()
+    output = subprocess.check_output(
+            'lsblk /dev/%s1 -o label' % diskGet, shell=True)
+    output = str(output).lstrip('b\'').split('\\n')
+    labelName = output[1].lstrip()
+    if labelName == "U3_PROG":
+        subprocess.check_call("sudo mount /dev/%s5 /mnt" % diskGet, shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE/ /mnt/home/partimag", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sync", shell=True, stdin=sys.stdin)
+    elif labelName == "DOS_G20B":
+        subprocess.check_call("sudo mount /dev/%s2 /mnt" % diskGet, shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE /mnt", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sync", shell=True, stdin=sys.stdin)
+    passGreen()
+
+
+def osSync_bak():
     diskChoose()
     output = subprocess.check_output(
             'lsblk /dev/%s1 -o size' % diskGet, shell=True)
@@ -160,6 +181,7 @@ def osSync():
         subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
         subprocess.check_call("sync", shell=True, stdin=sys.stdin)
     passGreen()
+
 
 #linuxUpdate
 def gitPull():
