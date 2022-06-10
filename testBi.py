@@ -62,7 +62,6 @@ def serialTest():
         if serialTest != 0:
             logging.error("RS232 serial loop test fail code:%s" % serialTest)
             moduleSys.failRed("RS232 serial loop test fail code:%s" % serialTest)
-#           exit()
         else:
             logging.info("RS232 serial loop test pass code:%s" % serialTest)
 
@@ -130,17 +129,17 @@ def biStressRoom():
             nowTime = int(time.time())
             print(" ")
             print(Fore.BLUE + Back.WHITE)
-            print("testBI")
+            print("燒機測試 BI Test")
             print(Fore.MAGENTA + Back.WHITE)
             print("Test PN:%s SN:%s" % (pn, sn))
             print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
             print(Style.RESET_ALL)
             print(" ")
-            print("BI Time End:", time.ctime(endTime))
-            print("BI Time Now:", time.ctime(nowTime))
+            print("結束時間 BI Time End:", time.ctime(endTime))
+            print("現在時間 BI Time Now:", time.ctime(nowTime))
             time.sleep(1)              
         else:
-            print("TempHigh")
+            print("CPU 溫度過高 TempHigh")
             logging.error("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
             moduleSys.failRed("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
     serialTest()
@@ -153,8 +152,8 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
     pn = db['pnSave']
 modelName = biFuncCheck()
 sn = moduleSys.snGet(pn, modelName)
-#biStress()
-biStressRoom()
+biStress()
+#biStressRoom()
 print("test done")
 moduleSys.passGreen()
 
