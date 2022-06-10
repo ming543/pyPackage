@@ -7,6 +7,7 @@ import shelve
 import subprocess
 import time
 import json
+from colorama import Fore, Back, Style
 #sys.path.append("..")
 from pyFunc import moduleSys
 
@@ -54,7 +55,8 @@ def getcpuH():
 
 
 def serialTest():
-    if modelName == "BI-120M-COM1":
+    #if modelName == "BI-120M-COM1":
+    if biosNameCheck() == "V2C" or "V3C":
         serialTest = subprocess.call(
                 "sudo /home/stux/tools/serial-test -p /dev/ttyS0 -b 115200 -o 1 -i 3", shell=True)
         if serialTest != 0:
@@ -109,13 +111,50 @@ def biStress():
         logging.info('Check BI total run %s passed!' % biCount)
 
 
+
+def biStressRoom():
+    cpuL = 20
+    if biosNameCheck() == "conga-QA5" or getCpuMips() >= 40:
+        cpuH = 65
+    else:
+        cpuH = getCpuMips() + 15
+    serialTest()
+    subprocess.call(
+            "sudo stress-ng -c 4 -m 1 -l 80 -t 120m &", shell=True)    
+    nowTime = int(time.time())
+    endTime = int(time.time() + 600)
+    while nowTime < endTime:
+        cpuT = getCpuTemp()
+        if cpuL < cpuT < cpuH:
+            os.system('clear')
+            nowTime = int(time.time())
+            print(" ")
+            print(Fore.BLUE + Back.WHITE)
+            print("testBI")
+            print(Fore.MAGENTA + Back.WHITE)
+            print("Test PN:%s SN:%s" % (pn, sn))
+            print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+            print(Style.RESET_ALL)
+            print(" ")
+            print("BI Time End:", time.ctime(endTime))
+            print("BI Time Now:", time.ctime(nowTime))
+            time.sleep(1)              
+        else:
+            print("TempHigh")
+            logging.error("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+            moduleSys.failRed("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+    serialTest()
+    logging.info("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+
+
 ### Stript start here ###
 os.system('clear')
 with shelve.open('/home/stux/pyPackage/dataBase') as db:
     pn = db['pnSave']
 modelName = biFuncCheck()
 sn = moduleSys.snGet(pn, modelName)
-biStress()
+#biStress()
+biStressRoom()
 print("test done")
 moduleSys.passGreen()
 
