@@ -7,6 +7,7 @@ from colorama import Fore, Back, Style
 from pyFunc import moduleSys
 from pyFunc import moduleEbk
 from pyFunc import moduleCg
+import testBi
 
 startTest = "/home/stux/pyPackage/t.sh"
 #Get PN from db
@@ -38,7 +39,7 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
     moduleSys.uartLoopCheck(sCom)
     moduleSys.alsabatTest()
-    moduleSys.cpuTempCheck(20, 60)
+#    moduleSys.cpuTempCheck(20, 60)
 
 
 def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
@@ -66,7 +67,7 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.usbCheck("JMS567", 1)
     moduleSys.usbCheck("DataTraveler|JetFlash", 3)
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
-    moduleSys.cpuTempCheck(20, 60)
+#    moduleSys.cpuTempCheck(20, 60)
 
 
 def Q715QA5(sCPU):
@@ -95,7 +96,7 @@ def Q715QA5(sCPU):
     #EC25
 #    moduleSys.atCheck("/dev/ttyUSB2", "ati", "Rev")
 #    moduleSys.atCheck("/dev/ttyUSB2", "at+qccid", "CCID")
-    moduleSys.cpuTempCheck(20, 60)
+#    moduleSys.cpuTempCheck(20, 60)
 
 
 def U7130PAS(sCPU, sDisk):
@@ -117,7 +118,7 @@ def U7130PAS(sCPU, sDisk):
     moduleSys.usbCheck("DataTraveler|JetFlash", 1)
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
     moduleSys.uartLoop("/dev/ttyS0")
-    moduleSys.cpuTempCheck(20, 60)
+    #moduleSys.cpuTempCheck(20, 60)
 
 
 def U7130(sCPU, sDisk):
@@ -142,7 +143,7 @@ def U7130(sCPU, sDisk):
     moduleSys.uartLoop("/dev/ttyS0")
     moduleSys.aplayTest()
     moduleSys.arecordTest()
-    moduleSys.cpuTempCheck(20, 60)
+    #moduleSys.cpuTempCheck(20, 60)
 
 
 def U7150(sCPU, sDisk):
@@ -168,7 +169,7 @@ def U7150(sCPU, sDisk):
     moduleSys.uartLoop("/dev/ttyS5")
     moduleSys.aplayTest()
     moduleSys.arecordTest()
-    moduleSys.cpuTempCheck(20, 60)
+    #moduleSys.cpuTempCheck(20, 60)
 
 
 def U6500(sCPU):
@@ -179,7 +180,8 @@ def debug(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
-    moduleSys.biosReleaseCheck("11/11/2019")
+    testBi.biStressRoom()
+    moduleSys.biosReleaseCheck("11/11/2020")
     moduleEbk.aicVersion("AIC-1.04")
     moduleEbk.aicDdmLogo()
     moduleEbk.aicTemp(20, 60)
@@ -192,14 +194,15 @@ def debug(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.memoryGet()
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
-    moduleSys.lanSelect(sLan)
-    moduleSys.usbCheck("Keyboard", 1)
-    moduleSys.usbCheck("JMS567", 1)
-    moduleSys.usbCheck("DataTraveler|JetFlash", 1)
-    moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
-    moduleSys.uartLoopCheck(sCom)
-    moduleSys.alsabatTest()
-    moduleSys.cpuTempCheck(20, 60)
+#    moduleSys.lanSelect(sLan)
+#    moduleSys.usbCheck("Keyboard", 1)
+#    moduleSys.usbCheck("JMS567", 1)
+#    moduleSys.usbCheck("DataTraveler|JetFlash", 1)
+#    moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
+#    moduleSys.uartLoopCheck(sCom)
+#    moduleSys.alsabatTest()
+    testBi.biStressCheck()
+    #moduleSys.cpuTempCheck(20, 60)
 
 def default():
     print(" ")
@@ -226,7 +229,7 @@ print(Style.RESET_ALL)
 #1-CPU, Poe, fan, dio, Lan, Com, Disk
 #U7XXX
 #1-CPU, Disk
-if pn == "10300-000000-A.0": AIH("6500", 4, 2, "1D", 5, 6, "opCheck")
+if pn == "10300-000000-A.0": debug("6500", 4, 2, "1D", 5, 6, "opCheck")
 elif pn == "10300-000004-A.3": Q715QA5("NA")
 elif pn == "10300-000004-A.4": Q715QA5("NA")
 elif pn == "10300-000007-A.0": Q715QA5("NA")

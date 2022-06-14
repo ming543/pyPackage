@@ -12,6 +12,14 @@ from colorama import Fore, Back, Style
 from pyFunc import moduleSys
 
 
+
+
+
+#Get PN from db
+with shelve.open('/home/stux/pyPackage/dataBase') as db:
+    pn = db['pnSave']
+    sn = db['snSave']
+
 def biosNameCheck():
     biosN = subprocess.check_output(
             "sudo dmidecode -s baseboard-product-name", shell=True)
@@ -112,6 +120,8 @@ def biStress():
 
 
 def biStressRoom():
+    global cpuL
+    global cpuH
     cpuL = 20
     if biosNameCheck() == "conga-QA5" or getCpuMips() >= 40:
         cpuH = 65
@@ -120,8 +130,17 @@ def biStressRoom():
     serialTest()
     subprocess.call(
             "sudo stress-ng -c 4 -m 1 -l 80 -t 120m &", shell=True)    
+
     nowTime = int(time.time())
+    global endTime 
     endTime = int(time.time() + 600)
+    cpuT = getCpuTemp()
+    logging.info("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+
+
+
+def biStressCheck():
+    nowTime = int(time.time())
     while nowTime < endTime:
         cpuT = getCpuTemp()
         if cpuL < cpuT < cpuH:
@@ -145,15 +164,15 @@ def biStressRoom():
     serialTest()
     logging.info("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
 
-
 ### Stript start here ###
-os.system('clear')
-with shelve.open('/home/stux/pyPackage/dataBase') as db:
-    pn = db['pnSave']
-modelName = biFuncCheck()
-sn = moduleSys.snGet(pn, modelName)
-biStress()
-#biStressRoom()
-print("test done")
-moduleSys.passGreen()
+if __name__ == '__main__':
+    os.system('clear')
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        pn = db['pnSave']
+    modelName = biFuncCheck()
+    sn = moduleSys.snGet(pn, modelName)
+    biStress()
+    #biStressRoom()
+    print("test done")
+    moduleSys.passGreen()
 
