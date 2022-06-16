@@ -16,6 +16,44 @@ from pyFunc import moduleEbk
 from pyFunc import moduleCg
 import json
 import shelve
+import scp
+from paramiko import SSHClient
+from scp import SCPClient
+
+hostName = "10.0.0.6"
+hostFolder = "C:"
+localFolder = "/home/partimag/log"
+response = os.system("ping -c 1 " + hostName)
+if response == 0:
+    subprocess.call(
+            "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
+            % (localFolder, hostName, hostFolder), shell=True)
+
+    #ssh = SSHClient()
+    #ssh.load_system_host_keys()
+    #ssh.connect('10.0.0.6')
+    #scp = SCPClient(ssh.get_transport())
+    #scp.put('example.txt', 'example2.txt')
+    #scp.put('/home/partimag/log', recursive=True, remote_path='C:')
+    #scp.get('example2.txt')
+else:
+    print ("ping fail " + hostName )
+    time.sleep(5)
+
+def scpCheck():
+    host = "10.0.0.6"
+    user = "production"
+    client = scp.Client(host=host, user=user, keyfile=keyfile)
+    # or
+    client = scp.Client(host=host, user=user)
+    client.use_system_keys()
+    # or
+    client = scp.Client(host=host, user=user, password=password)
+    # and then
+    client.transfer('/etc/local/filename', '/etc/remote/filename')
+
+
+scpCheck()
 
 #Get PN from db
 #with shelve.open('/home/stux/pyPackage/dataBase') as db:
@@ -40,6 +78,9 @@ moduleEbk.aicDioSelect("1I2D")
 #moduleEbk.aicIdioConfig("DIO1", "SOURCE")
 #moduleEbk.aicIdioConfig("DIO2", "SINK")
 #moduleEbk.aicIdioConfig("DIO2", "SOURCE")
+
+
+
 
 def getCpuTemp():
     #sensor -j > json type
@@ -178,4 +219,5 @@ def osSync():
 
 #moduleSys.getCpuMips()
 #print(n)
+
 

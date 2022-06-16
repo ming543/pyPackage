@@ -687,11 +687,25 @@ def uartLoop(comPort):
         logging.error('%s failed!' % comPort)
         failRed("%s fail" % comPort )
 
+def logScpCopy():
+    hostName = "10.0.0.6"
+    hostFolder = "C:"
+    localFolder = "/home/partimag/log"
+    response = os.system("ping -c 1 " + hostName)
+    if response == 0:
+    subprocess.call(
+            "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
+            % (localFolder, hostName, hostFolder), shell=True)
+    else:
+        print ("ping fail " + hostName )
+        time.sleep(5)
+
 
 def failRed(issueCheck):
     logging.error('****** TEST_FAILED! ******')
     #logFail = log + ".FAIL"
     #os.replace(log, logFail)
+    logScpCopy()
     print(Fore.RED + "FFFFFF______A______IIIIII____LL____" + Fore.RESET)
     print(Fore.RED + "FF_______AA___AA_____II______LL____" + Fore.RESET)
     print(Fore.RED + "FFFF_____AA___AA_____II______LL____" + Fore.RESET)
@@ -713,6 +727,7 @@ def passGreen():
     logging.info('****** TEST_PASSED! ******')
     logPass = log + ".PASS"
     os.replace(log, logPass)
+    logScpCopy()
     print(Fore.GREEN + "PPPPP_______A______SSSSSS___SSSSSS" + Fore.RESET)
     print(Fore.GREEN + "PP__PP____AA_AA____SS_______SS____" + Fore.RESET)
     print(Fore.GREEN + "PP___PP__AA___AA___SS_______SS____" + Fore.RESET)

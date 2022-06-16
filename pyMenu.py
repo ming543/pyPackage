@@ -181,6 +181,7 @@ def copyLog():
 
 #linuxUpdate
 def gitPull():
+    import setup
     os.system('clear')
     for i in range(5):  # ping 5 times
         response = subprocess.call(
