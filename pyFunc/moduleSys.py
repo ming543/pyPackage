@@ -438,15 +438,18 @@ def biosReleaseCheck(spec):
         failRed("BIOS_Release_Date不符")
 
 
-def rtcCheck():
+def rtcCheck(sBat):
     y = "2022"  # check years of BIOS time
-    rtcTime = subprocess.check_output("sudo hwclock -r", shell=True)
-    rtcTime = str(rtcTime).lstrip('b\'').split('\\n')[0]
-    if re.search(y, rtcTime):
-        logging.info('RTC_Time: ' + rtcTime + " SPEC: " + y)
+    if sBat == "withBat":
+        rtcTime = subprocess.check_output("sudo hwclock -r", shell=True)
+        rtcTime = str(rtcTime).lstrip('b\'').split('\\n')[0]
+        if re.search(y, rtcTime):
+            logging.info('RTC_Time: ' + rtcTime + " SPEC: " + y)
+        else:
+            logging.error('RTC_Time: ' + rtcTime + " SPEC: " + y)
+            failRed("rtc年份不符")
     else:
-        logging.error('RTC_Time: ' + rtcTime + " SPEC: " + y)
-        failRed("rtc年份不符")
+        logging.info('RTC_Time: No Check')
 
 def lanNicCheck(nNumber, spec): #(1,"001395")
     nCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /MAC_DUMP" % (eeFolder, nNumber), shell=True)
