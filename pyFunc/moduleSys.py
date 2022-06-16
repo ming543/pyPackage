@@ -41,7 +41,12 @@ for line in output:
     if re.search('G_DATA', line):
         diskData = line[:4]
         
-dosFolder = "/usr/lib/live/mount/persistence/%s/" % diskDos
+dosCheck = "/usr/lib/live/mount/persistence"
+if os.path.isdir(dosCheck):
+    dosFolder = "/usr/lib/live/mount/persistence/%s/" % diskDos
+else:
+    dosFolder = "/home/partimag/dos/"
+
 logPath = "/home/partimag/log/"
 if os.path.isdir(logPath):
     print(" ")
