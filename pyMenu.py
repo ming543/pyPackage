@@ -184,6 +184,7 @@ def gitPull():
     import setup
     os.system('clear')
     for i in range(5):  # ping 5 times
+        subprocess.call("git config --global http.sslverify false", shell=True)
         response = subprocess.call(
                 "ping -c 1 -w 1 8.8.8.8", shell=True)
         if response == 0:
