@@ -71,20 +71,16 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
 #    moduleSys.cpuTempCheck(20, 60)
 
 
-def Q715QA5(sBat):
+def Q715QA5OS(sBat):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
     moduleSys.dmidecodeLog("baseboard-serial-number")
-##    bios_rev
-##    bios_oem
     moduleSys.rtcCheck(sBat)
-#    moduleSys.cpuGet()
-    moduleSys.cpuCheck("i3")
-    moduleSys.memoryCheck("4096", "4096")
-    #moduleSys.storageGet()
-    moduleSys.storageCheck("32G")
+    moduleSys.cpuCheck("E3930")
+    moduleSys.memoryCheckOne("2048")
+    moduleSys.storageCheck("mmcblk1")
     moduleSys.lanCheck("eth0", "80:7b:85")
     moduleSys.lanCheck("eth1", "00:13:95")
     moduleSys.lanSpeedSet(2, 100)
@@ -100,9 +96,8 @@ def Q715QA5(sBat):
     #EC25
     moduleSys.atCheck("/dev/ttyUSB2", "ati", "Rev")
     moduleSys.atCheck("/dev/ttyUSB2", "at+qccid", "CCID")
-    moduleSys.cpuTempCheck(20, 50)
+    moduleSys.cpuTempCheck(20, 55)
     osClone.osCloneFix("2022-02-07-09-img-Q715QA5-EMMC-32G", "mmcblk1")
-
 
 
 def U7130PAS(sCPU, sDisk):
@@ -236,9 +231,9 @@ print(Style.RESET_ALL)
 #U7XXX
 #1-CPU, Disk
 if pn == "10300-000000-A.0": debug("6500", 4, 2, "1D", 5, 6, "opCheck")
-elif pn == "10300-000004-A.3": Q715QA5("withBat")
-elif pn == "10300-000004-A.4": Q715QA5("withBat")
-elif pn == "10300-000007-A.0": Q715QA5("withoutBat")
+elif pn == "10300-000004-A.3": Q715QA5OS("withBat")
+elif pn == "10300-000004-A.4": Q715QA5OS("withBat")
+elif pn == "10300-000007-A.0": Q715QA5OS("withoutBat")
 elif pn == "10400-000004-B.2": U7130PAS("NA")
 elif pn == "10400-000009-A.0": U7150("N4200")
 elif pn == "10400-000010-A.0": U7150("N4200")

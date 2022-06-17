@@ -295,7 +295,7 @@ def snGet(pn, modelName):
         startTime = time.strftime("%Y%m%d", time.localtime())
         # setup test log month folder
         logMonth = time.strftime("%Y%m", time.localtime())
-        logFilename = sn + "-" + modelName + "-" + startTime + ".log"
+        logFilename = sn + "-" + modelName + "-" + startTime 
         global log
         log = logPath + pn + "/" + logMonth + "/" + logFilename
         os.makedirs(os.path.dirname(log), exist_ok=True)  # Create log folder
@@ -366,7 +366,7 @@ def snGetPcba():
         startTime = time.strftime("%Y%m%d-%H%M%S", time.localtime())
         # setup test log month folder
         logMonth = time.strftime("%Y%m", time.localtime())
-        logFilename = sn + "-" + startTime + ".log"
+        logFilename = sn + "-" + startTime 
         global log
         log = logPath + pn + "/" + logMonth + "/" + logFilename
         os.makedirs(os.path.dirname(log), exist_ok=True)  # Create log folder
@@ -728,7 +728,7 @@ def failRed(issueCheck):
 
 def passGreen():
     logging.info('****** TEST_PASSED! ******')
-    logPass = log + ".PASS"
+    logPass = log + "-PASS.log"
     os.replace(log, logPass)
     logScpCopy()
     print(Fore.GREEN + "PPPPP_______A______SSSSSS___SSSSSS" + Fore.RESET)
@@ -805,6 +805,22 @@ def memoryCheck(specA, specB):
     else:
         logging.error('Memory_Check: Fail ' + mCheck[1] + " SPEC: " + specB)
         failRed("Size規格不符")
+
+
+def memoryCheckOne(specA):
+    memory = subprocess.check_output(
+            "sudo dmidecode -t memory | grep Size", shell=True)
+    memory = str(memory).lstrip('b\'\\t').rstrip('\\n\'').split('\\n\\t')
+    mCheck = []
+    for line in memory:
+        if line.startswith('Size:'):
+#            logging.info('Memory_' + line)
+            mCheck.append(line)
+    if re.search(specA, mCheck[0]):
+        logging.info('Memory_Check: Pass ' + mCheck[0] + " SPEC: " + specA)
+    else:
+        logging.error('Memory_Check: Fail ' + mCheck[0] + " SPEC: " + specA)
+        failRed("Size規格不符")
             
     
 
@@ -851,6 +867,7 @@ def storageCheck(specA):
         for line in output:
             print(line)
         logging.error("No storage find at system SPEC: " + specA)
+        print(Style.RESET_ALL)
         failRed("系統查無儲存裝置 SPEC: " + specA)
     print(Style.RESET_ALL)
 
