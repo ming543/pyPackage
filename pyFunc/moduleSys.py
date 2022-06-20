@@ -199,6 +199,9 @@ def cpuTempCheck(cpuL, cpuH):
             cpuT = int(float(cpuT))
     if cpuL < cpuT < cpuH:
         logging.info("Check CPU temp %s ! SPEC: %s to %s C" % (cpuT, cpuL, cpuH))
+        osFlag = 1
+        with shelve.open('/home/stux/pyPackage/dataBase') as db:
+            db['osFlagSave'] = osFlag
     else:
         logging.error("Check CPU temp %s ! SPEC: %s to %s C" % (cpuT, cpuL, cpuH))
         failRed("確認 CPU 溫度 %s C ! SPEC: %s to %s C" % (cpuT, cpuL, cpuH))
@@ -279,9 +282,11 @@ def snGet(pn, modelName):
     global sn
     sn = input()
     sn = str(sn)
+    osFlag = 0
     #with shelve.open('snTemp') as db:
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         db['snSave'] = sn
+        db['osFlagSave'] = osFlag
 
     if sn == "n":
         print("Start Test is " + startTest)

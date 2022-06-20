@@ -74,6 +74,7 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
 def Q715QA5OS(sBat):
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
+    moduleSys.atCheck("/dev/ttyUSB2", "ati/r/n", "Rev")
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
     moduleSys.dmidecodeLog("baseboard-serial-number")
@@ -94,7 +95,7 @@ def Q715QA5OS(sBat):
 #    moduleSys.atCheck("/dev/ttyUSB2", "at+cgmr", "CGMR")
 #    moduleSys.atCheck("/dev/ttyUSB2", "at+ciccid", "ICCID")
     #EC25
-    moduleSys.atCheck("/dev/ttyUSB2", "ati", "Rev")
+    #test AT command time can't too close
     moduleSys.atCheck("/dev/ttyUSB2", "at+qccid", "CCID")
     moduleSys.cpuTempCheck(20, 55)
     osClone.osCloneFix("2022-02-07-09-img-Q715QA5-EMMC-32G", "mmcblk1")

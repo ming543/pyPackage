@@ -36,15 +36,21 @@ def osClone():
 
 
 def osCloneFix(osFix, diskFix):
-    logging.info('OS Clone_Disk: ' + diskFix)
-    logging.info('OS Clone_REV: ' + osFix)
-    osClone = subprocess.call(
-            "sudo /usr/sbin/ocs-sr -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_IMAGE/%s %s" %(osFix, diskFix), shell=True)
-    if osClone != 0:
-        logging.error("OS Clone fail code:%s SPEC:0" % osClone)
-        moduleSys.failRed("OS回寫失敗")
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        osFlag = db['osFlagSave']
+    if osFlag == 1:
+        logging.info('OS Clone_Disk: ' + diskFix)
+        logging.info('OS Clone_REV: ' + osFix)
+        osClone = subprocess.call(
+                "sudo /usr/sbin/ocs-sr -g auto -e1 auto -e2 -r -j2 -k1 -scr -icds -p command restoredisk OS_IMAGE/%s %s" %(osFix, diskFix), shell=True)
+        if osClone != 0:
+            logging.error("OS Clone fail code:%s SPEC:0" % osClone)
+            moduleSys.failRed("OS回寫失敗")
+        else:
+            logging.info("OS Clone pass code:%s SPEC:0" % osClone)
     else:
-        logging.info("OS Clone pass code:%s SPEC:0" % osClone)
+        logging.error("OS Clone code:%s all test function not pass SPEC:0" % osFlag)
+        moduleSys.failRed("OS回寫失敗All Test function not PASS")
 
 ### Stript start here ###
 if __name__ == '__main__':
