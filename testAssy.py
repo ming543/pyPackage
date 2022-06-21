@@ -72,6 +72,7 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
 
 
 def Q715QA5OS(sBat):
+    moduleSys.ntpTime(sBat)
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.snGet(pn, modelName)
     moduleSys.atCheck("/dev/ttyUSB2", "ati/r/n", "Rev")

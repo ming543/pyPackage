@@ -16,6 +16,7 @@ import netifaces
 import serial
 from colorama import Fore, Back, Style
 import numpy as np
+import ntplib
 
 # logging.basicConfig(level=logging.DEBUG)
 # log_filename = datetime.datetime.now().strftime(sn + "-%Y-%m-%d-%H:%M:%S.log")
@@ -267,6 +268,11 @@ def pnCheck():
     else:
         return True
 
+def ntpTime(sBat):
+    if sBat != "withBat":
+        subprocess.call("sudo timedatectl set-ntp yes", shell=True)
+        time.sleep(2)
+        subprocess.call("sudo timedatectl", shell=True)
 
 # pn input form script
 def snGet(pn, modelName):

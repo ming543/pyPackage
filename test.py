@@ -20,25 +20,29 @@ import scp
 from paramiko import SSHClient
 from scp import SCPClient
 
-hostName = "10.0.0.6"
-hostFolder = "C:"
-localFolder = "/home/partimag/log"
-response = os.system("ping -c 1 " + hostName)
-if response == 0:
-    subprocess.call(
-            "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
-            % (localFolder, hostName, hostFolder), shell=True)
 
-    #ssh = SSHClient()
-    #ssh.load_system_host_keys()
-    #ssh.connect('10.0.0.6')
-    #scp = SCPClient(ssh.get_transport())
-    #scp.put('example.txt', 'example2.txt')
-    #scp.put('/home/partimag/log', recursive=True, remote_path='C:')
-    #scp.get('example2.txt')
-else:
-    print ("ping fail " + hostName )
-    time.sleep(5)
+moduleSys.ntpTime("withoutBat")
+
+def logUpdate():
+    hostName = "10.0.0.6"
+    hostFolder = "C:"
+    localFolder = "/home/partimag/log"
+    response = os.system("ping -c 1 " + hostName)
+    if response == 0:
+        subprocess.call(
+                "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
+                % (localFolder, hostName, hostFolder), shell=True)
+
+        #ssh = SSHClient()
+        #ssh.load_system_host_keys()
+        #ssh.connect('10.0.0.6')
+        #scp = SCPClient(ssh.get_transport())
+        #scp.put('example.txt', 'example2.txt')
+        #scp.put('/home/partimag/log', recursive=True, remote_path='C:')
+        #scp.get('example2.txt')
+    else:
+        print ("ping fail " + hostName )
+        time.sleep(5)
 
 def scpCheck():
     host = "10.0.0.6"
@@ -53,7 +57,7 @@ def scpCheck():
     client.transfer('/etc/local/filename', '/etc/remote/filename')
 
 
-scpCheck()
+#scpCheck()
 
 #Get PN from db
 #with shelve.open('/home/stux/pyPackage/dataBase') as db:
