@@ -1,0 +1,1 @@
+cmd_/home/stux/cgoslx-x64-1.03.032/CgosDrv/Lx/cgosdrv.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id  -T ./scripts/module-common.lds -o /home/stux/cgoslx-x64-1.03.032/CgosDrv/Lx/cgosdrv.ko /home/stux/cgoslx-x64-1.03.032/CgosDrv/Lx/cgosdrv.o /home/stux/cgoslx-x64-1.03.032/CgosDrv/Lx/cgosdrv.mod.o;  true
