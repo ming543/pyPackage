@@ -11,5 +11,6 @@ sudo cp $userFolder/.gitconfig /root/
 sudo cp $userFolder/.git-credentials /root/
 sudo apt-get install -y tofrodos
 sudo apt-get install -y sshpass
+sudo apt-get install -y tmux
 
 echo "****** system setup update done ******"
