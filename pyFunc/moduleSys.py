@@ -16,7 +16,7 @@ import netifaces
 import serial
 from colorama import Fore, Back, Style
 import numpy as np
-import ntplib
+#import ntplib
 
 # logging.basicConfig(level=logging.DEBUG)
 # log_filename = datetime.datetime.now().strftime(sn + "-%Y-%m-%d-%H:%M:%S.log")
