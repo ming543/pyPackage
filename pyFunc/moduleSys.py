@@ -213,7 +213,7 @@ def pnGet():
     print(" 選取測試PN ", end='')
     print(" Choose PN number for Test and Log! ")
     print(Style.RESET_ALL)
-    index = ['10300-', '10400-', '10500-', '10901-', '10902-', '10951-', '10953-', '20010-', '20020-', '20030-', '20040-', '20070-']
+    index = ['10200-', '10300-', '10400-', '10500-', '10901-', '10902-', '10951-', '10953-', '20010-', '20020-', '20030-', '20040-', '20070-']
     indexChoice = enquiries.choose('  Choose options: ', index)
     body = []
     for i in range(0, 10):
