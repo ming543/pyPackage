@@ -294,6 +294,9 @@ def aicIdioCheck(port):
     for i in range(len(result)):
         if re.search("C   C|NC  NC", result[i]):
             j = result[i]
+        else:
+            logging.error('IDIO_PORT_CHECK_Fail: %s SPEC:( 4)DO' % result[-6])
+            failRed('IDIO_PORT_CHECK: Failed! %s SPEC:( 4)DO' % result[-6])
         if re.search(port, result[i]):
             portCheck = result[i].split()[0]
             dataCheck = result[i].split()[1]
@@ -322,6 +325,9 @@ def aicDio(port):
     for i in range(len(result)):
         if re.search("Low   Low", result[i]):
             j = result[i]
+        else:
+            logging.error('DIO_PORT_CHECK_Fail: %s SPEC:( 9)GPIO' % result[-6])
+            failRed('DIO_PORT_CHECK: Failed! %s SPEC:( 9)GPIO' % result[-6])
         if re.search(port, result[i]):
             portCheck = result[i].split()[0]
             dataCheck = result[i].split()[1]

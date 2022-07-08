@@ -82,6 +82,7 @@ def mMenu():
 
 def pnMenu():
     os.system('clear')
+    moduleSys.dateGet()
     moduleSys.pnGet()
     moduleSys.pnCheck()
     sys.stdout.flush()

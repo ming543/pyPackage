@@ -220,7 +220,8 @@ def dateGet():
     for i in range(1, 13):
         #add number by six digi, someday may used.
         #body.append(indexChoice + "{:06d}".format(i))
-        body.append(indexChoice + str(i))
+        s = "%02d" % i
+        body.append(indexChoice + str(s))
     dateLog = enquiries.choose('  Choose date: ', body)
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         db['dateSave'] = dateLog
@@ -317,7 +318,6 @@ def snGet(pn, modelName):
         db['osFlagSave'] = osFlag
         dateLog = db['dateSave'] 
 
-
     if sn == "n":
         print("Start Test is " + startTest)
         with open(startTest, "w") as f:
@@ -339,14 +339,12 @@ def snGet(pn, modelName):
         with shelve.open('/home/stux/pyPackage/dataBase') as db:
             db['log'] = log
 
-
         logger = logging.getLogger()
         # Setup logging level
         logger.setLevel(logging.DEBUG)
         formatter = logging.Formatter(
                 '[%(levelname)1.1s %(asctime)s %(module)s:%(lineno)d] %(message)s',
                 datefmt='%Y%m%d %H:%M:%S')
-
         # Setup log show on stream and file both
         ch = logging.StreamHandler()
         # ch.setLevel(logging.DEBUG)
@@ -434,6 +432,7 @@ def snGetPcba():
         logging.info('Test_SN: ' + sn)
     return sn
 
+
 #dmiFunc ex.baseboard-product-name
 def dmidecodeCheck(dmiFunc, spec):
     biosN = subprocess.check_output("sudo dmidecode -s %s" % dmiFunc, shell=True)
@@ -451,8 +450,7 @@ def dmidecodeLog(dmiFunc):
     biosN = str(biosN).lstrip('b\'').split('\\n')[0]
     logging.info(dmiFunc + ': ' + biosN)
     return True
-    
-        
+            
 
 def biosVersionCheck(spec):
     biosV = subprocess.check_output("sudo dmidecode -s bios-version", shell=True)
@@ -486,6 +484,7 @@ def rtcCheck(sBat):
             failRed("rtc年份不符")
     else:
         logging.info('RTC_Time: No Check')
+
 
 def lanNicCheck(nNumber, spec): #(1,"001395")
     nCheck = subprocess.check_output("sudo %seeupdate64e /NIC=%s /MAC_DUMP" % (eeFolder, nNumber), shell=True)
@@ -546,8 +545,7 @@ def lanMacProg(nNumber, spec): #(2,"807B85")
         if macAddr == ("n"):
             logging.error('NIC_MAC_Prog: Len check Fail' + checkLen)
             failRed("LAN MAC Len check Fail MAC長度不符")
-            
-                  
+                              
     headCheck = macAddr[:6]
     if headCheck == spec:
         macProg = subprocess.call("sudo %seeupdate64e /NIC=%s /A %s /calcchksum" % (eeFolder, nNumber, macAddr), shell=True)
@@ -564,9 +562,6 @@ def lanMacProg(nNumber, spec): #(2,"807B85")
         failRed("LAN MAC Head %s 不符SPEC: %s" % (headCheck, spec))
             
         
-
-
-
 def lanMacCheck(ethN, macH):
     ethMac = getmac.get_mac_address(interface=ethN)
     if re.search(macH, ethMac):
@@ -575,9 +570,11 @@ def lanMacCheck(ethN, macH):
         logging.error('Test_MAC: ' + ethN + "_" + ethMac + " SPEC: " + macH)
         failRed("MAC不符")
 
+
 def lanSelect(sLan):
     for i in range(sLan):
         lanCheck("eth%s" %i, "80:7b:85")
+
 
 def lanCheck(ethN, macH):
     #test MAC
@@ -605,6 +602,7 @@ def lanCheck(ethN, macH):
         print("keyerror")
         logging.error('Test_Lan: %s IP address get failed!' % ethN)
         failRed("%s 測試網路IP連線失敗" % ethN)
+
 
 def lanSpeedSet(sLan, sSpeed):
     for i in range(sLan):
@@ -726,6 +724,7 @@ def uartLoop(comPort):
         logging.error('%s failed!' % comPort)
         failRed("%s fail" % comPort )
 
+
 def logScpCopy():
     hostName = "10.0.0.6"
     hostFolder = "C:"
@@ -763,6 +762,8 @@ def failRed(issueCheck):
 
 
 def passGreen():
+#    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+#        log = db['log'] 
     logging.info('****** TEST_PASSED! ******')
     logPass = log + "-PASS.log"
     os.replace(log, logPass)
