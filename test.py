@@ -21,6 +21,7 @@ from paramiko import SSHClient
 from scp import SCPClient
 
 
+moduleSys.logScpCopy()
 moduleSys.ntpTime("withoutBat")
 
 def logUpdate():

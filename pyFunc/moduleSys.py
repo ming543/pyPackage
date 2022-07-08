@@ -726,17 +726,25 @@ def uartLoop(comPort):
 
 
 def logScpCopy():
-    hostName = "10.0.0.6"
-    hostFolder = "C:"
     localFolder = "/home/partimag/log"
-    response = os.system("ping -c 1 " + hostName)
-    if response == 0:
+    winHost = "10.0.0.6"
+    winFolder = "C:"
+    winPing = os.system("ping -c 1 " + winHost)
+    if winPing == 0:
         subprocess.call(
                 "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
-                % (localFolder, hostName, hostFolder), shell=True)
-    else:
-        print ("ping fail " + hostName )
-        time.sleep(5)
+                % (localFolder, winHost, winFolder), shell=True)
+
+    zeroHost = "192.168.192.168"
+    zeroFolder = "/home/partimag"
+    zeroPing = os.system("ping -c 1 " + zeroHost)
+    if zeroPing == 0:
+        subprocess.call(
+                "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
+                % (localFolder, zeroHost, zeroFolder), shell=True)
+   # else:
+   #     print ("ping fail " + WinHost )
+   #     time.sleep(5)
 
 
 def failRed(issueCheck):
