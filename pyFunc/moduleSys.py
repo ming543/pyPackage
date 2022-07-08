@@ -207,6 +207,25 @@ def cpuTempCheck(cpuL, cpuH):
         logging.error("Check CPU temp %s ! SPEC: %s to %s C" % (cpuT, cpuL, cpuH))
         failRed("確認 CPU 溫度 %s C ! SPEC: %s to %s C" % (cpuT, cpuL, cpuH))
 
+
+def dateGet():
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print(" 選取測試日期 ", end='')
+    print(" Choose date for Test and Log! ")
+    print(Style.RESET_ALL)
+    index = ['2022', '2023', '2024', '2025']
+    indexChoice = enquiries.choose('  Choose options: ', index)
+    body = []
+    for i in range(1, 13):
+        #add number by six digi, someday may used.
+        #body.append(indexChoice + "{:06d}".format(i))
+        body.append(indexChoice + str(i))
+    dateLog = enquiries.choose('  Choose date: ', body)
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        db['dateSave'] = dateLog
+
+
 def pnGet():
     print(" ")
     print(Fore.BLUE + Back.WHITE)
@@ -238,6 +257,7 @@ def pnGet():
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         db['pnSave'] = pn
 
+
 def pnGet2():
     index = []
     aPath = "/home/stux/pyPackage/testAssy"
@@ -256,11 +276,13 @@ def pnCheck():
     os.system('clear')
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         pn = db['pnSave'] 
+        dateLog = db['dateSave'] 
     print(" ")
     print(Fore.MAGENTA + Back.WHITE)
     print("確認PN是否正確", end='')
     print(" Check PN number for Test and Log! ")
     print("Test_PN: " + pn)
+    print("Test_Date: " + dateLog)
     print(Style.RESET_ALL)
     pnCheck = input("任意鍵繼續 Press any key continue: ").lower()
     if pnCheck == "n":
@@ -293,6 +315,8 @@ def snGet(pn, modelName):
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         db['snSave'] = sn
         db['osFlagSave'] = osFlag
+        dateLog = db['dateSave'] 
+
 
     if sn == "n":
         print("Start Test is " + startTest)
@@ -304,16 +328,17 @@ def snGet(pn, modelName):
         # startTime = time.strftime("%Y%m%d-%H%M%S", time.localtime())
         # setup test start date-only
         startTime = time.strftime("%Y%m%d", time.localtime())
-        # setup test log month folder
-        logMonth = time.strftime("%Y%m", time.localtime())
+        # setup test log month folder - ask OP input
+        # logMonth = time.strftime("%Y%m", time.localtime())
         logFilename = sn + "-" + modelName + "-" + startTime 
         global log
-        log = logPath + pn + "/" + logMonth + "/" + logFilename
+        log = logPath + pn + "/" + dateLog + "/" + logFilename
         os.makedirs(os.path.dirname(log), exist_ok=True)  # Create log folder
         # save log name and location to database
         # with shelve.open('snTemp') as db:
         with shelve.open('/home/stux/pyPackage/dataBase') as db:
             db['log'] = log
+
 
         logger = logging.getLogger()
         # Setup logging level
