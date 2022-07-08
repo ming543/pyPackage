@@ -31,7 +31,8 @@ def mMenu():
     m3 = '更新DOS測試程式 Update DOS Test Script'
     m4 = '更新本機UEFI程式'
     m5 = '確認功能 FT232H GPIO test'
-    options = [m0, m1, m2, m3, m4, m5]
+    m6 = '更新本機zerotier address'
+    options = [m0, m1, m2, m3, m4, m5, m6]
 
     os.system('clear')
     print(Fore.YELLOW + "%s 其他選單 OTHER-MENU" % booted + Fore.RESET, end='')
@@ -51,6 +52,8 @@ def mMenu():
         uefiFolderUpdate()
     elif choice == m5:  # ft232Test
         ft232hCheck()
+    elif choice == m6:  # update zerotier address
+        zerotierUpdate()
 
 def pyMenu():
     with open(startTest, "w") as f:
@@ -122,6 +125,29 @@ def ft232hCheck():
     mMenu()
 
 
+def zerotierUpdate():
+    os.system('clear')
+    print('Stop service zerotier ... ')
+    response = subprocess.call(
+            "sudo service zerotier-one stop", shell=True)
+    time.sleep(5)
+    print('Remove zerotier identity ... ')
+    response = subprocess.call(
+            "sudo rm /var/lib/zerotier-one/identity.public", shell=True)
+    response = subprocess.call(
+            "sudo rm /var/lib/zerotier-one/identity.secret", shell=True)
+    print('Start service zerotier ... ')
+    response = subprocess.call(
+            "sudo service zerotier-one start", shell=True)
+    time.sleep(5)
+    response = subprocess.call(
+            "sudo zerotier-cli info", shell=True)
+    input("按任意鍵繼續 Press any key continue...")
+    mMenu()
+
+
+
+
 def uefiFolderUpdate():
     os.system('clear')
     scrFolder = "/home/stux/pyPackage/tools/uefi/*.*"
@@ -133,7 +159,6 @@ def uefiFolderUpdate():
     else:
         print("更新失敗")
     input("按任意鍵繼續 Press any key continue...")
-
     mMenu()
 
 
