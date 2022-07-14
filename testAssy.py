@@ -71,6 +71,31 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
 #    moduleSys.cpuTempCheck(20, 60)
 
 
+def CJB(sCPU, sDisk):
+    modelName = inspect.currentframe().f_code.co_name
+    moduleSys.snGet(pn, modelName)
+    moduleSys.dmidecodeLog("bios-version")
+    moduleSys.dmidecodeLog("baseboard-product-name")
+    moduleSys.dmidecodeLog("baseboard-serial-number")
+    moduleSys.rtcCheck("withBat")
+    moduleSys.cpuCheck(sCPU)
+    moduleSys.memoryGet()
+    moduleSys.storageCheck(sDisk)
+    moduleSys.storageGet()
+    moduleSys.lanCheck("eth0", "80:7b:85")
+    moduleSys.lanCheck("eth1", "00:13:95")
+    moduleSys.usbCheck("Keyboard", 1)
+    moduleSys.usbCheck("Mouse", 1)
+    moduleSys.usbCheck("JMS567", 1)
+    moduleSys.usbCheck("DataTraveler|JetFlash", 1)
+    moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
+    moduleCg.i2cGpio()
+    moduleSys.uartLoop("/dev/ttyS0")
+    moduleSys.aplayTest()
+    moduleSys.arecordTest()
+    #moduleSys.cpuTempCheck(20, 60)
+
+
 def Q715QA5OS(sBat):
     moduleSys.ntpTime(sBat)
     modelName = inspect.currentframe().f_code.co_name
@@ -236,6 +261,7 @@ if pn == "10300-000000-A.0": debug("6500", 4, 2, "1D", 5, 6, "opCheck")
 elif pn == "10300-000004-A.3": Q715QA5OS("withBat")
 elif pn == "10300-000004-A.4": Q715QA5OS("withBat")
 elif pn == "10300-000007-A.0": Q715QA5OS("withoutBat")
+elif pn == "10300-000008-A.0": CJB("cpu", "disk")
 elif pn == "10400-000004-B.2": U7130PAS("NA")
 elif pn == "10400-000009-A.0": U7150("N4200")
 elif pn == "10400-000010-A.0": U7150("N4200")
