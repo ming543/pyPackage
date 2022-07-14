@@ -20,6 +20,29 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
     pn = db['pnSave']
     sn = db['snSave']
 
+
+def biMenu():
+    m0 = '燒機測試2小時 BI Test 2hrs'
+    m1 = '燒機測試4小時 BI Test 4hrs'
+    options = [m0, m1]
+
+    os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("%s 燒機選單 BI-MENU" % booted + Style.RESET_ALL, end='')
+    #print(Style.RESET_ALL)
+    print(" Build by EFCO SamLee明")
+    print("測試程式版本 LINUX Revision %s" % loginfo)
+    print(Fore.MAGENTA + Back.WHITE)
+    print('目前設定PN:%s' % pn)
+    print(Style.RESET_ALL)
+    choice = enquiries.choose('選擇測試項目 Choose options:', options)
+    if choice == m0:  
+        global biTotal = 12
+    elif choice == m1:  
+        global biTotal = 24
+
+
 def biosNameCheck():
     biosN = subprocess.check_output(
             "sudo dmidecode -s baseboard-product-name", shell=True)
@@ -75,7 +98,7 @@ def serialTest():
 
 
 def biStress():
-    biTotal = 12
+    #biTotal = 12
     biCount = 0
     cpuH = getcpuH()    
     cpuL = 20
