@@ -7,6 +7,7 @@ import shelve
 import subprocess
 import time
 import json
+import enquiries
 from colorama import Fore, Back, Style
 #sys.path.append("..")
 from pyFunc import moduleSys
@@ -21,7 +22,9 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
     sn = db['snSave']
 
 
+
 def biMenu():
+    global biTotal 
     m0 = '燒機測試2小時 BI Test 2hrs'
     m1 = '燒機測試4小時 BI Test 4hrs'
     options = [m0, m1]
@@ -29,18 +32,16 @@ def biMenu():
     os.system('clear')
     print(" ")
     print(Fore.BLUE + Back.WHITE)
-    print("%s 燒機選單 BI-MENU" % booted + Style.RESET_ALL, end='')
+    print("燒機選單 BI-MENU" + Style.RESET_ALL, end='')
     #print(Style.RESET_ALL)
-    print(" Build by EFCO SamLee明")
-    print("測試程式版本 LINUX Revision %s" % loginfo)
     print(Fore.MAGENTA + Back.WHITE)
     print('目前設定PN:%s' % pn)
     print(Style.RESET_ALL)
     choice = enquiries.choose('選擇測試項目 Choose options:', options)
     if choice == m0:  
-        global biTotal = 12
+        biTotal = 12
     elif choice == m1:  
-        global biTotal = 24
+        biTotal = 24
 
 
 def biosNameCheck():
@@ -110,7 +111,7 @@ def biStress():
     serialTest()
     while biCount <= biTotal:
         nowTime = int(time.time())
-        endTime = int(time.time() + 600)
+        endTime = int(time.time() + (600 * biTotal))
         while nowTime < endTime:
             cpuT = getCpuTemp()
             if cpuL < cpuT < cpuH:
@@ -118,7 +119,7 @@ def biStress():
                 nowTime = int(time.time())
                 print(" ")
                 print("Test PN:%s SN:%s" % (pn, sn))
-                print("BI run %s, Total run 12 times" % biCount)
+                print("BI 10 mins run %s, Total run %s times" % (biCount, biTotal))
                 print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
                 print(" ")
                 print("BI run %s Time End:" % biCount, time.ctime(endTime))
@@ -193,6 +194,7 @@ if __name__ == '__main__':
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         pn = db['pnSave']
     modelName = biFuncCheck()
+    biMenu()
     sn = moduleSys.snGet(pn, modelName)
     biStress()
     #biStressRoom()
