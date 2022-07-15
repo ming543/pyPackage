@@ -21,7 +21,7 @@ from paramiko import SSHClient
 from scp import SCPClient
 
 
-moduleSys.logScpCopy()
+#moduleSys.logScpCopy()
 moduleSys.ntpTime("withoutBat")
 
 def logUpdate():
@@ -74,7 +74,7 @@ moduleSys.snGet(pn, modelName)
 #moduleSys.uartLoop("/dev/ttyS0")
 #moduleSys.memoryCheck("8192 MB","No Module")
 #moduleEbk.aicFan(2)
-moduleEbk.aicDioSelect("1I2D")
+#moduleEbk.aicDioSelect("1I2D")
 #moduleEbk.aicDio("GPIO1")
 #moduleEbk.aicIdioConfig("DIO1", "SINK")
 #moduleEbk.aicIdioCheck("DIO1")
@@ -127,7 +127,8 @@ def atCheck(comPort, atCommand, atBack):
 
 
 
-#atCheck("/dev/ttyUSB2", "at\r\n", "OK")
+atCheck("/dev/ttyUSB2", "at\r\n", "OK")
+atCheck("/dev/ttyUSB2", "at+qccid\r\n", "CCID")
 
 
 def uartLoopCheck(comPort):

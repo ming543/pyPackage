@@ -165,7 +165,7 @@ def atCheck(comPort, atCommand, atBack):
         os.remove(atLog)
     subprocess.call("sudo cat %s | tee -a %s &" % (comPort, atLog), shell=True, timeout=5)
     try:
-        subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommandrn, comPort), shell=True, timeout=5)
+        subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommandrn, comPort), shell=True, timeout=10)
 #        for i in range(2):
 #            subprocess.call("sudo sh -c \"echo '%s' > %s\"" % (atCommandrn, comPort), shell=True, timeout=5)
 #            time.sleep(2)
@@ -293,9 +293,10 @@ def pnCheck():
 
 def ntpTime(sBat):
     if sBat != "withBat":
-        subprocess.call("sudo timedatectl set-ntp yes", shell=True)
-        time.sleep(2)
+        #subprocess.call("sudo timedatectl set-ntp yes", shell=True)
+        #time.sleep(2)
         subprocess.call("sudo timedatectl", shell=True)
+        time.sleep(2)
 
 # pn input form script
 def snGet(pn, modelName):
