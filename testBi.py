@@ -88,7 +88,7 @@ def getcpuH():
 
 def serialTest():
     #if modelName == "BI-120M-COM1":
-    if biosNameCheck() == "V2C" or "V3C":
+    if biosNameCheck() == "V2C|V3C":
         serialTest = subprocess.call(
                 "sudo /home/stux/tools/serial-test -p /dev/ttyS0 -b 115200 -o 1 -i 3", shell=True)
         if serialTest != 0:
