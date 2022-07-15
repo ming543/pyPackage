@@ -27,7 +27,8 @@ def biMenu():
     global biTotal 
     m0 = '燒機測試2小時 BI Test 2hrs'
     m1 = '燒機測試4小時 BI Test 4hrs'
-    options = [m0, m1]
+    m2 = '燒機測試8小時 BI Test 8hrs'
+    options = [m0, m1, m2]
 
     os.system('clear')
     print(" ")
@@ -42,6 +43,8 @@ def biMenu():
         biTotal = 12
     elif choice == m1:  
         biTotal = 24
+    elif choice == m2:  
+        biTotal = 48
 
 
 def biosNameCheck():
@@ -111,7 +114,8 @@ def biStress():
     serialTest()
     while biCount <= biTotal:
         nowTime = int(time.time())
-        endTime = int(time.time() + (600 * biTotal))
+        endTime = int(time.time() + 600)
+        endTimeFinal = int(time.time() + (600 * biTotal))
         while nowTime < endTime:
             cpuT = getCpuTemp()
             if cpuL < cpuT < cpuH:
@@ -122,7 +126,7 @@ def biStress():
                 print("BI 10 mins run %s, Total run %s times" % (biCount, biTotal))
                 print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
                 print(" ")
-                print("BI run %s Time End:" % biCount, time.ctime(endTime))
+                print("BI run %s Time End:" % biCount, time.ctime(endTimeFinal))
                 print("BI run %s Time Now:" % biCount, time.ctime(nowTime))
                 time.sleep(1)              
             else:
