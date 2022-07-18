@@ -109,8 +109,10 @@ def biStress():
     #-c N, --cpu N start N workers spinning on sqrt(rand())
     #-m N, --vm N start N workers spinning on anonymous mma
     #-t N, --timeout T timeout after T seconds
+    #subprocess.call(
+    #        "sudo stress-ng -c 4 -m 1 -l 80 -t 120m &", shell=True)    
     subprocess.call(
-            "sudo stress-ng -c 4 -m 1 -l 80 -t 120m &", shell=True)    
+            "sudo stress-ng -c 4 -m 1 -l 80 &", shell=True)    
     serialTest()
     while biCount <= biTotal:
         nowTime = int(time.time())
@@ -123,11 +125,11 @@ def biStress():
                 nowTime = int(time.time())
                 print(" ")
                 print("Test PN:%s SN:%s" % (pn, sn))
-                print("BI 10 mins run %s, Total run %s times" % (biCount, biTotal))
-                print("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
+                print("燒機循環測試 BI 10 mins run %s, Total run %s times" % (biCount, biTotal))
+                print("CPU溫度 Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
                 print(" ")
-                print("BI run %s Time End:" % biCount, time.ctime(endTimeFinal))
-                print("BI run %s Time Now:" % biCount, time.ctime(nowTime))
+                print("結束時間 BI run %s Time End:" % biCount, time.ctime(endTimeFinal))
+                print("現在時間 BI run %s Time Now:" % biCount, time.ctime(nowTime))
                 time.sleep(1)              
             else:
                 print("TempHigh")
@@ -157,7 +159,7 @@ def biStressRoom():
         cpuH = getCpuMips() + 15
     serialTest()
     subprocess.call(
-            "sudo stress-ng -c 4 -m 1 -l 80 -t 120m &", shell=True)    
+            "sudo stress-ng -c 4 -m 1 -l 80 &", shell=True)    
 
     nowTime = int(time.time())
     global endTime 
