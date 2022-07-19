@@ -1,8 +1,27 @@
+" 如果還沒安裝 vim-plug，則下載安裝它(限 Unix)
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" 使用前先執行此程式
 call plug#begin('~/.vim/plugged')
+" 確定你使用單引號
+" 所有有效的 git 網址
+Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+" 簡寫; 取得 https://github.com/junegunn/vim-easy-align
+Plug 'junegunn/vim-easy-align'
+" 當有執行 :NERDTreeToggle 指令時再載入
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" 只對特定文件類型載入
+" 例如以下只對文件類型為 clojure 才載入
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+
 Plug 'davidhalter/jedi-vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Yggdroot/indentLine'
 Plug 'nvie/vim-flake8'
+" 結束安裝插件呼叫此程式
 call plug#end()
 
 
