@@ -9,4 +9,12 @@ pLocal=/home/mm/pyPackage/
 pCloud=/home/mm/pCloudDrive/pyPackage/
 if [ -d $pCloud ];then
 	rsync -avh $pLocal $pCloud
+	echo "****** pCloud update done ******"
+fi
+
+wslLocal=/home/ming/pyPackage/
+wslCloud=/home/ming/pCloudDrive/pyPackage/
+if [ -d $wslCloud  ];then
+        rsync -avh $wslLocal $wslCloud
+	echo "****** wslCloud update done ******"
 fi

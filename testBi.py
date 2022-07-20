@@ -25,6 +25,7 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
 
 def biMenu():
     global biTotal 
+    global stressTime
     m0 = '燒機測試2小時 BI Test 2hrs'
     m1 = '燒機測試4小時 BI Test 4hrs'
     m2 = '燒機測試8小時 BI Test 8hrs'
@@ -41,10 +42,13 @@ def biMenu():
     choice = enquiries.choose('選擇測試項目 Choose options:', options)
     if choice == m0:  
         biTotal = 12
+        stressTime = str(biTotal) + "0m"
     elif choice == m1:  
         biTotal = 24
+        stressTime = str(biTotal) + "0m"
     elif choice == m2:  
         biTotal = 48
+        stressTime = str(biTotal) + "0m"
 
 
 def biosNameCheck():
@@ -111,8 +115,9 @@ def biStress():
     #-t N, --timeout T timeout after T seconds
     #subprocess.call(
     #        "sudo stress-ng -c 4 -m 1 -l 80 -t 120m &", shell=True)    
+
     subprocess.call(
-            "sudo stress-ng -c 4 -m 1 -l 80 &", shell=True)    
+            "sudo stress-ng -c 4 -m 1 -l 80 -t %s &" % stressTime, shell=True)    
     serialTest()
     while biCount <= biTotal:
         nowTime = int(time.time())
@@ -159,7 +164,7 @@ def biStressRoom():
         cpuH = getCpuMips() + 15
     serialTest()
     subprocess.call(
-            "sudo stress-ng -c 4 -m 1 -l 80 &", shell=True)    
+            "sudo stress-ng -c 4 -m 1 -l 80 -t %s &" % sterssTime, shell=True)    
 
     nowTime = int(time.time())
     global endTime 
