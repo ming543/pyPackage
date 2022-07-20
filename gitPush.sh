@@ -5,6 +5,7 @@ git commit -m "$1"
 git branch -M main
 git push -u origin main
 
+pcloudcc -u sam.lee@efcotec.com -d
 pLocal=/home/mm/pyPackage/
 pCloud=/home/mm/pCloudDrive/pyPackage/
 if [ -d $pCloud ];then
