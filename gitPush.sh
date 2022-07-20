@@ -18,3 +18,10 @@ if [ -d $wslCloud  ];then
         rsync -avh $wslLocal $wslCloud
 	echo "****** wslCloud update done ******"
 fi
+
+stuxLocal=/home/stux/pyPackage/
+stuxCloud=/home/stux/pCloudDrive/pyPackage/
+if [ -d $stuxCloud  ];then
+        rsync -avh $stuxLocal $stuxCloud
+	echo "****** stuxCloud update done ******"
+fi
