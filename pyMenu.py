@@ -72,7 +72,8 @@ def mMenu():
     elif choice == m6:  # copy log to onedrive
         copyLog()
     elif choice == m7:  # Update Linux script
-        gitPull()
+        #gitPull()
+        pcloudPull()
     # Last of list
     elif choice == ml:  # power off system
         print("系統關機 The system will shutdown after 2 secs!")
@@ -218,7 +219,7 @@ def pcloudPull():
                 "ping -c 1 -w 1 8.8.8.8", shell=True)
         if response == 0:
             print("PING OK")
-
+            rclone -v sync pcloud:pyPackage /home/stux/pyPackage/ --exclude=/.git/** -L -P
             print("pcloudPullDone")
 
             rC = subprocess.call("cd %s && sh system.sh" % pyFolder, shell=True)
