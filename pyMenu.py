@@ -219,8 +219,13 @@ def pcloudPull():
                 "ping -c 1 -w 1 8.8.8.8", shell=True)
         if response == 0:
             print("PING OK")
-            rclone -v sync pcloud:pyPackage /home/stux/pyPackage/ --exclude=/.git/** -L -P
-            print("pcloudPullDone")
+            pS = subprocess.call(
+                    "rclone -v sync pcloud:pyPackage /home/stux/pyPackage/ --exclude=/.git/** -L -P", shell=True)
+            if pS == 0:
+                print("pcloudPullDone")
+                print(Fore.GREEN + "更新成功 Update done!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
 
             rC = subprocess.call("cd %s && sh system.sh" % pyFolder, shell=True)
             if rC == 0:  # check rclone pass or fail
