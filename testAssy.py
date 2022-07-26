@@ -17,6 +17,7 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
 
 def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     modelName = inspect.currentframe().f_code.co_name
+    moduleSys.funcMenu()
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
     moduleSys.biosReleaseCheck("11/11/2019")
@@ -47,6 +48,7 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
 
 def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     modelName = inspect.currentframe().f_code.co_name
+    moduleSys.funcMenu()
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
     moduleSys.biosReleaseCheck("11/11/2020")
@@ -77,6 +79,7 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
 
 def CJB(sCPU, sDisk):
     modelName = inspect.currentframe().f_code.co_name
+    moduleSys.funcMenu()
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
@@ -103,6 +106,7 @@ def CJB(sCPU, sDisk):
 def Q715QA5OS(sBat):
     moduleSys.ntpTime(sBat)
     modelName = inspect.currentframe().f_code.co_name
+    moduleSys.funcMenuT1()
     moduleSys.snGet(pn, modelName)
     moduleSys.atCheck("/dev/ttyUSB2", "at+qccid", "CCID")
     moduleSys.dmidecodeLog("bios-version")
@@ -133,6 +137,7 @@ def Q715QA5OS(sBat):
 
 def U7130PAS(sCPU, sDisk):
     modelName = inspect.currentframe().f_code.co_name
+    moduleSys.funcMenu()
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
@@ -142,8 +147,10 @@ def U7130PAS(sCPU, sDisk):
     moduleSys.memoryGet()
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
-    moduleSys.lanCheck("eth0", "80:7b:85")
-    moduleSys.lanCheck("eth1", "00:13:95")
+    #moduleSys.lanCheck("eth0", "80:7b:85")
+    #moduleSys.lanCheck("eth1", "00:13:95")
+    moduleSys.lanCheck("enp1s0", "80:7b:85")
+    moduleSys.lanCheck("enp4s0", "00:13:95")
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("Mouse", 1)
     moduleSys.usbCheck("JMS567", 1)
@@ -155,6 +162,7 @@ def U7130PAS(sCPU, sDisk):
 
 def U7130(sCPU, sDisk):
     modelName = inspect.currentframe().f_code.co_name
+    moduleSys.funcMenu()
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
@@ -164,8 +172,10 @@ def U7130(sCPU, sDisk):
     moduleSys.memoryGet()
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
-    moduleSys.lanCheck("eth0", "80:7b:85")
-    moduleSys.lanCheck("eth1", "00:13:95")
+    #moduleSys.lanCheck("eth0", "80:7b:85")
+    #moduleSys.lanCheck("eth1", "00:13:95")
+    moduleSys.lanCheck("enp1s0", "80:7b:85")
+    moduleSys.lanCheck("enp4s0", "00:13:95")
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("Mouse", 1)
     moduleSys.usbCheck("JMS567", 1)
@@ -180,6 +190,7 @@ def U7130(sCPU, sDisk):
 
 def U7150(sCPU, sDisk):
     modelName = inspect.currentframe().f_code.co_name
+    moduleSys.funcMenu()
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
@@ -190,8 +201,10 @@ def U7150(sCPU, sDisk):
     moduleSys.memoryCheck("4096","4096")
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
-    moduleSys.lanCheck("eth0", "80:7b:85")
-    moduleSys.lanCheck("eth1", "00:13:95")
+    #moduleSys.lanCheck("eth0", "80:7b:85")
+    #moduleSys.lanCheck("eth1", "00:13:95")
+    moduleSys.lanCheck("enp1s0", "80:7b:85")
+    moduleSys.lanCheck("enp4s0", "00:13:95")
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("Mouse", 1)
     moduleSys.usbCheck("JMS567", 1)
@@ -264,7 +277,7 @@ print(Style.RESET_ALL)
 #1-CPU, Poe, fan, dio, Lan, Com, Disk
 #U7XXX
 #1-CPU, Disk
-if pn == "10300-000000-A.0": debug("6500", 4, 2, "1D", 6, 6, "opCheck")
+if pn == "20010-000001-A.0": debug("6500", 4, 2, "1D", 6, 6, "opCheck")
 elif pn == "10300-000004-A.3": Q715QA5OS("withBat")
 elif pn == "10300-000004-A.4": Q715QA5OS("withBat")
 elif pn == "10300-000007-A.0": Q715QA5OS("withoutBat")

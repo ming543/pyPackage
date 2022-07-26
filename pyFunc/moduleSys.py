@@ -228,6 +228,9 @@ def dateGet():
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         db['dateSave'] = dateLog
 
+def funcMenuT1():
+    global funcSelect
+    funcSelect = "T1"
 
 def funcMenu():
     global funcSelect
