@@ -16,6 +16,7 @@ from pyFunc import moduleSys
 # start test file
 pyFolder = "/home/stux/pyPackage/"
 startTest = pyFolder + "t.sh"
+revFile = pyFolder + "revision"
     
 
 # Check system boot by UEFI or LEGACY mode
@@ -25,7 +26,9 @@ booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
 g = git.Git('.')
 
 # loginfo = g.log('-p', '-1' , '--date=iso')
-loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
+#loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
+with open(revFile) as f:
+    loginfo = f.readline().rstrip()
 
 #Get PN from db
 with shelve.open(pyFolder + 'dataBase') as db:
@@ -49,7 +52,7 @@ def mMenu():
     print("%s 主選單 MAIN-MENU" % booted + Style.RESET_ALL, end='')
     #print(Style.RESET_ALL)
     print(" Build by EFCO SamLee明")
-    print("測試程式版本 LINUX Revision %s" % loginfo)
+    print("測試程式版本 LINUX Revision: %s" % loginfo)
     print(Fore.MAGENTA + Back.WHITE)
     print('目前設定PN:%s' % pn)
     print(Style.RESET_ALL)
@@ -84,7 +87,8 @@ def mMenu():
 def pnMenu():
     os.system('clear')
     moduleSys.dateGet()
-    moduleSys.pnGet()
+    #moduleSys.pnGet()
+    moduleSys.pnInput()
     moduleSys.pnCheck()
     sys.stdout.flush()
     os.execv(sys.executable, ["python3"] + sys.argv)

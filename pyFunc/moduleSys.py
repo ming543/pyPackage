@@ -273,6 +273,29 @@ def pnGet2():
             return index[i]
 
 
+# pn input form script
+def pnInput():
+    os.system('clear')
+    print(" ")
+    print(Fore.MAGENTA + Back.WHITE)
+    print(" 輸入測試PN ex.20010-000001-A.0 ", end='')
+    print(" Input PN number for Test and Log! ")
+    print(Style.RESET_ALL)
+    print("按n鍵結束  ", end='')
+    print("Back to menu press 'n' ")
+    global sn
+    pn = input()
+    pn = str(pn)
+    #with shelve.open('snTemp') as db:
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        db['pnSave'] = pn
+    if pn == "n":
+        print("Start Test is " + startTest)
+        with open(startTest, "w") as f:
+            f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
+        subprocess.call("sh %s" % startTest, shell=True)
+
+
 def pnCheck():
     os.system('clear')
     with shelve.open('/home/stux/pyPackage/dataBase') as db:

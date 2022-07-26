@@ -115,7 +115,6 @@ def biStress():
     #-t N, --timeout T timeout after T seconds
     #subprocess.call(
     #        "sudo stress-ng -c 4 -m 1 -l 80 -t 120m &", shell=True)    
-
     subprocess.call(
             "sudo stress-ng -c 4 -m 1 -l 80 -t %s &" % stressTime, shell=True)    
     serialTest()
@@ -153,8 +152,8 @@ def biStress():
         logging.info('Check BI total run %s passed!' % biCount)
 
 
-
 def biStressRoom():
+    stressTime = "120m"
     global cpuL
     global cpuH
     cpuL = 20
@@ -164,7 +163,7 @@ def biStressRoom():
         cpuH = getCpuMips() + 15
     serialTest()
     subprocess.call(
-            "sudo stress-ng -c 4 -m 1 -l 80 -t %s &" % sterssTime, shell=True)    
+            "sudo stress-ng -c 4 -m 1 -l 80 -t %s &" % stressTime, shell=True)    
 
     nowTime = int(time.time())
     global endTime 
