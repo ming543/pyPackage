@@ -170,6 +170,8 @@ def copyLog():
             print("PING OK")
             lF = "/home/partimag/log"
             oF = "onedrive:General/log"
+            cF = "CM_EFCO:log"
+            CM_EFCO = subprocess.call("rclone -v copy %s %s -P" % (lF, cF), shell=True)
             rC = subprocess.call("rclone -v copy %s %s -P" % (lF, oF), shell=True)
             if rC == 0:  # check rclone pass or fail
                 print(Fore.GREEN + "日誌檔案上傳成功 Log copy to onedrive done!!!" + Fore.RESET)
