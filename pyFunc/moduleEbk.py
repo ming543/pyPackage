@@ -322,12 +322,13 @@ def aicDio(port):
     result = str(result).splitlines()
     portCheck = ""
     dataCheck = ""
+    #print(result)
     for i in range(len(result)):
-        if re.search("Low   Low", result[i]):
+        if re.search('Low   Low', result[i]):
             j = result[i]
-        else:
-            logging.error('DIO_PORT_CHECK_Fail: %s SPEC:( 9)GPIO' % result[-6])
-            failRed('DIO_PORT_CHECK: Failed! %s SPEC:( 9)GPIO' % result[-6])
+    #    else:
+    #        logging.error('DIO_PORT_CHECK_Fail: %s SPEC:( 9)GPIO' % result[-6])
+    #        failRed('DIO_PORT_CHECK: Failed! %s SPEC:( 9)GPIO' % result[-6])
         if re.search(port, result[i]):
             portCheck = result[i].split()[0]
             dataCheck = result[i].split()[1]

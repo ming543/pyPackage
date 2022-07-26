@@ -24,15 +24,17 @@ import numpy as np
 
 # Check system boot by UEFI or LEGACY mode
 booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
-
-# Get revision
-g = git.Git('.')
-loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
-
 pyFolder = "/home/stux/pyPackage/"
 eeFolder = "/home/stux/pyPackage/tools/intel/Linux_x64/OEM_Mfg/"
 #sT = "/home/production/pyPackage/t.sh"
 startTest = "/home/stux/pyPackage/t.sh"
+revFile = pyFolder + "revision"
+
+# Get revision
+g = git.Git('.')
+#loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
+with open(revFile) as f:
+    loginfo = f.readline().rstrip()
 
 output = subprocess.check_output('lsblk -o kname,label', shell=True)
 output = str(output).lstrip('b\'').split('\\n')
@@ -227,6 +229,23 @@ def dateGet():
         db['dateSave'] = dateLog
 
 
+def funcMenu():
+    global funcSelect
+    m0 = '燒機前功能測試 - T1'
+    m1 = '燒機後功能測試 - T2'
+    options = [m0, m1]
+    os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("測試選單 Test-MENU" + Style.RESET_ALL, end='')
+    print(Fore.MAGENTA + Back.WHITE)
+    print(Style.RESET_ALL)
+    choice = enquiries.choose('選擇測試項目 Choose options:', options)
+    if choice == m0:  
+        funcSelect = "T1"
+    elif choice == m1:  
+        funcSelect = "T2"
+
 def pnGet():
     print(" ")
     print(Fore.BLUE + Back.WHITE)
@@ -354,9 +373,9 @@ def snGet(pn, modelName):
         startTime = time.strftime("%Y%m%d", time.localtime())
         # setup test log month folder - ask OP input
         # logMonth = time.strftime("%Y%m", time.localtime())
-        logFilename = sn + "-" + modelName + "-" + startTime 
+        logFilename = sn + "-" + modelName + "-" + startTime + "-" + funcSelect
         global log
-        log = logPath + pn + "/" + dateLog + "/" + logFilename
+        log = logPath + pn + "/" + dateLog + "/" + funcSelect + "/" + logFilename
         os.makedirs(os.path.dirname(log), exist_ok=True)  # Create log folder
         # save log name and location to database
         # with shelve.open('snTemp') as db:
@@ -629,12 +648,17 @@ def lanCheck(ethN, macH):
 
 
 def lanSpeedSet(sLan, sSpeed):
-    for i in range(sLan):
+    subprocess.call(
+        "sudo ethtool -s enp0s31f6 speed %s duplex full autoneg on" % sSpeed, shell=True )
+    logging.info('LAN_SPEED_SET: enp0s31f6 to %s' % sSpeed)
+    for i in range(1, sLan):
+        #subprocess.call(
+        #    "sudo ethtool -s eth%s speed %s duplex full autoneg on" % (i, sSpeed), shell=True )
         subprocess.call(
-            "sudo ethtool -s eth%s speed %s duplex full autoneg on" % (i, sSpeed), shell=True )
+            "sudo ethtool -s enp%s0 speed %s duplex full autoneg on" % (i, sSpeed), shell=True )
+        logging.info('LAN_SPEED_SET: enp%ss0 to %s' %(i, sSpeed))
     subprocess.call(
         "ping 8.8.8.8 -c 20 > /dev/null &", shell=True )
-    logging.info('LAN_SPEED_SET: eth%s to %s' %(i, sSpeed))
 
     
 def lanLedCheck(ledCheck):
@@ -651,6 +675,22 @@ def lanLedCheck(ledCheck):
         logging.error('LAN_LED_Check: Fail %s' %ledCheck)
         failRed("LAN LED 燈號不良 %s" % ledCheck)
     logging.info('LAN_LED_ON: Display OK %s' %ledCheck)
+
+
+def lanLedCheckAll():
+    os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("網路燈號確認 LAN LED Check")
+    print(Fore.MAGENTA + Back.WHITE)
+    print("確認網路孔LED燈號是否顯示正常")
+    print(Style.RESET_ALL)
+    print("不良按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('LAN_LED_Check_All: Fail')
+        failRed("LAN LED 燈號不良 ")
+    logging.info('LAN_LED_ON: Display OK All')
 
 
 def lanLedOffCheck(ledCheck):

@@ -47,7 +47,10 @@ def mMenu():
     elif choice == m2:  # fix MBR
         fixMbr()
     elif choice == m3:  # update DOS
-        moduleSys.dosPull()
+        #moduleSys.dosPull()
+        print("The Function not support now...")
+        input("按任意鍵繼續 Press any key continue...")
+        mMenu()
     elif choice == m4: # update UEFI tools
         uefiFolderUpdate()
     elif choice == m5:  # ft232Test
@@ -150,10 +153,10 @@ def zerotierUpdate():
 
 def uefiFolderUpdate():
     os.system('clear')
-    scrFolder = "/home/stux/pyPackage/tools/uefi/*.*"
-    desFolder = "/home/partimag/"
+    scrFolder = "/home/stux/pyPackage/tools/uefi"
+    desFolder = "/boot/efi"
     response = subprocess.call(
-            "cp -r %s %s" % (scrFolder, desFolder), shell=True)
+            "sudo rsync -avh %s %s" % (scrFolder, desFolder), shell=True)
     if response == 0:
         print("更新成功")
     else:

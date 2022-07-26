@@ -33,6 +33,8 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.memoryGet()
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
+    moduleSys.lanSpeedSet(sLan, 100)
+    moduleSys.lanLedCheckAll()
     moduleSys.lanSelect(sLan)
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("JMS567", 1)
@@ -61,6 +63,8 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.memoryGet()
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
+    moduleSys.lanSpeedSet(sLan, 100)
+    moduleSys.lanLedCheckAll()
     moduleSys.lanSelect(sLan)
     moduleSys.uartLoopCheck(sCom)
     moduleSys.alsabatTest()
@@ -206,9 +210,10 @@ def U6500(sCPU):
 
 def debug(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     modelName = inspect.currentframe().f_code.co_name
+    moduleSys.funcMenu()
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
-    testBi.biStressRoom()
+    #testBi.biStressRoom()
     moduleSys.biosReleaseCheck("11/11/2020")
     moduleEbk.aicVersion("AIC-1.04")
     moduleEbk.aicDdmLogo()
@@ -222,6 +227,8 @@ def debug(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.memoryGet()
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
+    moduleSys.lanSpeedSet(sLan, 100)
+    moduleSys.lanLedCheckAll()
 #    moduleSys.lanSelect(sLan)
 #    moduleSys.usbCheck("Keyboard", 1)
 #    moduleSys.usbCheck("JMS567", 1)
@@ -229,7 +236,7 @@ def debug(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
 #    moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
 #    moduleSys.uartLoopCheck(sCom)
 #    moduleSys.alsabatTest()
-    testBi.biStressCheck()
+#    testBi.biStressCheck()
     #moduleSys.cpuTempCheck(20, 60)
 
 def default():
@@ -257,7 +264,7 @@ print(Style.RESET_ALL)
 #1-CPU, Poe, fan, dio, Lan, Com, Disk
 #U7XXX
 #1-CPU, Disk
-if pn == "10300-000000-A.0": debug("6500", 4, 2, "1D", 5, 6, "opCheck")
+if pn == "10300-000000-A.0": debug("6500", 4, 2, "1D", 6, 6, "opCheck")
 elif pn == "10300-000004-A.3": Q715QA5OS("withBat")
 elif pn == "10300-000004-A.4": Q715QA5OS("withBat")
 elif pn == "10300-000007-A.0": Q715QA5OS("withoutBat")
