@@ -211,6 +211,31 @@ def gitPull():
     sys.stdout.flush()
     os.execv(sys.executable, ["python3"] + sys.argv)
 
+def pcloudPull():
+    os.system('clear')
+    for i in range(5):  # ping 5 times
+        response = subprocess.call(
+                "ping -c 1 -w 1 8.8.8.8", shell=True)
+        if response == 0:
+            print("PING OK")
+
+            print("pcloudPullDone")
+
+            rC = subprocess.call("cd %s && sh system.sh" % pyFolder, shell=True)
+            if rC == 0:  # check rclone pass or fail
+                print(Fore.GREEN + "更新成功 Update done!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
+            else:
+                print(Fore.RED + "更新失敗 Update Fail!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
+        else:
+            print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
+            time.sleep(5)
+    sys.stdout.flush()
+    os.execv(sys.executable, ["python3"] + sys.argv)
+
 
 
 
