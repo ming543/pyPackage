@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=master
+Exec=python3 /home/stux/pyPackage/master.py
+Comment=
+Terminal=true
+Icon=cinnamon-panel-launcher
+Type=Application

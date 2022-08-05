@@ -64,6 +64,7 @@ if __name__ == '__main__':
     modelName = "CLONEOS"
     print("Clone_Disk: ", diskShow)
     print("Clone_OS: ", osGet)
+    moduleSys.funcMenuOs()
     moduleSys.snGet(pn, modelName)
     logging.info('Clone_Disk: ' + diskShow)
     logging.info('Clone_OS: ' + osGet)

@@ -29,7 +29,8 @@ def biMenu():
     m0 = '燒機測試2小時 BI Test 2hrs'
     m1 = '燒機測試4小時 BI Test 4hrs'
     m2 = '燒機測試8小時 BI Test 8hrs'
-    options = [m0, m1, m2]
+    m3 = '返回主選單'
+    options = [m0, m1, m2, m3]
 
     os.system('clear')
     print(" ")
@@ -49,6 +50,11 @@ def biMenu():
     elif choice == m2:  
         biTotal = 48
         stressTime = str(biTotal) + "0m"
+    elif choice == m3:  
+        startTest = "/home/stux/pyPackage/t.sh"
+        with open(startTest, "w") as f:
+            f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
+        subprocess.call("sh %s" % startTest, shell=True)
 
 
 def biosNameCheck():
@@ -205,6 +211,7 @@ if __name__ == '__main__':
         pn = db['pnSave']
     modelName = biFuncCheck()
     biMenu()
+    moduleSys.funcMenuBi()
     sn = moduleSys.snGet(pn, modelName)
     biStress()
     #biStressRoom()

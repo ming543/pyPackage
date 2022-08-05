@@ -16,13 +16,16 @@ from pyFunc import moduleSys
 # start test file
 pyFolder = "/home/stux/pyPackage/"
 startTest = pyFolder + "t.sh"
+revFile = pyFolder + "revision"
 
 # Check system boot by UEFI or LEGACY mode
 booted = "UEFI" if os.path.exists("/sys/firmware/efi") else "LEGACY"
 
 # Get revision
 g = git.Git('.')
-loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
+#loginfo = g.log('-m', '-1', '--pretty=format:"%h %s"')
+with open(revFile) as f:
+    loginfo = f.readline().rstrip()
 
 #Check and mount log folder
 logFolder = "/home/partimag/log"
@@ -49,7 +52,8 @@ def mMenu():
     if choice == m1:  # Build test disk
         osSync()
     elif choice == m7:  # Update Linux script
-        gitPull()
+        #gitPull()
+        pcloudPull()
     # Last of list
     elif choice == ml:  # power off system
         print("系統關機 The system will shutdown after 5 secs!")
@@ -109,11 +113,13 @@ def passGreen():
     print(Fore.GREEN + "PP_______AA_A_AA_______SS_______SS" + Fore.RESET)
     print(Fore.GREEN + "PP_______AA___AA___SSSSSS___SSSSSS" + Fore.RESET)
     print(" ")
-    print("按任意鍵關機,n鍵返回主選單  ", end='')
+#    print("按任意鍵關機,n鍵返回主選單  ", end='')
+    print("按任意鍵返回主選單  ", end='')
     check = input("Press any key power off").lower()
-    if check == ("n"):
-        mMenu()
-    os.system('systemctl poweroff')
+    mMenu()
+#    if check == ("n"):
+#        mMenu()
+#    os.system('systemctl poweroff')
 
 def failRed():
     print(Fore.RED + "FFFFFF______A______IIIIII____LL____" + Fore.RESET)
@@ -123,11 +129,13 @@ def failRed():
     print(Fore.RED + "FF_______AA_A_AA_____II______LL____" + Fore.RESET)
     print(Fore.RED + "FF_______AA___AA___IIIIII____LLLLLL" + Fore.RESET)
     print(" ")
-    print("按任意鍵關機,n鍵返回主選單  ", end='')
+#    print("按任意鍵關機,n鍵返回主選單  ", end='')
+    print("按任意鍵返回主選單  ", end='')
     check = input("Press any key power off").lower()
-    if check == ("n"):
-        mMenu()
-    os.system('systemctl poweroff')
+    mMenu()
+#    if check == ("n"):
+#        mMenu()
+#    os.system('systemctl poweroff')
 
 
 #build test disk
@@ -158,6 +166,11 @@ def osSync():
     elif labelName == "DOS_G20B":
         subprocess.check_call("sudo mount /dev/%s2 /mnt" % diskGet, shell=True, stdin=sys.stdin)
         subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE /mnt", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
+        subprocess.check_call("sync", shell=True, stdin=sys.stdin)
+    elif labelName == "BOOT":
+        subprocess.check_call("sudo mount /dev/%s2 /mnt" % diskGet, shell=True, stdin=sys.stdin)
+        subprocess.check_call("sudo rsync -avh /home/partimag/OS_IMAGE /mnt/home/partimag", shell=True, stdin=sys.stdin)
         subprocess.check_call("sudo umount /mnt", shell=True, stdin=sys.stdin)
         subprocess.check_call("sync", shell=True, stdin=sys.stdin)
     passGreen()
@@ -202,6 +215,36 @@ def gitPull():
             #subprocess.call("sh %s" % startTest, shell=True)
             time.sleep(3)
             break
+        else:
+            print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
+            time.sleep(5)
+    sys.stdout.flush()
+    os.execv(sys.executable, ["python3"] + sys.argv)
+
+def pcloudPull():
+    os.system('clear')
+    for i in range(5):  # ping 5 times
+        response = subprocess.call(
+                "ping -c 1 -w 1 8.8.8.8", shell=True)
+        if response == 0:
+            print("PING OK")
+            pS = subprocess.call(
+                    "rclone -v sync pcloud:pyPackage /home/stux/pyPackage/ --exclude=/.git/** -L -P", shell=True)
+            if pS == 0:
+                print("pcloudPullDone")
+                print(Fore.GREEN + "更新成功 Update done!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
+
+            rC = subprocess.call("cd %s && sh system.sh" % pyFolder, shell=True)
+            if rC == 0:  # check rclone pass or fail
+                print(Fore.GREEN + "更新成功 Update done!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
+            else:
+                print(Fore.RED + "更新失敗 Update Fail!!!" + Fore.RESET)
+                input("按任意鍵繼續 Press any key continue...")
+                break
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(5)

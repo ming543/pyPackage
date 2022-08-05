@@ -7,7 +7,7 @@
 cls
 echo "============================================================="
 echo "AICCFG.nsh - Program the AIC config by PN select."
-echo "ex.AICCFG.nsh 20010-000001"
+echo "ex.AICCFG 20010-000001"
 echo "============================================================="
 
 
@@ -218,6 +218,9 @@ W62812.nsh
 goto END
 
 :END
+echo "NOLOGO display of DDM"
+NOLOGO.nsh
+
 cd \
 :cd uefi
 echo "command ststus: %lasterror% "

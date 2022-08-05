@@ -228,15 +228,28 @@ def dateGet():
     with shelve.open('/home/stux/pyPackage/dataBase') as db:
         db['dateSave'] = dateLog
 
+
 def funcMenuT1():
     global funcSelect
     funcSelect = "T1"
+
+
+def funcMenuOs():
+    global funcSelect
+    funcSelect = "OS"
+
+
+def funcMenuBi():
+    global funcSelect
+    funcSelect = "BI"
+
 
 def funcMenu():
     global funcSelect
     m0 = '燒機前功能測試 - T1'
     m1 = '燒機後功能測試 - T2'
-    options = [m0, m1]
+    m2 = '返回主選單'
+    options = [m0, m1, m2]
     os.system('clear')
     print(" ")
     print(Fore.BLUE + Back.WHITE)
@@ -248,6 +261,11 @@ def funcMenu():
         funcSelect = "T1"
     elif choice == m1:  
         funcSelect = "T2"
+    elif choice == m2:  
+        print("Start Test is " + startTest)
+        with open(startTest, "w") as f:
+            f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
+        subprocess.call("sh %s" % startTest, shell=True)
 
 def pnGet():
     print(" ")
@@ -618,8 +636,18 @@ def lanMacCheck(ethN, macH):
 
 
 def lanSelect(sLan):
-    for i in range(sLan):
-        lanCheck("eth%s" %i, "80:7b:85")
+    if sLan == 2:
+        lanList = ["enp0s31f6", "enp1s0"]
+    elif sLan == 4:
+        lanList = ["enp0s31f6", "enp1s0", "enp2s0", "enp3s0"]
+    elif sLan == 6:
+        lanList = ["enp0s31f6", "enp1s0", "enp2s0", "enp3s0", "enp4s0", "enp5s0"]
+    
+    for i in range(len(lanList)):
+        lanCheck(lanList[i], "80:7b:85")
+
+    #for i in range(sLan):
+    #    lanCheck("eth%s" %i, "80:7b:85")
 
 
 def lanCheck(ethN, macH):
@@ -736,7 +764,7 @@ def usbSelect(sUsb):
         usbCheck("JMS567", 1)
         usbCheck("DataTraveler|JetFlash", 1)
         usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
-    elif sUsb =="AIH":
+    elif sUsb == "AIH":
         usbCheck("Keyboard", 1)
         usbCheck("JMS567", 1)
         usbCheck("DataTraveler|JetFlash", 3)
@@ -802,13 +830,27 @@ def logScpCopy():
                 "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
                 % (localFolder, winHost, winFolder), shell=True)
 
+
+def logScpCopyMm():
+    localFolder = "/home/partimag/log"
+    mmHost = "10.60.0.88"
+    mmFolder = "log"
+    mmPing = os.system("ping -c 1 " + mmHost)
+    if mmPing == 0:
+        subprocess.call(
+                "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -P 6666 -r %s stux@%s:"
+                % (localFolder, mmHost), shell=True)
+
+
+def logScpCopy2():
+    localFolder = "/home/partimag/log"
     zeroHost = "192.168.192.168"
-    zeroFolder = "/home/partimag"
+    zeroFolder = "log"
     zeroPing = os.system("ping -c 1 " + zeroHost)
     if zeroPing == 0:
         subprocess.call(
-                "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
-                % (localFolder, zeroHost, zeroFolder), shell=True)
+                "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -P 6666 -r %s stux@%s:"
+                % (localFolder, zeroHost), shell=True)
    # else:
    #     print ("ping fail " + WinHost )
    #     time.sleep(5)
@@ -819,6 +861,7 @@ def failRed(issueCheck):
     #logFail = log + ".FAIL"
     #os.replace(log, logFail)
     logScpCopy()
+    logScpCopyMm()
     print(Fore.RED + "FFFFFF______A______IIIIII____LL____" + Fore.RESET)
     print(Fore.RED + "FF_______AA___AA_____II______LL____" + Fore.RESET)
     print(Fore.RED + "FFFF_____AA___AA_____II______LL____" + Fore.RESET)
@@ -830,6 +873,7 @@ def failRed(issueCheck):
     print("確認規格:", issueCheck)
     print(" ")
     print("按n鍵關機,其他鍵重測  ", end='')
+    logScpCopy2()
     check = input("Press'n'power off, other key re-test: ").lower()
     if check == ("n"):
         os.system('systemctl poweroff')
@@ -843,6 +887,7 @@ def passGreen():
     logPass = log + "-PASS.log"
     os.replace(log, logPass)
     logScpCopy()
+    logScpCopyMm()
     print(Fore.GREEN + "PPPPP_______A______SSSSSS___SSSSSS" + Fore.RESET)
     print(Fore.GREEN + "PP__PP____AA_AA____SS_______SS____" + Fore.RESET)
     print(Fore.GREEN + "PP___PP__AA___AA___SS_______SS____" + Fore.RESET)
@@ -852,6 +897,7 @@ def passGreen():
     print(Fore.GREEN + "PP_______AA___AA___SSSSSS___SSSSSS" + Fore.RESET)
     print(" ")
     print("按任意鍵關機  ", end='')
+    logScpCopy2()
     check = input("Press any key power off").lower()
     if check == ("n"):
         subprocess.call("sh %s" % startTest, shell=True)

@@ -153,10 +153,11 @@ def zerotierUpdate():
 
 def uefiFolderUpdate():
     os.system('clear')
-    scrFolder = "/home/stux/pyPackage/tools/uefi"
-    desFolder = "/boot/efi"
+    scrFolder = "/home/stux/pyPackage/tools/uefi/."
+    #desFolder = "/boot/efi"
+    desFolder = "/boot/efi/."
     response = subprocess.call(
-            "sudo rsync -avh %s %s" % (scrFolder, desFolder), shell=True)
+            "sudo scp -r %s %s" % (scrFolder, desFolder), shell=True)
     if response == 0:
         print("更新成功")
     else:
