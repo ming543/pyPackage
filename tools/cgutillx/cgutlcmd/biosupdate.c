@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2016, congatec AG. All rights reserved.
+ * Copyright (c) 2021, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -139,8 +139,7 @@ static void ShowUsage(void)
 		PRINTF(_T("/C       - Invalidate CMOS.\n"));														
         PRINTF(_T("/NOC     - Do not invalidate CMOS (DEFAULT).\n"));
 		PRINTF(_T("/P       - Preserve BIOS password.\n"));											//MOD007	
-        PRINTF(_T("/LAN     - Restore LAN area(s) when running an extended update.\n"));			//MOD008	
-				
+		PRINTF(_T("/LAN     - Restore LAN area(s) when running an extended update.\n"));         	//MOD008	
 		PRINTF(_T("/AOO     - Perform immediate/automatic off-on cycle to unlock extended\n"));				
 		PRINTF(_T("           BIOS area if necessary. (Default for DOS and UEFI)\n"));
 		PRINTF(_T("/NAOO    - Do NOT perform immediate/automatic off-on cycle to unlock extended\n"));				

@@ -1,1 +1,0 @@
-cmd_/home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/cgosdrv.ko := ld -r -m elf_x86_64 --build-id=sha1  -T arch/x86/module.lds -o /home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/cgosdrv.ko /home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/cgosdrv.o /home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/cgosdrv.mod.o;  true

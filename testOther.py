@@ -98,7 +98,59 @@ def fixMbr():
     input("按任意鍵繼續 Press any key continue...")
     mMenu()
 
+
 def ft232hCheck():
+    os.environ.setdefault('BLINKA_FT232H', '1')
+    try:
+        import board
+        import digitalio
+    except:
+        print("Import FT232H GPIO device fail")
+        input("按任意鍵繼續 Press any key continue...")
+        mMenu()
+    C0 = digitalio.DigitalInOut(board.C0)
+    C1 = digitalio.DigitalInOut(board.C1)
+    C2 = digitalio.DigitalInOut(board.C2)
+    C3 = digitalio.DigitalInOut(board.C3)
+    C4 = digitalio.DigitalInOut(board.C4)
+    C5 = digitalio.DigitalInOut(board.C5)
+    C6 = digitalio.DigitalInOut(board.C6)
+    C7 = digitalio.DigitalInOut(board.C7)
+    #check all gpio is open
+    for i in range(8):
+        locals()['C' + str(i)].direction = digitalio.Direction.INPUT
+        gpioInput = str(locals()['C' + str(i)].value)
+        if gpioInput == "True":
+            print("Open Test Pass of C" + str(i))
+        else:
+            print("Open Test Fail of C" + str(i))
+    time.sleep(1)
+    for i in range(8):
+        count = 0
+        countFlag = 0
+        while count < 10:
+            os.system('clear')
+            print('The GPIO Port %s Test: ' % i, end='' )
+            gpioInput = str(locals()['C' + str(i)].value)
+            print(gpioInput)
+            print(' ')
+            print('Test end at count 10, now is %s' % count)
+            if gpioInput == "False":
+                print('The GPIO Port %s: ' % i, end='' )
+                print(str(locals()['C' + str(i)].value))
+                print(' ')
+                countFlag = 1
+                break
+            count = count + 1
+            time.sleep(1)
+        if countFlag == 0:
+            print("count over 10 times")
+            time.sleep(2)
+            break
+    mMenu()
+
+
+def ft232hCheckBak():
     os.environ.setdefault('BLINKA_FT232H', '1')
     import board
     import digitalio
@@ -113,7 +165,7 @@ def ft232hCheck():
     for i in range(8):
         locals()['C' + str(i)].direction = digitalio.Direction.INPUT
     count = 0
-    while count < 30:
+    while count < 10:
         time.sleep(1)
         os.system('clear')
         startTime = time.strftime("%H%M%S", time.localtime())
@@ -121,10 +173,9 @@ def ft232hCheck():
         for i in range(8):
             print('The GPIO Port %s: ' % i, end='' )
             print(str(locals()['C' + str(i)].value))
-
         count = count + 1
         print(' ')
-        print('Test end at count 30, now is %s' % count)
+        print('Test end at count 10, now is %s' % count)
     mMenu()
 
 

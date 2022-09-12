@@ -1,4 +1,55 @@
 ==============================================================================
+        congatec System Utility Version 1.6.1 (01.12.2021)
+==============================================================================
+
+COMMON:
+- Version updated to 1.6.1.
+- cgbc.h: Revised the definition and usage of standard data types to support
+  64-bit environments properly.
+- Added / extended support for various congatec Board Controller functions
+  (see cgbc.h MOD063-MOD070)
+- Added support for all MEC170x variants in the 144 pin WFBGA package
+
+CGUTLCMD:  
+- Added support for all MEC170x variants in the 144 pin WFBGA package
+
+
+==============================================================================
+        congatec System Utility Version 1.6.0  (13.08.2021)
+==============================================================================
+
+COMMON:
+- Version updated to 1.6.0.
+- Added support for Elkhart Lake MAC address recovery also when running a
+  normal (non-extended) BIOS update.
+- Fixed an issue when the Elkhart Lake BIOS update process got terminated 
+  when the GbE region could not be found. The BIOS update now continues with
+  an empty GbE region (for example when using an empty external SPI flash).
+- Fix for a bug which caused a hangpup when running a firmware update on a 
+  Tiva cBC based design without the /f switch.
+- Update to the latest CGBC API.
+- Update of some copyright notes.
+- Improved the performance of firmware updates on the GEN5 cBC.
+- Added support for cBC based on MEC1706.
+- Added support for the /!cidoverride switch.
+
+CGUTLCMD:  
+- Added new /!cidoverride switch for bcprog command
+- updated smbios sample file to fix EFI Shell parsing issue with spaces
+  before and after '='
+
+
+==============================================================================
+        congatec System Utility Version 1.5.9  (28.01.2021)
+==============================================================================
+
+COMMON:
+- Version updated to 1.5.9.
+- Added support for Elkhart Lake MAC address recovery when running an extended
+  update.
+- Fix for DSAC MAC address recovery
+
+==============================================================================
         congatec System Utility Version 1.5.8  (17.10.2018)
 ==============================================================================
 

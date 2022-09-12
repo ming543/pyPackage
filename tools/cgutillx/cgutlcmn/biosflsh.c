@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2018, congatec AG. All rights reserved.
+ * Copyright (c) 2021, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -16,18 +16,24 @@
  *
  *---------------------------------------------------------------------------
  */
-
-/*---------------------------------------------------------------------------
- *
- * $Header:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/BIOSFLSH.C-arc   1.15   Sep 06 2016 15:42:24   congatec  $
- *
- * Contents: Congatec BIOS update common implementation module.
- *
- *---------------------------------------------------------------------------
- *
- *                      R E V I S I O N   H I S T O R Y
- *
- * $Log:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/BIOSFLSH.C-arc  $
+ 
+/*
+ * MOD019: Changed return values for DSAC GbE region recovery so that in case of
+ *         no GbE region present or recovery error bios update continues without
+ *         GbE region recovery
+ * 
+ * MOD018: Fixed EHL MAC address recovery when running non-extended update and also
+ *         prevent exit with error when GbE region could not be found.
+ * 
+ * MOD017: Fixed DSAC identification string
+ * 
+ * MOD016: Added EHL MAC address recovery
+ * 
+ * MOD015: Added DSAC MAC address recovery and preservation of LAN areas
+ * 
+ * MOD014: Added support for 512k block size BIOS update
+ * 
+ * MOD013: Added BIOS update data preservation
  * 
  *    Rev 1.15   Sep 06 2016 15:42:24   congatec
  * Added BSD header.
@@ -258,7 +264,7 @@ UINT16 CG_CheckPatchInputExtd_DSAC
     UINT32	LANCTRL1Regionfile, LANCTRL1Regionflash;		
     UINT32  LANCTRL1RegionfileEnd, LANCTRL1RegionflashEnd;	
     UINT32  LANCTRL0Size, LANCTRL1Size;
-	
+    
  
     // -----------------------------
 
@@ -294,14 +300,14 @@ UINT16 CG_CheckPatchInputExtd_DSAC
     {
 		// If we cannot read at all, we have a problem !
 		// However, we might still only face a flash unlock issue.
-		return CG_BFRET_OK; // CG_BFRET_ERROR;
+		return CG_BFRET_OK; //MOD019
 	}
     
     // Check flash descriptor signatures in flash part and in flash contents file 
 	if( (*((UINT32*)(pInputData+0x10)) != FLASH_DESCRIPTOR_SIGNATURE) ||  (data32 != FLASH_DESCRIPTOR_SIGNATURE))
 	{
 		// Invalid descriptor signature in flash or file -> Break.
-		return CG_BFRET_OK; 
+		return CG_BFRET_OK;  //MOD019
 	}
     
     // Get flash region base address from input file
@@ -313,17 +319,16 @@ UINT16 CG_CheckPatchInputExtd_DSAC
     {
 		// If we cannot read at all, we have a problem !
 		// However, we might still only face a flash unlock issue.
-		return CG_BFRET_OK; // CG_BFRET_ERROR;
+		return CG_BFRET_OK; //MOD019
 	}
 	FRBAflash = (data32 & 0x00FF0000) >> 12;
-    
+
     // Check match
 	if(FRBAfile != FRBAflash)
 	{
 		// No match. Break 
-		return CG_BFRET_OK;
+		return CG_BFRET_OK; //MOD019
 	}
-
     // Now that we have the flash region base address, check whether
 	// there is a used flash region 11, which is dedicated to LAN CTRL0
 	FLREG11file	=   FRBAfile + FLREG11_OFFSET;
@@ -336,7 +341,7 @@ UINT16 CG_CheckPatchInputExtd_DSAC
 	if((data32 & 0x00001FFF) == 0x00001FFF)
 	{
 		// Region unused. Break.
-		return CG_BFRET_OK;
+		return CG_BFRET_OK; //MOD019
 	}
     LANCTRL0Regionfile = (data32 & 0x00007FFF) << 12;
     // Get LAN CTRL 0 region limit
@@ -347,13 +352,13 @@ UINT16 CG_CheckPatchInputExtd_DSAC
     {
 		// If we cannot read at all, we have a problem !
 		// However, we might still only face a flash unlock issue.
-		return CG_BFRET_OK; // CG_BFRET_ERROR;
+		return CG_BFRET_OK; // MOD019
 	} 
 	// Check whether region is used
 	if((data32 & 0x00001FFF) == 0x00001FFF)
 	{
 		// Region unused. Break.
-		return CG_BFRET_OK;
+		return CG_BFRET_OK; //MOD019
 	}
     LANCTRL0Regionflash = (data32 & 0x00007FFF) << 12;
     // Get LAN CTRL 0 region limit
@@ -362,9 +367,8 @@ UINT16 CG_CheckPatchInputExtd_DSAC
     if((LANCTRL0Regionfile != LANCTRL0Regionflash) || (LANCTRL0RegionfileEnd != LANCTRL0RegionflashEnd))
 	{
 		// No match. Break
-		return CG_BFRET_OK;
+		return CG_BFRET_OK; //MOD019
 	}
-    
     // Check whether
 	// there is a used flash region 11, which is dedicated to LAN CTRL1
 	FLREG12file	= FRBAfile + FLREG12_OFFSET;
@@ -376,7 +380,7 @@ UINT16 CG_CheckPatchInputExtd_DSAC
 	if((data32 & 0x00001FFF) == 0x00001FFF)
 	{
 		// Region unused. Break.
-		return CG_BFRET_OK;
+		return CG_BFRET_OK; //MOD019
 	}
 
     LANCTRL1Regionfile = (data32 & 0x00007FFF) << 12;
@@ -387,13 +391,13 @@ UINT16 CG_CheckPatchInputExtd_DSAC
     {
 		// If we cannot read at all, we have a problem !
 		// However, we might still only face a flash unlock issue.
-		return CG_BFRET_OK; // CG_BFRET_ERROR;
+		return CG_BFRET_OK; //MOD019
 	}
 	// Check whether region is used
 	if((data32 & 0x00001FFF) == 0x00001FFF)
 	{
 		// Region unused. Break.
-		return CG_BFRET_OK;
+		return CG_BFRET_OK; //MOD019
 	}
     LANCTRL1Regionflash = (data32 & 0x00007FFF) << 12;
     // Get LAN CTRL 1 region limit
@@ -403,8 +407,8 @@ UINT16 CG_CheckPatchInputExtd_DSAC
     if((LANCTRL1Regionfile != LANCTRL1Regionflash) || (LANCTRL1RegionfileEnd != LANCTRL1RegionflashEnd)) 
 	{
 		// No match. Break
-		return CG_BFRET_OK;
-	}
+		return CG_BFRET_OK; //MOD019
+	} 
      
     //There is a valid LANCTRL 1 section in the flash and in the file. 
     
@@ -423,19 +427,20 @@ UINT16 CG_CheckPatchInputExtd_DSAC
         {
             BiosFlashReportState(1, "FAILED!");
             free(lanBuffer);
-            return CG_BFRET_ERROR;
+            return CG_BFRET_OK; //MOD019
         }
 
         if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_EXTD, LANCTRL0Regionflash, lanBuffer, LANCTRL0Size))
         {
             BiosFlashReportState(1, "FAILED!");
             free(lanBuffer);
-            return CG_BFRET_ERROR;
+            return CG_BFRET_OK; //MOD019
         }
 
         for (i= 0; i < LANCTRL0Size; ++i)
         {
             *(pInputData+LANCTRL0Regionflash + i) = lanBuffer[i];
+            
         }
 
         free(lanBuffer);
@@ -447,16 +452,15 @@ UINT16 CG_CheckPatchInputExtd_DSAC
         {
             BiosFlashReportState(1, "FAILED!");
             free(lanBuffer);
-            return CG_BFRET_ERROR;
+            return CG_BFRET_OK; //MOD019
         }
         
         if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_EXTD, LANCTRL1Regionflash, lanBuffer, LANCTRL1Size))
         {
             BiosFlashReportState(1, "FAILED!");
             free(lanBuffer);
-            return CG_BFRET_ERROR;
+            return CG_BFRET_OK; //MOD019
         }
-
         for (i= 0; i < LANCTRL1Size; ++i)
         {
             *(pInputData+LANCTRL1Regionflash + i) = lanBuffer[i];
@@ -466,30 +470,30 @@ UINT16 CG_CheckPatchInputExtd_DSAC
     }
     else // preserve only the MAC addresses and overwrite the other parts of the LAN CTRL 0 and 1 areas
     {
+
         //Get first mac address with fixed offset
         if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_EXTD, LANCTRL0Regionflash + MAC_0_2_OFFSET, &macAddress[0][0], 6))
         {
-            return CG_BFRET_ERROR;
+            return CG_BFRET_OK; //MOD019
         } 
         
         //MAC address 1 is stored at offset 0x212
         if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_EXTD, LANCTRL0Regionflash + MAC_1_3_OFFSET, &macAddress[1][0], 6))
         {
-            return CG_BFRET_ERROR;
+            return CG_BFRET_OK; //MOD019
         }
-        
         
         //Try to recover MAC address 2 using offset 0x202
         
         if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_EXTD, LANCTRL1Regionflash + MAC_0_2_OFFSET, &macAddress[2][0], 6))
         {
-            return CG_BFRET_ERROR;
+            return CG_BFRET_OK; //MOD019
         }
         
         //MAC address 3 is stored at offset 0x212
         if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_EXTD, LANCTRL1Regionflash + MAC_1_3_OFFSET, &macAddress[3][0], 6))
         {
-            return CG_BFRET_ERROR;
+            return CG_BFRET_OK; //MOD019
         }
         
         // copy old mac address 0 to input bios buffer
@@ -532,6 +536,194 @@ UINT16 CG_CheckPatchInputExtd_DSAC
 }
 
 //MOD015 ^
+
+
+//MOD016 v 
+
+/* ###################################
+ *  ELKHART LAKE MAC ADDRESS RECOVERY
+ * ###################################
+ * EHL GbE Region Layout:
+ * 
+ * GUID: 16 Bytes
+ * FFS Header: 12 Bytes
+ * Version: 4 Bytes
+ * Number of Ports: 4 Bytes
+ * 
+ * For each MAC address (see number of ports):
+ * BDF: 4 Bytes
+ * MAC Address Low: 4 Bytes
+ * MAC Address High: 4 Bytes
+ * 
+ */
+
+UINT16 CG_CheckPatchInputExtd_EHL
+(
+	unsigned char *pInputData,
+	UINT32 nInputDataSize,
+	UINT32 nProjID,	
+    UINT32 nFlags
+)
+{
+    UINT32 gbeguid[4] = {0x12E29FB4, 0x4172AA56, 0x5FDD4EB3, 0xA90A444B};
+    UINT32 guidData[4] = {0}; // buffer for storing the guid read from the bios file in order to compare
+    UINT32 gbeFlashOffset, gbeFileOffset, nIndex, i, j;
+    UINT8 guidFlashFound = FALSE;
+    UINT8 guidFileFound = FALSE;
+    UINT32 storageAreaSize;
+    UINT32 versionFlash, numberOfPortsFlash; //version number and number of ports stored from bios flash
+    unsigned char macEntryFlash[EHL_GBE_REGION_MAXNUM_PORTS][EHL_GBE_REGION_MAC_SIZE]; //array holding the mac entries stored from bios flash
+    
+    //##############################################
+    // BIOS Flash : Get MAC addresses
+    //##############################################
+    
+    BiosFlashReportState(0, "GbE Region recovery . . . . ");
+    
+    //get size of bios area (CG32_STORAGE_MPFA_ALL -> BIOS ROM part (comprises _STATIC, _USER, _DYNAMIC))
+    if ((storageAreaSize = CgosStorageAreaSize(hCgos, CG32_STORAGE_MPFA_ALL)) <1)
+    {
+        BiosFlashReportState(1, "\nERROR: Could not get flash size. Area locked??? Please try again with /ef flag");
+    }
+
+    nIndex = 0;
+        
+    //search bios flash for gbe guid
+    while(nIndex < (storageAreaSize)-sizeof(guidData))
+    {
+        if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_ALL, nIndex, (unsigned char*)&guidData, sizeof(guidData)))
+        {
+            BiosFlashReportState(1, "\nERROR: Could not get flash size. Area locked??? Please try again with /ef flag");
+            return CG_MPFARET_OK; // MOD018
+        }
+        //compare if 4 dwords read from the offset match the gbe guid.
+        else if((guidData[0] == gbeguid[0]) && (guidData[1] == gbeguid[1]) && (guidData[2] == gbeguid[2]) && (guidData[3] == gbeguid[3]))
+        {
+            //guid found!
+            guidFlashFound = TRUE;
+            gbeFlashOffset = nIndex; //this is the offset to GbE region (the first byte of its guid)
+            break;
+        }
+        else
+        {   //guid not found -> increase the index by 32 bits and keep searching
+            nIndex = nIndex + 4;
+        }
+    }
+    
+    if (guidFlashFound == FALSE)
+    {
+        // no GUID found in BIOS Flash -> exit with error
+        BiosFlashReportState(1, "\nERROR: Could not get flash size. Area locked??? Please try again with /ef flag\n");
+        printf("ERROR: Could not find GbE GUID in BIOS Flash!\n");
+        return CG_BFRET_OK; // MOD018 return OK, and flash BIOS anyway (GbE region will be written with default value)
+    }
+
+    // guidFlashFound == TRUE: A GbE GUID has been found in the BIOS file -> get the data
+    
+    // save the version dword
+    if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_ALL, (gbeFlashOffset+EHL_GBE_REGION_NUMPORTS_OFFSET), (unsigned char*)&versionFlash, sizeof(versionFlash)))
+    {
+        printf("ERROR: Could not get version from BIOS flash\n");
+        return CG_MPFARET_OK;  // MOD018 return OK, and flash BIOS anyway (GbE region will be written with default value)
+    }
+
+    // get the number of ports and the mac addresses
+    
+    // the number of Ports dword is at gbeFlashOffset + EHL_GBE_REGION_NUMPORTS_OFFSET
+    if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_ALL, (gbeFlashOffset+EHL_GBE_REGION_NUMPORTS_OFFSET), (unsigned char*)&numberOfPortsFlash, sizeof(numberOfPortsFlash)))
+    {
+        printf("ERROR: Could not get number of ports from BIOS flash\n");
+        return CG_MPFARET_OK;  // MOD018 return OK, and flash BIOS anyway (GbE region will be written with default value)
+    }
+            
+    //sanity check: the number of ports is higher than the array for the mac addresses can hold
+    if (numberOfPortsFlash > ((sizeof(macEntryFlash)/EHL_GBE_REGION_MAC_SIZE)))
+    {
+
+        printf("\nERROR: Number of MAC addresses found in BIOS flash exceeds buffer!\n");
+        return CG_BFRET_OK;   // MOD018 return OK, and flash BIOS anyway (GbE region will be written with default value)
+    }
+    
+    // print the mac addresses in the flash
+    
+    for (i = 0; i < numberOfPortsFlash; ++i)
+    {
+        if(!CgosStorageAreaRead(hCgos, CG32_STORAGE_MPFA_ALL, (gbeFlashOffset+EHL_GBE_REGION_MAC_OFFSET+(EHL_GBE_REGION_MAC_SIZE*i)), (unsigned char*)&macEntryFlash[i][0], EHL_GBE_REGION_MAC_SIZE))
+        {
+            printf("ERROR: Could not get MAC address %i from BIOS flash\n",i);
+            return CG_MPFARET_OK;  // MOD018 return OK, and flash BIOS anyway (GbE region will be written with default value)
+        }
+        
+    }
+    
+    //##############################################
+    // BIOS File: Get Gbe Region
+    //##############################################
+    
+    //search for GbE GUID in BIOS flash file
+
+    nIndex = 0;
+    
+    while(nIndex < nInputDataSize)
+    {
+
+        if ((*(UINT32*)(pInputData+nIndex) == gbeguid[0]) && (*(UINT32*)(pInputData+nIndex+4) == gbeguid[1]) && (*(UINT32*)(pInputData+nIndex+8) == gbeguid[2]) && (*(UINT32*)(pInputData+nIndex+12) == gbeguid[3]))
+        {
+            // GUID found! 
+            guidFileFound = TRUE;
+            gbeFileOffset = nIndex; //this is the offset to GbE region (the first byte of its guid)
+            break;
+        }
+        else
+        {
+            //GUID not found (yet) -> keep on searching
+            nIndex = nIndex + 4;
+        }
+    }
+    
+    //exit if GUID has not been found
+    if (guidFileFound == FALSE) 
+    {
+        // no GUID found in BIOS file -> exit with error
+        printf("\nERROR: Could not find GbE Region in BIOS File!");
+        return CG_BFRET_OK;   // MOD018 return OK, and flash BIOS anyway (GbE region will be written with default value)
+    }
+
+    // guidFileFound == TRUE here -> GUID has been found, now restore MAC addresses
+
+    //##############################################
+    // Save GbE region data from flash to file
+    //##############################################
+    
+    // The file has an empty Gbe Region, the only data present is the GUID and the FFS Header. Thus, skip the FFS header when restoring.
+    // The version, the number of ports and all the MAC entries have to be copied.
+    
+    
+    // copy version
+    
+    *(UINT32*)(pInputData + gbeFileOffset + EHL_GBE_REGION_VERSION_OFFSET) = versionFlash;
+
+    // copy number of ports
+    
+    *(UINT32*)(pInputData + gbeFileOffset + EHL_GBE_REGION_NUMPORTS_OFFSET) = numberOfPortsFlash;
+
+    for (i = 0; i < numberOfPortsFlash; ++i)
+    {
+        //restore MAC address for each port
+        for (j = 0; j < EHL_GBE_REGION_MAC_SIZE; ++j)
+        {
+             *(pInputData+gbeFileOffset+EHL_GBE_REGION_MAC_OFFSET + (EHL_GBE_REGION_MAC_SIZE*i) + j) = macEntryFlash[i][j];
+        }
+    }
+
+    printf("DONE!\n");
+
+    return CG_BFRET_OK; 
+    
+}
+
+//MOD016 ^
+
 
 /*---------------------------------------------------------------------------
  * Name: CG_CheckPatchInputExtd
@@ -1106,6 +1298,24 @@ UINT16 CG_BiosFlash( _TCHAR* lpszBiosFile, UINT32 nFlags)
 
     fclose(fpBiosRomfile);
     BiosFlashReportState(1, "DONE!");
+    
+    //MOD018 v 
+    // Check if platform is Elkhart Lake (QA70, SA70, TA70, PA70, MA70). If yes, perform EHL MAC address recovery.
+    if ((memcmp(&szBoardBiosName,"QA70",4) == 0) || (memcmp(&szBoardBiosName,"SA70",4) == 0) || (memcmp(&szBoardBiosName,"TA70",4) == 0) || (memcmp(&szBoardBiosName,"PA70",4) == 0) || (memcmp(&szBoardBiosName,"MA70",4) == 0))
+        {
+                // EHL MAC address recovery
+                if(CG_CheckPatchInputExtd_EHL(pBuffer,nRomfileSize,*((UINT32 *)(&szBoardBiosName[0])),nFlags) != CG_BFRET_OK)
+                {
+                    // Failed to perform required input data patch or check. Quit.
+                    free(pBuffer);
+                    return CG_BFRET_ERROR;
+                }
+                if (nFlags & CG_BFFLAG_KEEP_LANAREAS)
+                {   // Restoring the LAN areas LAN CTRL 0 and LAN CTRL 1 is only available for DSAC
+                    BiosFlashReportState(0, "\nRestoring LAN areas is not available for this project!\n");  
+                }
+    } 
+    //MOD018 ^ 
 																				//MOD003 v
 	// For a real extended flash update special handling of the additional flash content might be required,
 	// like restoring the MAC address stored in the flash or other things. This can be handled here.
@@ -1113,7 +1323,7 @@ UINT16 CG_BiosFlash( _TCHAR* lpszBiosFile, UINT32 nFlags)
 	{
         //MOD015 v
         //Check if we want to flash a DSAC. If yes, use the special handling for DSAC.
-        if (memcmp(&szBoardBiosName,"DSAC",4) == 0)
+        if (memcmp(&szBoardBiosName,"DSA",3) == 0) //MOD017
         {
                 // keep MAC addresses only
                 if(CG_CheckPatchInputExtd_DSAC(pBuffer,nRomfileSize,*((UINT32 *)(&szBoardBiosName[0])),nFlags) != CG_BFRET_OK)
@@ -1123,6 +1333,23 @@ UINT16 CG_BiosFlash( _TCHAR* lpszBiosFile, UINT32 nFlags)
                     return CG_BFRET_ERROR;
                 }
         }
+        /*MOD018 v  
+        // Check if platform is Elkhart Lake (QA70, SA70, TA70, PA70, MA70). If yes, perform EHL MAC address recovery.
+        else if ((memcmp(&szBoardBiosName,"QA70",4) == 0) || (memcmp(&szBoardBiosName,"SA70",4) == 0) || (memcmp(&szBoardBiosName,"TA70",4) == 0) || (memcmp(&szBoardBiosName,"PA70",4) == 0) || (memcmp(&szBoardBiosName,"MA70",4) == 0))
+        {
+                // EHL MAC address recovery
+                if(CG_CheckPatchInputExtd_EHL(pBuffer,nRomfileSize,*((UINT32 *)(&szBoardBiosName[0])),nFlags) != CG_BFRET_OK)
+                {
+                    // Failed to perform required input data patch or check. Quit.
+                    free(pBuffer);
+                    return CG_BFRET_ERROR;
+                }
+                if (nFlags & CG_BFFLAG_KEEP_LANAREAS)
+                {   // Restoring the LAN areas LAN CTRL 0 and LAN CTRL 1 is only available for DSAC
+                    BiosFlashReportState(0, "\nRestoring LAN areas is not available for this project!\n");  
+                }
+        } MOD018 ^*/
+       
         else // Use the standard handling for all other projects.
         {
             if(CG_CheckPatchInputExtd(pBuffer,nRomfileSize,*((UINT32 *)(&szBoardBiosName[0]))) != CG_BFRET_OK)
@@ -1148,8 +1375,6 @@ UINT16 CG_BiosFlash( _TCHAR* lpszBiosFile, UINT32 nFlags)
         }
     }
     //MOD015 ^
-    
-
 
     																			//MOD003 ^
 																	
@@ -1409,7 +1634,7 @@ UINT16 CG_BiosFlash( _TCHAR* lpszBiosFile, UINT32 nFlags)
 		BiosFlashReportState(0, "Please reboot the system!");
 		BiosFlashReportState(0, " ");	//MOD007
 	}
-                                                                        //MOD003 ^    
+                                                                //MOD003 ^    
 	return CG_BFRET_OK;
 }
 
@@ -1651,7 +1876,7 @@ UINT16 CgBfGetBiosInfoRomfile
         {
             *(lpszBiosVersion + nCount) = CgBiosInfoRomfile.biosVersion[nCount];
         }
-        retVal = CG_BFRET_OK; 
+        retVal = CG_BFRET_OK;
     }
     else
     {

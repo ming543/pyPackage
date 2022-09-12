@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2016, congatec AG. All rights reserved.
+ * Copyright (c) 2021, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -181,7 +181,7 @@ void CgClearScreen(void);
 // Version definition
 //---------------------
 #define MAJOR_VERSION_NUMBER    1
-#define MINOR_VERSION_NUMBER    5
+#define MINOR_VERSION_NUMBER    6 
 
 //---------------------------
 // Access level definitions

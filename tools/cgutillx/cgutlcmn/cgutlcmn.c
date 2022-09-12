@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2016, congatec AG. All rights reserved.
+ * Copyright (c) 2021, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -16,20 +16,8 @@
  *
  *---------------------------------------------------------------------------
  */
-
-/*---------------------------------------------------------------------------
- *
- * $Header:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/CGUTLCMN.C-arc   1.5   Sep 06 2016 15:55:52   congatec  $
- *
- * Contents: Common congatec utility routines and data.
- *
- *---------------------------------------------------------------------------
- *
- *                      R E V I S I O N   H I S T O R Y
- *
- * $Log:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/CGUTLCMN.C-arc  $
- * 
- *    Rev 1.5   Sep 06 2016 15:55:52   congatec
+ 
+/*    Rev 1.5   Sep 06 2016 15:55:52   congatec
  * Added BSD header.
  * 
  *    Rev 1.4   May 31 2012 15:45:48   gartner

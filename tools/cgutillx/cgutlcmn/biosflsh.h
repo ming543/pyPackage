@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2018, congatec AG. All rights reserved.
+ * Copyright (c) 2021, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -91,7 +91,6 @@ extern "C" {
 #define CG_BFFLAG_AUTO_OFFON	0x0800	// Perform immediate/auto off-on cycle for BIOS unlock.	//MOD006
 #define CG_BFFLAG_PRESERVE		0x1000	// Preserve pre-defined NVRAM settings (e.g. PASSWORD)	//MOD007
 #define CG_BFFLAG_KEEP_LANAREAS 0x2000  // Save LAN CTRL 0 and LAN CTRL 1 areas (DSAC)          //MOD008
-#define CG_BFFLAG_KEEP_LANAREAS 0x2000  // Save LAN CTRL 0 and LAN CTRL 1 areas (DSAC)          //MOD008
 
 //-------------------------
 // BIOS flash return codes
@@ -159,6 +158,35 @@ extern UINT16 CgBfGetBiosInfoFlash(void);										//MOD002
 #define X550_FW_POINTER 0x0F
 
 // MOD008 ^
+
+//MOD009 v
+
+/*
+ * EHL GbE Region Layout:
+ * 
+ * GUID: 16 Bytes
+ * FFS Header: 12 Bytes
+ * Version: 4 Bytes
+ * Number of Ports: 4 Bytes
+ * 
+ * For each MAC address (see number of ports):
+ * BDF: 4 Bytes
+ * MAC Address Low: 4 Bytes
+ * MAC Address High: 4 Bytes
+ * 
+ */
+
+#define EHL_GBE_REGION_MAXNUM_PORTS 3 // there should not be more than 3 mac address entries, otherwise we have a problem 
+
+#define EHL_GBE_REGION_VERSION_SIZE 0x04
+#define EHL_GBE_REGION_NUMPORTS_SIZE 0x04
+#define EHL_GBE_REGION_MAC_SIZE 0x0C // Size of a MAC address entry 4 Bytes BDF + 4 Bytes MAC Address Low + 4 Bytes MAC Address High = 12 = 0x0C
+
+#define EHL_GBE_REGION_VERSION_OFFSET 0x1C //16 Bytes GUID + 12 Bytes FFS Header = 28 = 1C
+#define EHL_GBE_REGION_NUMPORTS_OFFSET 0x20 // 16 Bytes GUID + 12 Bytes FFS Header + 4 Bytes Version = 32 = 0x20
+#define EHL_GBE_REGION_MAC_OFFSET 0x24 // Offset to first MAC address (EHL_GBE_REGION_NUMPORTS_OFFSET + 4 Bytes Number of ports)
+
+//MOD009 ^
                                                                             
 // Restore previous packing rules
 #pragma pack(pop)																//MOD005 ^

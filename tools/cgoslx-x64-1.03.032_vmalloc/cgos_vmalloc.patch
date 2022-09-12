@@ -1,0 +1,34 @@
+--- a/include/linux/vmalloc.h	2021-08-30 10:12:24.107408946 +0300
++++ b/include/linux/vmalloc.h	2021-08-30 10:13:23.515486012 +0300
+@@ -105,6 +105,7 @@
+ extern void *vmalloc_32(unsigned long size);
+ extern void *vmalloc_32_user(unsigned long size);
+ extern void *__vmalloc(unsigned long size, gfp_t gfp_mask);
++extern void *__vmalloc_prot(unsigned long size, gfp_t gfp_mask, pgprot_t prot);
+ extern void *__vmalloc_node_range(unsigned long size, unsigned long align,
+ 			unsigned long start, unsigned long end, gfp_t gfp_mask,
+ 			pgprot_t prot, unsigned long vm_flags, int node,
+--- a/mm/vmalloc.c	2021-08-30 09:44:28.517305651 +0300
++++ b/mm/vmalloc.c	2021-08-30 10:11:02.587302770 +0300
+@@ -2619,6 +2619,21 @@
+ }
+ EXPORT_SYMBOL(__vmalloc);
+ 
++static void *__vmalloc_node_prot(unsigned long size, unsigned long align,
++			    gfp_t gfp_mask, pgprot_t prot,
++			    int node, const void *caller)
++{
++	return __vmalloc_node_range(size, align, VMALLOC_START, VMALLOC_END,
++				gfp_mask, prot, 0, node, caller);
++}
++
++void *__vmalloc_prot(unsigned long size, gfp_t gfp_mask, pgprot_t prot)
++{
++	return __vmalloc_node_prot(size, 1, gfp_mask, prot, NUMA_NO_NODE,
++				__builtin_return_address(0));
++}
++EXPORT_SYMBOL(__vmalloc_prot);
++
+ /**
+  * vmalloc - allocate virtually contiguous memory
+  * @size:    allocation size

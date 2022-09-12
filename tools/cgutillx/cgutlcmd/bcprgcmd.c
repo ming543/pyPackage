@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2016, congatec AG. All rights reserved.
+ * Copyright (c) 2021, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -19,15 +19,21 @@
 
 /*---------------------------------------------------------------------------
  *
- * $Header:   S:/CG/archives/CGTOOLS/CGUTIL/W32DOSX/CGUTLCMD/BCPRGCMD.C-arc   1.14   Sep 06 2016 16:23:42   congatec  $
- *
  * Contents: Board controller firmware update command line module.
  *
  *---------------------------------------------------------------------------
  *
  *                      R E V I S I O N   H I S T O R Y
  *
- * $Log:   S:/CG/archives/CGTOOLS/CGUTIL/W32DOSX/CGUTLCMD/BCPRGCMD.C-arc  $
+ * MOD014: Added support for all MEC170x variants in the 144 pin WFBGA package.
+ *
+ * MOD013: added support for the /!cidoverride switch.
+ *
+ * MOD012: added support for MEC1706
+ *
+ * MOD011: Revised PrintMessage().
+ *
+ * MOD010: added support for MEC1705
  * 
  *    Rev 1.14   Sep 06 2016 16:23:42   congatec
  * Added BSD header.
@@ -176,7 +182,21 @@ static _TCHAR *messages[] = {
  _T("ATmega325P\n"),                                 // BCPRG_FOUND_ATMEGA325P //MOD005
  _T("STM32F100R8\n"),                                // BCPRG_FOUND_STM32F100R8 //MOD008
  _T("TM4E1231H6ZRB\n"),                              // BCPRG_FOUND_TM4E1231H6ZRB //MOD009
+ _T("MEC1701HSZ\n"),                                 // BCPRG_FOUND_MEC1701HSZ //MOD014
+ _T("MEC1701KSZ\n"),                                 // BCPRG_FOUND_MEC1701KSZ //MOD014
+ _T("MEC1701QSZ\n"),                                 // BCPRG_FOUND_MEC1701QSZ //MOD014
+ _T("MEC1703HSZ\n"),                                 // BCPRG_FOUND_MEC1703HSZ //MOD014
+ _T("MEC1703KSZ\n"),                                 // BCPRG_FOUND_MEC1703KSZ //MOD014
+ _T("MEC1703QSZ\n"),                                 // BCPRG_FOUND_MEC1703QSZ //MOD014
+ _T("MEC1704HSZ\n"),                                 // BCPRG_FOUND_MEC1704HSZ //MOD014
+ _T("MEC1704KSZ\n"),                                 // BCPRG_FOUND_MEC1704KSZ //MOD014
+ _T("MEC1704QSZ\n"),                                 // BCPRG_FOUND_MEC1704QSZ //MOD014
+ _T("MEC1705HSZ\n"),                                 // BCPRG_FOUND_MEC1705HSZ //MOD014
+ _T("MEC1705KSZ\n"),                                 // BCPRG_FOUND_MEC1705KSZ //MOD014
  _T("MEC1705QSZ\n"),                                 // BCPRG_FOUND_MEC1705QSZ //MOD010
+ _T("MEC1706HSZ\n"),                                 // BCPRG_FOUND_MEC1706HSZ //MOD014
+ _T("MEC1706KSZ\n"),                                 // BCPRG_FOUND_MEC1706KSZ //MOD014
+ _T("MEC1706QSZ\n"),                                 // BCPRG_FOUND_MEC1706QSZ //MOD012
  _T("Checking locks and fuses. . . . "),             // BCPRG_CHECK_FUSES_BEFORE
  _T("EEPROM is unprotected"),                        // BCPRG_BAD_FUSES_ERROR
  passedMes,                                          // BCPRG_CHECK_FUSES_AFTER
@@ -324,6 +344,12 @@ static void ParseArguments( INT32 argc, _TCHAR **argv )
                          flags |= BCPRG_NFP_SWITCH;
                         }
                                                                       //MOD002^
+                                                                      //MOD013v  
+                      if( !STRCMP( &argv[i][2], _T("cidoverride") ) )
+                        {
+                         flags |= BCPRG_CID_OVR_SWITCH;
+                        }
+                                                                      //MOD013^
                       break;
 
           default:
@@ -518,7 +544,21 @@ static void (*errHandlerTbl[])() = {
                                     NULL,      // BCPRG_FOUND_ATMEGA325P //MOD006
                                     NULL,      // BCPRG_FOUND_STM32F100R8 //MOD008
                                     NULL,      // BCPRG_FOUND_TM4E1231H6ZRB //MOD009
+                                    NULL,      // BCPRG_FOUND_MEC1701HSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1701KSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1701QSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1703HSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1703KSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1703QSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1704HSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1704KSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1704QSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1705HSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1705KSZ //MOD014
                                     NULL,      // BCPRG_FOUND_MEC1705QSZ //MOD010
+                                    NULL,      // BCPRG_FOUND_MEC1706HSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1706KSZ //MOD014
+                                    NULL,      // BCPRG_FOUND_MEC1706QSZ //MOD012
                                     NULL,      // BCPRG_CHECK_FUSES_BEFORE
                                     StdErr,    // BCPRG_BAD_FUSES_ERROR
                                     NULL,      // BCPRG_CHECK_FUSES_AFTER

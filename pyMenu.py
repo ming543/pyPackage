@@ -158,8 +158,20 @@ def osClone():
         mMenu()
 
 
+def logScpCopyZt():
+    localFolder = "/home/partimag/log"
+    zeroHost = "192.168.192.168"
+    zeroFolder = "log"
+    zeroPing = os.system("ping -c 1 " + zeroHost)
+    if zeroPing == 0:
+        subprocess.call(
+                "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -P 6666 -r %s stux@%s:"
+                % (localFolder, zeroHost), shell=True)
+
+
 #logToOnedrive
 def copyLog():
+    logScpCopyZt()
     os.system('clear')
     for i in range(5):  # ping 5 times
         response = subprocess.call(
@@ -170,15 +182,15 @@ def copyLog():
             print("PING OK")
             lF = "/home/partimag/log"
             oF = "onedrive:General/log"
+            rC = subprocess.call("rclone -v copy %s %s -P" % (lF, oF), shell=True)
             cF = "CM_EFCO:log"
             CM_EFCO = subprocess.call("rclone -v copy %s %s -P" % (lF, cF), shell=True)
-            rC = subprocess.call("rclone -v copy %s %s -P" % (lF, oF), shell=True)
-            if rC == 0:  # check rclone pass or fail
-                print(Fore.GREEN + "日誌檔案上傳成功 Log copy to onedrive done!!!" + Fore.RESET)
+            if CM_EFCO == 0:  # check rclone pass or fail
+                print(Fore.GREEN + "日誌檔案上傳成功 Log copy to CM_EFCO done!!!" + Fore.RESET)
                 input("按任意鍵繼續 Press any key continue...")
                 break
             else:
-                print(Fore.RED + "日誌檔案上傳失敗 Log copy to onedrive Fail!!!" + Fore.RESET)
+                print(Fore.RED + "日誌檔案上傳失敗 Log copy to CM_EFCO Fail!!!" + Fore.RESET)
                 input("按任意鍵繼續 Press any key continue...")
                 break
         else:
@@ -229,19 +241,20 @@ def pcloudPull():
                     "rclone -v sync pcloud:pyPackage /home/stux/pyPackage/ --exclude=/.git/** -L -P", shell=True)
             if pS == 0:
                 print("pcloudPullDone")
-                print(Fore.GREEN + "更新成功 Update done!!!" + Fore.RESET)
+                print(Fore.GREEN + "pcloud 更新成功 Update done!!!" + Fore.RESET)
                 input("按任意鍵繼續 Press any key continue...")
                 break
-
+            '''system.sh update    
             rC = subprocess.call("cd %s && sh system.sh" % pyFolder, shell=True)
             if rC == 0:  # check rclone pass or fail
-                print(Fore.GREEN + "更新成功 Update done!!!" + Fore.RESET)
+                print(Fore.GREEN + "system.sh 更新成功 Update done!!!" + Fore.RESET)
                 input("按任意鍵繼續 Press any key continue...")
                 break
             else:
                 print(Fore.RED + "更新失敗 Update Fail!!!" + Fore.RESET)
                 input("按任意鍵繼續 Press any key continue...")
                 break
+            '''
         else:
             print(Fore.YELLOW + "外網測試失敗 Ping fail, check internet" + Fore.RESET)
             time.sleep(5)

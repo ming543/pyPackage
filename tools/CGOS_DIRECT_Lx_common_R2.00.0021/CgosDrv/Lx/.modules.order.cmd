@@ -1,1 +1,0 @@
-cmd_/home/stux/CGOS_DIRECT_Lx_common_R2.00.0021/CgosDrv/Lx/modules.order := {   echo /home/stux/CGOS_DIRECT_Lx_common_R2.00.0021/CgosDrv/Lx/cgosdrv.ko; :; } | awk '!x[$$0]++' - > /home/stux/CGOS_DIRECT_Lx_common_R2.00.0021/CgosDrv/Lx/modules.order

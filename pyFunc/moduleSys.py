@@ -14,6 +14,7 @@ import enquiries
 import cpuinfo
 import netifaces
 import serial
+import pexpect
 from colorama import Fore, Back, Style
 import numpy as np
 #import ntplib
@@ -55,6 +56,11 @@ if os.path.isdir(logPath):
     print(" ")
 else:
     subprocess.call("sudo mount /dev/%s /home/partimag -o umask=000" % diskData, shell=True)
+
+
+
+
+
 
 #DOS Update 
 def dosPull():   
@@ -98,13 +104,6 @@ def alsabatTest():
         logging.error("Audio Loopback Test: Fail, Response = " + str(response))
         failRed("確認AUDIO LOOPBACK FAIL")
 
-def arecordTest():
-    response = subprocess.check_call("arecord -d 5 -vvv -f dat /dev/null", shell=True)
-    if response == 0:
-        logging.info('Audio arecord Test: Pass')
-    else:
-        logging.error("Audio arecord Test: Fail, Response = " + response)
-        failRed("確認AUDIO arecord FAIL")
 
 def aplayTest():
     response = subprocess.check_call("aplay -vvv -d 5 /home/stux/pyPackage/tools/default_dual.wav", shell=True)
@@ -113,6 +112,46 @@ def aplayTest():
     else:
         logging.error("Audio aplay Test: Fail, Response = " + response)
         failRed("確認AUDIO aplay FAIL")
+
+
+def arecordTest():
+    response = subprocess.check_call("arecord i-Dhw:0,0 -d 1 -vv -f dat /dev/null", shell=True)
+    if response == 0:
+        logging.info('Audio arecord Test: Pass')
+    else:
+        logging.error("Audio arecord Test: Fail, Response = " + response)
+        failRed("確認AUDIO arecord FAIL")
+
+
+def audioLoopback():
+    '''response = subprocess.call("speaker-test -l 1 &", shell=True)
+    if response == 0:
+        logging.info('Test_Audio_Speaker: Done')
+    else:
+        logging.error("Test_Audio_Speaker: Fail, Response = " + response)
+        failRed("確認AUDIO Speaker FAIL")
+    '''
+    response = subprocess.check_call("aplay -d 5 /home/stux/pyPackage/default_dual.wav &", shell=True)
+    if response == 0:
+        logging.info('Test_Audio_play: Pass')
+    else:
+        logging.error("Test_Audio_play: Fail, Response = " + response)
+        failRed("確認AUDIO play FAIL")
+    time.sleep(1)
+    os.system('clear')
+    process = pexpect.spawn('arecord -Dhw:0,0 -d 1 -vv -f dat /dev/null', timeout=2, encoding='utf-8' )
+    process.expect(pexpect.EOF)
+    result = process.before
+    result = str(result).splitlines()
+    #print("rrrrrr", result[-1][-3]) # get arecord last line [-1], get audio % by [-3:-1]
+    #resule = int(float(result[-1][-3:-1]))
+    result = result[-1][-3]
+    if result == "9":
+        logging.info("Test_Audio_Record: %s ! SPEC: 9 " % result)
+    else:
+        logging.error("Test_Audio_Record: %s ! SPEC: 9" % result)
+        failRed("Record Fail 確認 audio loopback 接線: %s ! SPEC: 9" % result)
+
 
 def audioPlay():
     #隱藏一些報錯，這些不影響程式的執行
@@ -132,6 +171,7 @@ def audioPlay():
     stream.write(data.astype(np.float32).tostring())
     stream.close()
     p.terminate()
+
 
 def audioWire():
     """
@@ -192,6 +232,20 @@ def atCheck(comPort, atCommand, atBack):
     time.sleep(2)
 
 
+def cdromCheck(fileCheck):
+    filePath = "/cdrom/%s" % fileCheck
+    if os.path.isdir(filePath):
+        logging.info('Check CDROM: The file got in CD - %s' %fileCheck)
+    else:
+        subprocess.call("sudo mount /dev/cdrom /cdrom", shell=True)
+        time.sleep(3)
+        if os.path.isdir(filePath):
+            logging.info('Check CDROM: The file got in CD - %s' %fileCheck)
+        else:
+            logging.error('Check CDROM: CD file not find - %s' %fileCheck)
+            failRed("確認 CDROM ! CD file not find - %s " % fileCheck)
+
+
 def cpuTempCheck(cpuL, cpuH):
     sensors = subprocess.check_output(
             "sensors -u", shell=True)
@@ -234,6 +288,11 @@ def funcMenuT1():
     funcSelect = "T1"
 
 
+def funcMenuT2():
+    global funcSelect
+    funcSelect = "T2"
+
+
 def funcMenuOs():
     global funcSelect
     funcSelect = "OS"
@@ -245,6 +304,8 @@ def funcMenuBi():
 
 
 def funcMenu():
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        pn = db['pnSave'] 
     global funcSelect
     m0 = '燒機前功能測試 - T1'
     m1 = '燒機後功能測試 - T2'
@@ -253,9 +314,10 @@ def funcMenu():
     os.system('clear')
     print(" ")
     print(Fore.BLUE + Back.WHITE)
-    print("測試選單 Test-MENU" + Style.RESET_ALL, end='')
+    print("測試選單 Test-MENU", pn + Style.RESET_ALL, end='')
     print(Fore.MAGENTA + Back.WHITE)
     print(Style.RESET_ALL)
+
     choice = enquiries.choose('選擇測試項目 Choose options:', options)
     if choice == m0:  
         funcSelect = "T1"
@@ -266,6 +328,63 @@ def funcMenu():
         with open(startTest, "w") as f:
             f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
         subprocess.call("sh %s" % startTest, shell=True)
+
+
+def ft232hCheck():
+    os.environ.setdefault('BLINKA_FT232H', '0')
+    time.sleep(1)
+    os.environ.setdefault('BLINKA_FT232H', '1')
+    try:
+        import board
+        import digitalio
+    except:
+        print("Import FT232H GPIO device fail")
+        input("按任意鍵繼續 Press any key continue...")
+        with open(startTest, "w") as f:
+            f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
+        subprocess.call("sh %s" % startTest, shell=True)
+    C0 = digitalio.DigitalInOut(board.C0)
+    C1 = digitalio.DigitalInOut(board.C1)
+    C2 = digitalio.DigitalInOut(board.C2)
+    C3 = digitalio.DigitalInOut(board.C3)
+    C4 = digitalio.DigitalInOut(board.C4)
+    C5 = digitalio.DigitalInOut(board.C5)
+    C6 = digitalio.DigitalInOut(board.C6)
+    C7 = digitalio.DigitalInOut(board.C7)
+    #check all gpio is open
+    for i in range(8):
+        locals()['C' + str(i)].direction = digitalio.Direction.INPUT
+        gpioInput = str(locals()['C' + str(i)].value)
+        if gpioInput == "True":
+            logging.info("Open Test Pass of C" + str(i))
+        else:
+            logging.error("Open Test Fail of C" + str(i))
+            failRed("開關開路確認不良C" + str(i))		
+    time.sleep(1)
+
+    for i in range(8):
+        count = 0
+        countFlag = 0
+        while count < 10:
+            os.system('clear')
+            print('目前測試開關 %s GPIO Port Test now : ' % i, end='' )
+            gpioInput = str(locals()['C' + str(i)].value)
+            print(gpioInput)
+            print(' ')
+            print('請於十秒內完成測試 Test end at count 10, now is %s' % count)
+            if gpioInput == "False":
+                logging.info("The GPIO Port %s Test: Pass" % i)
+                countFlag = 1
+                time.sleep(2)
+                break
+            count = count + 1
+            time.sleep(1)
+        if countFlag == 0:
+            print("count over 10 times")
+            time.sleep(2)
+            logging.error("Count Test Over 10 Secs Fail of C" + str(i))
+            failRed("開關確認超過十秒不良C" + str(i))		
+
 
 def pnGet():
     print(" ")
@@ -381,7 +500,6 @@ def snGet(pn, modelName):
         db['snSave'] = sn
         db['osFlagSave'] = osFlag
         dateLog = db['dateSave'] 
-
     if sn == "n":
         print("Start Test is " + startTest)
         with open(startTest, "w") as f:
@@ -398,11 +516,13 @@ def snGet(pn, modelName):
         global log
         log = logPath + pn + "/" + dateLog + "/" + funcSelect + "/" + logFilename
         os.makedirs(os.path.dirname(log), exist_ok=True)  # Create log folder
+        logPass = logPath + pn + "/" + dateLog + "/" + funcSelect + "/PASS/" + logFilename + "-PASS.log"
+        os.makedirs(os.path.dirname(logPass), exist_ok=True)  # Create logPass folder
         # save log name and location to database
         # with shelve.open('snTemp') as db:
         with shelve.open('/home/stux/pyPackage/dataBase') as db:
             db['log'] = log
-
+            db['logPass'] = logPass
         logger = logging.getLogger()
         # Setup logging level
         logger.setLevel(logging.DEBUG)
@@ -688,6 +808,7 @@ def lanSpeedSet(sLan, sSpeed):
         subprocess.call(
             "sudo ethtool -s enp%s0 speed %s duplex full autoneg on" % (i, sSpeed), shell=True )
         logging.info('LAN_SPEED_SET: enp%ss0 to %s' %(i, sSpeed))
+    time.sleep(1)
     subprocess.call(
         "ping 8.8.8.8 -c 20 > /dev/null &", shell=True )
 
@@ -741,6 +862,71 @@ def lanLedOffCheck(ledCheck):
     logging.info('LAN_LED_OFF: Remove LAN Cable and LED OFF')
      
 
+def displayCheck(nameCheck):
+    os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("螢幕確認 display Check")
+    print(Fore.MAGENTA + Back.WHITE)
+    print("確認螢幕是否顯示正常 - %s" % nameCheck)
+    print(Style.RESET_ALL)
+    print("不良按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('Display_Check: %s Fail' % nameCheck)
+        failRed("螢幕不良 - %s" % nameCheck)
+    logging.info('Display_CHECK: Display OK - %s' % nameCheck)
+
+
+def fanCheck():
+    os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("風扇確認 FAN Check")
+    print(Fore.MAGENTA + Back.WHITE)
+    print("確認風扇是否運作正常")
+    print(Style.RESET_ALL)
+    print("不良按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('Fan_Check: Fail')
+        failRed("風扇不良")
+    logging.info('FAN_CHECK: FAN Check OK')
+
+
+def ledCheck(nameCheck):
+    os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("LED燈號確認 LED Check")
+    print(Fore.MAGENTA + Back.WHITE)
+    print("確認LED燈號是否顯示正常 - %s" % nameCheck)
+    print(Style.RESET_ALL)
+    print("不良按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('LED_Check: %s Fail' % nameCheck)
+        failRed("LED 燈號不良 - %s" % nameCheck)
+    logging.info('LED_CHECK: LED Display OK - %s' % nameCheck)
+
+
+def hddledCheck():
+    subprocess.call("sudo hdparm -t /dev/sda &", shell=True )
+    os.system('clear')
+    print(" ")
+    print(Fore.BLUE + Back.WHITE)
+    print("LED燈號確認 LED Check")
+    print(Fore.MAGENTA + Back.WHITE)
+    print("確認HDD LED燈號是否顯示正常")
+    print(Style.RESET_ALL)
+    print("不良按n鍵結束,其他鍵繼續  ", end='')
+    check = input("Failed press 'n', other key continue: ").lower()
+    if check == ("n"):
+        logging.error('HDD_LED_Check: Fail')
+        failRed("HDD LED 燈號不良")
+    logging.info('HDD_LED_CHECK: LED Display OK')
+
+
 def usbCheck(spec, num):
     usbList = subprocess.check_output("lsusb", shell=True)
     usbSplit = str(usbList).lstrip('b\'').rstrip('\'').split('\\n')
@@ -785,7 +971,7 @@ def uartLoopCheck(sCom):
         try:
             subprocess.call("sudo chmod 666 /dev/ttyS%s" % i, shell=True )
             mySerial = serial.Serial("/dev/ttyS%s" % i, 115200, timeout=1)
-            for num in range(1, 6):
+            for num in range(1, 4):
                 sendData = bytes([num])
                 result = mySerial.write(sendData)
                 recvData = mySerial.readline()
@@ -800,12 +986,45 @@ def uartLoopCheck(sCom):
             failRed("/dev/ttyS%s fail" % i )
        
 
+def uartSend(comPort):
+    os.system('clear')
+    subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
+    mySerial = serial.Serial(comPort, 9600, timeout=1)
+    if mySerial.is_open:
+        print("port open success")
+        sendData = bytes([66])
+        while True:
+            mySerial.write(sendData)
+            print('COM PORT LOOPBACK TEST %s' % sendData)
+            time.sleep(0.1)
+
+
+def uartGet(comPort):
+    os.system('clear')
+    subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
+    mySerial = serial.Serial(comPort, 9600, timeout=1)
+    if mySerial.is_open:
+        print("port open success")
+        len_return = mySerial.inWaiting()
+        while True:
+            recvData = mySerial.readline()
+            print('COM PORT TEST %s' % recvData)
+            return_data = mySerial.read(len_return)
+            print('COM PORT LOOPBACK TEST %s' % return_data)
+        if len_return:
+            return_data = mySerial.read(len_return)
+       # recvData = mySerial.readline()
+            time.sleep(1)
+            print('COM PORT LOOPBACK TEST %s' % return_data)
+    time.sleep(10)
+
+
 def uartLoop(comPort):
     os.system('clear')
     try:
         subprocess.call("sudo chmod 666 %s" % comPort, shell=True )
         mySerial = serial.Serial(comPort, 115200, timeout=1)
-        for num in range(1, 6):
+        for num in range(1, 4):
             sendData = bytes([num])
             result = mySerial.write(sendData)
             recvData = mySerial.readline()
@@ -824,25 +1043,25 @@ def logScpCopy():
     localFolder = "/home/partimag/log"
     winHost = "10.0.0.6"
     winFolder = "C:"
-    winPing = os.system("ping -c 1 " + winHost)
+    winPing = os.system("ping -c 1 10.0.0.6 > /dev/null")
     if winPing == 0:
         subprocess.call(
-                "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
-                % (localFolder, winHost, winFolder), shell=True)
+            "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
+            % (localFolder, winHost, winFolder), shell=True)
 
 
 def logScpCopyMm():
     localFolder = "/home/partimag/log"
-    mmHost = "10.60.0.88"
+    mmHost = "10.0.0.10"
     mmFolder = "log"
-    mmPing = os.system("ping -c 1 " + mmHost)
+    mmPing = os.system("ping -c 1 10.0.0.10 > /dev/null")
     if mmPing == 0:
         subprocess.call(
                 "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -P 6666 -r %s stux@%s:"
                 % (localFolder, mmHost), shell=True)
 
 
-def logScpCopy2():
+def logScpCopyZt():
     localFolder = "/home/partimag/log"
     zeroHost = "192.168.192.168"
     zeroFolder = "log"
@@ -862,6 +1081,8 @@ def failRed(issueCheck):
     #os.replace(log, logFail)
     logScpCopy()
     logScpCopyMm()
+    #logScpCopy2()
+
     print(Fore.RED + "FFFFFF______A______IIIIII____LL____" + Fore.RESET)
     print(Fore.RED + "FF_______AA___AA_____II______LL____" + Fore.RESET)
     print(Fore.RED + "FFFF_____AA___AA_____II______LL____" + Fore.RESET)
@@ -873,7 +1094,6 @@ def failRed(issueCheck):
     print("確認規格:", issueCheck)
     print(" ")
     print("按n鍵關機,其他鍵重測  ", end='')
-    logScpCopy2()
     check = input("Press'n'power off, other key re-test: ").lower()
     if check == ("n"):
         os.system('systemctl poweroff')
@@ -881,13 +1101,15 @@ def failRed(issueCheck):
 
 
 def passGreen():
-#    with shelve.open('/home/stux/pyPackage/dataBase') as db:
-#        log = db['log'] 
+    with shelve.open('/home/stux/pyPackage/dataBase') as db:
+        logPass = db['logPass'] 
     logging.info('****** TEST_PASSED! ******')
-    logPass = log + "-PASS.log"
+    #logPass = log + "-PASS.log"
     os.replace(log, logPass)
     logScpCopy()
     logScpCopyMm()
+    #logScpCopy2()
+
     print(Fore.GREEN + "PPPPP_______A______SSSSSS___SSSSSS" + Fore.RESET)
     print(Fore.GREEN + "PP__PP____AA_AA____SS_______SS____" + Fore.RESET)
     print(Fore.GREEN + "PP___PP__AA___AA___SS_______SS____" + Fore.RESET)
@@ -897,7 +1119,6 @@ def passGreen():
     print(Fore.GREEN + "PP_______AA___AA___SSSSSS___SSSSSS" + Fore.RESET)
     print(" ")
     print("按任意鍵關機  ", end='')
-    logScpCopy2()
     check = input("Press any key power off").lower()
     if check == ("n"):
         subprocess.call("sh %s" % startTest, shell=True)

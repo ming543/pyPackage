@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2016, congatec AG. All rights reserved.
+ * Copyright (c) 2021, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -19,15 +19,25 @@
 
 /*---------------------------------------------------------------------------
  *
- * $Header:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/BCPRGCMN.C-arc   1.16   Sep 07 2016 12:24:56   congatec  $
- *
  * Contents: Board controller firmware update common implementation module.
  *
  *---------------------------------------------------------------------------
  *
  *                      R E V I S I O N   H I S T O R Y
  *
- * $Log:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/BCPRGCMN.C-arc  $
+ * MOD024: Added support for all MEC170x variants in the 144 pin WFBGA package.
+ *
+ * MOD023: added support for the /!cidoverride switch.
+ *
+ * MOD022: added support for MEC1706
+ * 
+ * MOD021: changes for a better flash read/write performance during a firmware
+ *         update on GEN5 cBC based designs
+ *
+ * MOD020: changes to skip verifying 0xFF data bytes by default in case of the
+ *         GEN5 cBC family
+ *
+ * MOD019: added support for the GEN5 cBC family
  * 
  *    Rev 1.16   Sep 07 2016 12:24:56   congatec
  * Fixed type conversion warnings.
@@ -193,6 +203,8 @@ static char nlNl[]             = "\n\n";
 #endif //_CONSOLE
 
 static char verifyInfoPat8[]   = _T("offset: %04Xh  expected: %02Xh  found: %02Xh");
+static char verifyInfoPat8L[]  = _T("offset: %08Xh  expected: %02Xh  found: %02Xh"); //MOD021
+static char flashReadErrMsg[]  = _T("flash page read error");                        //MOD021
 static char verifyInfoPat16[]  = _T("offset: %04Xh  expected: %04Xh  found: %04Xh");
 static char verifyInfoPatF[]   = _T("fuses: %c  expected: %02Xh  found: %02Xh");
 static char verifyInfoPatL[]   = _T("expected: %02Xh  found: %02Xh");
@@ -552,7 +564,23 @@ static INT32 HandleHexData( char *pDat, UINT32 adr,
 }
 
 
+                                                                      //MOD021v
+static int iCheckFF16( UINT32 idx )
+{
+  UINT32 i;
 
+  for( i = 0; i < 16; i = i + 1 )
+    {
+      if( pFlsBuf[idx+i] != 0xFF )
+        {
+          return( 0 );
+        }
+    }
+  return( 1 );
+}
+                                                                      //MOD021^
+
+                                                                      
 static INT32 ReadDatFile( void )
 {
  P_HEX_REC pRec;
@@ -613,11 +641,23 @@ static INT32 ReadDatFile( void )
           BCPRG_VERBOSE_PRINTF( flsTag, NULL, NULL );
           for( i=0; i<MAX_FLS_SIZ; i++ )
             {
+                                                                      //MOD021v
              if( !(i % 16) )
                {
-                BCPRG_VERBOSE_PRINTF( "\n%04X: ", i, NULL );
+                while( (iCheckFF16( i ) != 0) && (i < MAX_FLS_SIZ) )
+                  {
+                   i = i + 16;
+                  }
                }
-             BCPRG_VERBOSE_PRINTF( "%02X ", pFlsBuf[i], NULL );
+             if( i < MAX_FLS_SIZ )
+               {
+                                                                      //MOD021^
+                if( !(i % 16) )
+                  {
+                   BCPRG_VERBOSE_PRINTF( "\n%04X: ", i, NULL );
+                  }
+                BCPRG_VERBOSE_PRINTF( "%02X ", pFlsBuf[i], NULL );
+               }                                                      //MOD021
             }
           BCPRG_VERBOSE_PRINTF( "\n", NULL, NULL );
           BCPRG_VERBOSE_PRINTF( eepTag, NULL, NULL );
@@ -1199,6 +1239,216 @@ static INT32 CheckDeviceType( void )
                                            BCPRG_EEEP_SUPPORT;
                                   break;
                                                                      //MOD015^
+                                                                     //MOD024v
+    case MEC1701HSZ_SIGNATURE:
+                                  flsSiz = MEC1701HSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1701HSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1701HSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1701HSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1701KSZ_SIGNATURE:
+                                  flsSiz = MEC1701KSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1701KSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1701KSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1701KSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1701QSZ_SIGNATURE:
+                                  flsSiz = MEC1701QSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1701QSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1701QSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1701QSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1703HSZ_SIGNATURE:
+                                  flsSiz = MEC1703HSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1703HSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1703HSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1703HSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1703KSZ_SIGNATURE:
+                                  flsSiz = MEC1703KSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1703KSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1703KSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1703KSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1703QSZ_SIGNATURE:
+                                  flsSiz = MEC1703QSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1703QSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1703QSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1703QSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1704HSZ_SIGNATURE:
+                                  flsSiz = MEC1704HSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1704HSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1704HSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1704HSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1704KSZ_SIGNATURE:
+                                  flsSiz = MEC1704KSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1704KSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1704KSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1704KSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1704QSZ_SIGNATURE:
+                                  flsSiz = MEC1704QSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1704QSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1704QSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1704QSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1705HSZ_SIGNATURE:
+                                  flsSiz = MEC1705HSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1705HSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1705HSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1705HSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1705KSZ_SIGNATURE:
+                                  flsSiz = MEC1705KSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1705KSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1705KSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1705KSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+                                                                     //MOD024^
                                                                      //MOD019v
     case MEC1705QSZ_SIGNATURE:
                                   flsSiz = MEC1705QSZ_FLASH_SIZE;
@@ -1215,9 +1465,69 @@ static INT32 CheckDeviceType( void )
                                   lbModeProgDisabled = 0;
                                   mfgStart = 0;
                                   flags |= BCPRG_AVR_DISABLE_CMD;
-                                  flags |= BCPRG_SKIP_VERIFY_FF; //MOD020
+                                  flags |= BCPRG_SKIP_VERIFY_FF;     //MOD020
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;    //MOD021
                                   break;
                                                                      //MOD019^
+                                                                     //MOD024v
+    case MEC1706HSZ_SIGNATURE:
+                                  flsSiz = MEC1706HSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1706HSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1706HSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1706HSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+
+    case MEC1706KSZ_SIGNATURE:
+                                  flsSiz = MEC1706KSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1706KSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1706KSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1706KSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+                                                                     //MOD024^
+                                                                     //MOD022v
+    case MEC1706QSZ_SIGNATURE:
+                                  flsSiz = MEC1706QSZ_FLASH_SIZE;
+                                  flsPageSiz = MEC1706QSZ_FLASH_PAGE_SIZE;
+                                  eepSiz = MEC1706QSZ_EEPROM_SIZE;
+                                  BcprgShowProgress( BCPRG_FOUND_MEC1706QSZ );
+                                  pEesave = &curFusesH;
+                                  eesaveMsk = MC17_FUSE_EESAVE;
+                                  pSpien = NULL;
+                                  pRstdisbl = NULL;
+                                  pCksel = NULL;
+                                  lbModeMsk = 0;
+                                  lbModeProgEnabled = 0;
+                                  lbModeProgDisabled = 0;
+                                  mfgStart = 0;
+                                  flags |= BCPRG_AVR_DISABLE_CMD;
+                                  flags |= BCPRG_SKIP_VERIFY_FF;
+                                  flags |= BCPRG_SPM_EXT_SUPPORT;
+                                  break;
+                                                                     //MOD022^
     default:                                       
                                   return( BCPRG_UNKNOWN_DEVICE_ERROR );
    }
@@ -1800,6 +2110,218 @@ static INT32 AvrSpmProgramFlsPage( UINT32 adr, unsigned char *pBuf,
 }
 
 
+                                                                     //MOD021v
+static uint32_t ui32Gen5PgSize;
+
+static int iSkipFlsPage( uint32_t ui32PageIdx )
+{
+  uint32_t *pui32Blk;
+  uint32_t   ui32Idx;
+
+  if( (flags & BCPRG_SKIP_VERIFY_FF) == 0 )
+    {
+      return( 0 );
+    }
+
+  pui32Blk = (uint32_t *)(&pFlsBuf[ui32PageIdx]);
+  for( ui32Idx = 0; ui32Idx < (ui32Gen5PgSize/4); ui32Idx = ui32Idx + 1 )
+    {
+      if( pui32Blk[ui32Idx] != 0xFFFFFFFF )
+        {
+          return( 0 );
+        }
+    }
+  return( 1 );
+}
+
+cgosret_bool Gen5SetFlashPageAddr( uint32_t ui32FlashPageAddress )
+{
+  unsigned char wbuf[6];
+  cgosret_bool  cgosRet;
+  UINT32        sts;
+
+  wbuf[0] = CGBC_CMD_AVR_SPM_EXT;
+  wbuf[1] = CGBC_CMD_AVR_SPM_FLS_ADDR;
+  wbuf[2] = (uint8_t)(ui32FlashPageAddress >>  0);
+  wbuf[3] = (uint8_t)(ui32FlashPageAddress >>  8);
+  wbuf[4] = (uint8_t)(ui32FlashPageAddress >> 16);
+  wbuf[5] = (uint8_t)(ui32FlashPageAddress >> 24);
+  cgosRet = CgosCgbcHandleCommand( hCgos, &wbuf[0], 6, NULL, 0, &sts );
+  if( cgosRet != 0 )
+    {
+      if( (sts & CGBC_STAT_MSK) != CGBC_RDY_STAT )
+        {
+          cgosRet = 0;
+        }
+    }
+  return( cgosRet );
+}
+
+
+
+uint8_t Gen5GetFlashCtlrSts( uint32_t *pui32FlsPageSize )
+{
+  unsigned char wbuf[2];
+  unsigned char rbuf[5];
+  UINT32        sts;
+
+  wbuf[0] = CGBC_CMD_AVR_SPM_EXT;
+  wbuf[1] = CGBC_CMD_AVR_SPM_FLS_STAT;
+  if( CgosCgbcHandleCommand( hCgos, &wbuf[0], 2, &rbuf[0], 5, &sts ) != 0 )
+    {
+      if( ((sts & CGBC_STAT_MSK   ) == CGBC_RDY_STAT )  &&
+          ((sts & CGBC_DAT_PENDING) != 0             )  &&
+          ((sts & CGBC_DAT_CNT_MSK) == (5-1)         )     )
+        {
+          if( pui32FlsPageSize != NULL )
+            {
+              *pui32FlsPageSize = *((uint32_t *)(&(rbuf[1])));
+            }
+          return( rbuf[0] );
+        }
+    }
+  return( CGBC_AVR_SPM_FLS_ERR );
+}
+
+
+
+cgosret_bool Gen5WriteFlashPage( uint8_t *pui8WrDat )
+{
+  unsigned char wbuf[34];
+  cgosret_bool  cgosRet;
+  UINT32        sts;
+  uint32_t  ui32Idx;
+
+  for( cgosRet = 1,
+       ui32Idx = 0; (   (cgosRet != 0             )
+                     && (ui32Idx <  ui32Gen5PgSize)); ui32Idx = ui32Idx + 32 )
+    {
+      wbuf[0] = CGBC_CMD_AVR_SPM_EXT;
+      wbuf[1] = CGBC_CMD_AVR_SPM_FLS_WR32;
+      memcpy( &wbuf[2], &pui8WrDat[ui32Idx], 32 );
+      cgosRet = CgosCgbcHandleCommand( hCgos, &wbuf[0], 34, NULL, 0, &sts );
+      if( cgosRet != 0 )
+        {
+          if( (sts & CGBC_STAT_MSK) != CGBC_RDY_STAT )
+            {
+              cgosRet = 0;
+            }
+        }
+    }
+  return( cgosRet );    
+}
+
+
+
+cgosret_bool Gen5ReadFlashPage( uint8_t *pui8RdDat )
+{
+  unsigned char wbuf[2];
+  cgosret_bool  cgosRet;
+  UINT32        sts;
+  uint32_t  ui32Idx;
+
+  for( cgosRet = 1,
+       ui32Idx = 0; (   (cgosRet != 0             )
+                     && (ui32Idx <  ui32Gen5PgSize)); ui32Idx = ui32Idx + 32 )
+    {
+      wbuf[0] = CGBC_CMD_AVR_SPM_EXT;
+      wbuf[1] = CGBC_CMD_AVR_SPM_FLS_RD32;
+      cgosRet = CgosCgbcHandleCommand( hCgos, &wbuf[0],       2,
+                                              &pui8RdDat[ui32Idx], 32, &sts );
+      if( cgosRet != 0 )
+        {
+          if( ((sts & CGBC_STAT_MSK   ) != CGBC_RDY_STAT )  ||
+              ((sts & CGBC_DAT_PENDING) == 0             )  ||
+              ((sts & CGBC_DAT_CNT_MSK) != (32-1)        )     )
+            {
+              cgosRet = 0;
+            }
+        }
+    }
+  return( cgosRet );    
+}
+
+
+
+static INT32 Gen5ProgramFls( void )
+{
+  UINT32 i, j;
+  INT32  ret;
+  int    iSkipped;
+
+  BcprgShowProgress( BCPRG_PROGRAM_FLS_BEFORE );
+
+  BCPRG_VERBOSE_OPEN
+  BCPRG_VERBOSE_PRINTF( nl, NULL, NULL );
+  BCPRG_VERBOSE_PRINTF( verboseStartMes, NULL, NULL );
+  BCPRG_VERBOSE_CLOSE
+
+  ret = BCPRG_PASSED;
+  iSkipped = 1;
+  for( i = 0; (   (i   <  codeSiz     )
+               && (ret == BCPRG_PASSED)); i = i + ui32Gen5PgSize )
+    {
+      while( (iSkipFlsPage( i ) != 0) && (i < codeSiz) )
+        {
+          iSkipped = 1;
+          i = i + ui32Gen5PgSize;
+        }
+      if( i < codeSiz )
+        {
+          if( iSkipped != 0 )
+            {
+              if( Gen5SetFlashPageAddr( i ) == 0 )
+                {
+                  ret = BCPRG_PROGRAM_FLS_ERROR;
+                }
+              iSkipped = 0;
+            }
+          if( ret == BCPRG_PASSED )
+            {
+              BCPRG_VERBOSE_OPEN
+              for( j = 0; j < ui32Gen5PgSize; j++ )
+                {
+                  if( (j & 0x0F) == 0 )
+                    {
+                     BCPRG_VERBOSE_PRINTF( "%08X:", i+j, NULL );
+                    }
+                  if( (j & 0x0F) == 8 )
+                    {
+                     BCPRG_VERBOSE_PRINTF( "-%02X", pFlsBuf[i+j], NULL );
+                    }
+                  else
+                    {
+                     BCPRG_VERBOSE_PRINTF( " %02X", pFlsBuf[i+j], NULL );
+                    }
+                  if( (j & 0x0F) == 15 )
+                    {
+                     BCPRG_VERBOSE_PRINTF( nl, NULL, NULL );
+                    }
+                }
+              BCPRG_VERBOSE_CLOSE
+    
+              if( Gen5WriteFlashPage( &pFlsBuf[i] ) == 0 )
+                {
+                 ret = BCPRG_PROGRAM_FLS_ERROR;
+                }
+            }
+        }
+    }
+
+  while( Gen5GetFlashCtlrSts( NULL ) == CGBC_AVR_SPM_FLS_BSY );
+
+  BCPRG_VERBOSE_OPEN
+  BCPRG_VERBOSE_PRINTF( verboseEndMes, NULL, NULL );
+  BCPRG_VERBOSE_CLOSE
+
+  if( ret == BCPRG_PASSED )
+    {
+      BcprgShowProgress( BCPRG_PROGRAM_FLS_AFTER );
+    }
+ return( ret );
+}
+                                                                     //MOD021^
+
 
 static INT32 ProgramFls( void )
 {
@@ -1821,7 +2343,22 @@ static INT32 ProgramFls( void )
        return( BCPRG_CHECK_FLS_SPACE_ERROR );
       }
     BcprgShowProgress( BCPRG_CHECK_FLS_SPACE_AFTER );
-
+                                                                     //MOD021v
+    /* When the design supports the extended AVR SPM commands then a faster
+     * programming procedure can be used.  Note!  The Tiva cBC bootblock
+     * firmware hangs as soon as it receives any other cBC command than the
+     * standard AVR SPM commands.  Therefore the check whether the extended AVR
+     * SPM commands are supported cannot be done by just executing one of them.
+     * Instead the BCPRG_SPM_EXT_SUPPORT flag is used first to see whether the
+     * running cBC can support them at all. */
+    if( (flags & BCPRG_SPM_EXT_SUPPORT) != 0 )
+      {
+        if( Gen5GetFlashCtlrSts( &ui32Gen5PgSize ) != CGBC_AVR_SPM_FLS_ERR )
+          {
+            return( Gen5ProgramFls() );
+          }
+      }
+                                                                     //MOD021^
     BcprgShowProgress( BCPRG_PROGRAM_FLS_BEFORE );
 
     BCPRG_VERBOSE_OPEN
@@ -2299,6 +2836,82 @@ static void DetermineVerificationArea( UINT32 *pOffsetStart,
 }
                                                               //MOD006 MOD012^
 
+                                                                     //MOD021v
+static INT32 Gen5VerifyFls( void )
+{
+  UINT32       i, j;
+  INT32        ret;
+  int         iSkipped;
+  UINT32       verEnd;
+  UINT32       verStart;
+  uint8_t *pui8PgBuf;
+
+  BcprgShowProgress( BCPRG_VERIFY_FLS_BEFORE );
+
+  pui8PgBuf = malloc( ui32Gen5PgSize );
+  if( pui8PgBuf == NULL )
+    {
+     return( BCPRG_MALLOC_ERROR );
+    }
+
+  DetermineVerificationArea( &verStart, &verEnd );
+
+  ret = BCPRG_PASSED;
+  iSkipped = 1;
+  for( i = verStart; (   (i   <  verEnd      )
+                      && (ret == BCPRG_PASSED)); i = i + ui32Gen5PgSize )
+    {
+      while( (iSkipFlsPage( i ) != 0) && (i < verEnd) )
+        {
+          iSkipped = 1;
+          i = i + ui32Gen5PgSize;
+        }
+      if( i < verEnd )
+        {
+          if( iSkipped != 0 )
+            {
+              if( Gen5SetFlashPageAddr( i ) == 0 )
+                {
+                  ret = BCPRG_PROGRAM_FLS_ERROR;
+                }
+              iSkipped = 0;
+            }
+          if( ret == BCPRG_PASSED )
+            {
+              if( Gen5ReadFlashPage( pui8PgBuf ) == 0 )
+                {
+                  strcpy( infoMesBuf, flashReadErrMsg );
+                  ret = BCPRG_VERIFY_FLS_ERROR;
+                }
+            }
+          if( ret == BCPRG_PASSED )
+            {
+              if( memcmp( pui8PgBuf, &pFlsBuf[i], ui32Gen5PgSize ) != 0 )
+                {
+                  for( j = 0; j < ui32Gen5PgSize; j = j + 1 )
+                    {
+                      if( pui8PgBuf[j] != pFlsBuf[j+i] )
+                        {
+                          SPRINTF( infoMesBuf,
+                                   verifyInfoPat8L,
+                                   j+i, pFlsBuf[j+i], pui8PgBuf[j] );
+                          ret = BCPRG_VERIFY_FLS_ERROR;
+                        }
+                      j++;
+                    }
+                }
+            }
+        }          
+    }
+
+  if( ret == BCPRG_PASSED )
+    {
+      BcprgShowProgress( BCPRG_VERIFY_FLS_AFTER );
+    }
+ return( ret );
+}
+                                                                     //MOD021^
+
 
 static INT32 VerifyFls( void )
 {
@@ -2306,11 +2919,27 @@ static INT32 VerifyFls( void )
  UINT32 in;
  UINT32 out;
  UINT32 cnt;
- UINT32 verEnd;                                         //MOD006 MOD012
- UINT32 verStart;                                              //MOD012
+ UINT32 verEnd;                                               //MOD006 MOD012
+ UINT32 verStart;                                                    //MOD012
 
  if( (flags & BCPRG_FLS_PROG_REQ)  &&  !(flags & BCPRG_SKIP_VERIFY) )
    {
+                                                                     //MOD021v
+    /* When the design supports the extended AVR SPM commands then a faster
+     * verification procedure can be used.  Note!  The Tiva cBC bootblock
+     * firmware hangs as soon as it receives any other cBC command than the
+     * standard AVR SPM commands.  Therefore the check whether the extended AVR
+     * SPM commands are supported cannot be done by just executing one of them.
+     * Instead the BCPRG_SPM_EXT_SUPPORT flag is used first to see whether the
+     * running cBC can support them at all. */
+    if( (flags & BCPRG_SPM_EXT_SUPPORT) != 0 )
+      {
+       if( Gen5GetFlashCtlrSts( &ui32Gen5PgSize ) != CGBC_AVR_SPM_FLS_ERR )
+         {
+          return( Gen5VerifyFls() );
+         }
+      }
+                                                                     //MOD021^
     BcprgShowProgress( BCPRG_VERIFY_FLS_BEFORE );
                                                                      //MOD006v
     DetermineVerificationArea( &verStart, &verEnd );                 //MOD012
@@ -2647,10 +3276,13 @@ static INT32 CheckCompatibility( void )
  BCPRG_VERBOSE_PRINTF( verboseEndMes, NULL, NULL );
  BCPRG_VERBOSE_CLOSE
 
- if( (curCid != -1) && (curCid != cgbcCid) )
-   {
-    return( BCPRG_CHECK_COMPATIBILITY_ERROR );
-   }
+ if( (flags & BCPRG_CID_OVR_SWITCH) == 0 )                           //MOD023
+   {                                                                 //MOD023
+    if( (curCid != -1) && (curCid != cgbcCid) )
+      {
+       return( BCPRG_CHECK_COMPATIBILITY_ERROR );
+      }
+   }                                                                 //MOD023
 
  BcprgShowProgress( BCPRG_CHECK_COMPATIBILITY_AFTER );
  return( BCPRG_PASSED );

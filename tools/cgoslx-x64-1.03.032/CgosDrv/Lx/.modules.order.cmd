@@ -1,1 +1,0 @@
-cmd_/home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/modules.order := {   echo /home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/cgosdrv.ko; :; } | awk '!x[$$0]++' - > /home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/modules.order

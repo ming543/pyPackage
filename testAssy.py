@@ -17,14 +17,15 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
 
 def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     modelName = inspect.currentframe().f_code.co_name
-    moduleSys.funcMenu()
+    #moduleSys.funcMenu()
+    moduleSys.funcMenuT2()
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
     moduleSys.biosReleaseCheck("11/11/2019")
     moduleEbk.aicVersion("AIC-1.04")
     moduleEbk.aicDdmLogo()
     moduleEbk.aicTemp(20, 60)
-    moduleEbk.aicRtc(2.999, 3.333)
+    moduleEbk.aicRtc(2.911, 3.333)
     moduleEbk.opPoe(sPoe)
 #    moduleEbk.aicPoe(sPoe)
 #    moduleEbk.aicFan(sFan)
@@ -34,6 +35,7 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.memoryGet()
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
+    moduleSys.audioLoopback()
     moduleSys.lanSpeedSet(sLan, 100)
     moduleSys.lanLedCheckAll()
     moduleSys.lanSelect(sLan)
@@ -42,20 +44,20 @@ def AIM(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.usbCheck("DataTraveler|JetFlash", 1)
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
     moduleSys.uartLoopCheck(sCom)
-    moduleSys.alsabatTest()
 #    moduleSys.cpuTempCheck(20, 60)
 
 
 def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     modelName = inspect.currentframe().f_code.co_name
-    moduleSys.funcMenu()
+    #moduleSys.funcMenu()
+    moduleSys.funcMenuT2()
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
     moduleSys.biosReleaseCheck("11/11/2020")
     moduleEbk.aicVersion("AIC-1.04")
     moduleEbk.aicDdmLogo()
     moduleEbk.aicTemp(20, 60)
-    moduleEbk.aicRtc(2.999, 3.333)
+    moduleEbk.aicRtc(2.911, 3.333)
     #moduleEbk.aicPoe(sPoe)
     moduleEbk.opPoe(sPoe)
     moduleEbk.aicFan(sFan)
@@ -65,11 +67,12 @@ def AIH(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     moduleSys.memoryGet()
     moduleSys.storageCheck(sDisk)
     moduleSys.storageGet()
+    #moduleSys.alsabatTest()
+    moduleSys.audioLoopback()
     moduleSys.lanSpeedSet(sLan, 100)
     moduleSys.lanLedCheckAll()
     moduleSys.lanSelect(sLan)
     moduleSys.uartLoopCheck(sCom)
-    moduleSys.alsabatTest()
     moduleSys.usbCheck("Keyboard", 1)
     moduleSys.usbCheck("JMS567", 1)
     moduleSys.usbCheck("DataTraveler|JetFlash", 3)
@@ -98,12 +101,59 @@ def CJB(sCPU, sDisk):
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
     moduleCg.i2cGpio()
     moduleSys.uartLoop("/dev/ttyS0")
-    moduleSys.aplayTest()
-    moduleSys.arecordTest()
+    moduleSys.audioLoopback()
+    #moduleSys.aplayTest()
+    #moduleSys.arecordTest()
     #moduleSys.cpuTempCheck(20, 60)
 
 
-def Q715QA5OS(sBat):
+def CJB1U(sCPU, sDisk):
+    modelName = inspect.currentframe().f_code.co_name
+    #moduleSys.funcMenu()
+    moduleSys.funcMenuT1()
+    moduleSys.snGet(pn, modelName)
+    moduleSys.dmidecodeLog("bios-version")
+    #moduleSys.dmidecodeLog("baseboard-product-name")
+    #moduleSys.dmidecodeLog("baseboard-serial-number")
+    moduleSys.rtcCheck("withBat")
+    moduleSys.ledCheck("POWER") 
+    moduleSys.hddledCheck() 
+    moduleSys.fanCheck() 
+    moduleSys.displayCheck("DP1") 
+    moduleSys.displayCheck("DP2") 
+    moduleSys.displayCheck("DP3") 
+    moduleSys.cpuCheck(sCPU)
+    moduleSys.memoryGet()
+    moduleSys.storageCheck(sDisk)
+    moduleSys.storageGet()
+    moduleSys.cdromCheck("EMB-Q170A REV.B.1ST ED") #file in CDROM
+    moduleSys.audioLoopback()
+    moduleSys.lanCheck("enp0s31f6", "00:07:32")
+    moduleSys.lanCheck("enp1s0", "00:07:32")
+    #moduleSys.usbCheck("Keyboard", 1) PS2 keyboard
+    #moduleSys.usbCheck("Keyboard", 1)
+    moduleSys.usbCheck("Mouse", 1)
+    moduleSys.usbCheck("JMS567", 1) # test disk
+    moduleSys.usbCheck("DataTraveler|JetFlash", 3) # usb stick
+    moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1) # scanner
+    #moduleCg.i2cGpio()
+    #moduleSys.uartLoop("/dev/ttyS0")
+    #moduleSys.aplayTest()
+    #moduleSys.arecordTest()
+    testBi.bi120m()
+    testBi.biStress(0) # roomTemp = 0, chamber = 1 
+    #moduleSys.cpuTempCheck(20, 60)
+
+
+def FT232H():
+    modelName = inspect.currentframe().f_code.co_name
+    moduleSys.funcMenuT1()
+    moduleSys.snGet(pn, modelName)
+    moduleSys.ft232hCheck()
+
+
+
+def Q715QA5OS(sBat, sOS):
     moduleSys.ntpTime(sBat)
     modelName = inspect.currentframe().f_code.co_name
     moduleSys.funcMenuT1()
@@ -131,13 +181,17 @@ def Q715QA5OS(sBat):
     #EC25
     #test AT command time can't too close
     moduleSys.atCheck("/dev/ttyUSB2", "ati/r/n", "Rev")
-    moduleSys.cpuTempCheck(20, 55)
-    osClone.osCloneFix("2022-02-07-09-img-Q715QA5-EMMC-32G", "mmcblk1")
+    moduleSys.cpuTempCheck(20, 60)
+    if sOS == "OS1":
+        osClone.osCloneFix("2022-02-07-09-img-Q715QA5-EMMC-32G", "mmcblk1")
+    elif sOS == "OS2":
+        osClone.osCloneFix("csb.22.2.0-img", "mmcblk1")
 
 
 def U7130PAS(sCPU, sDisk):
     modelName = inspect.currentframe().f_code.co_name
-    moduleSys.funcMenu()
+    #moduleSys.funcMenu()
+    moduleSys.funcMenuT2()
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
@@ -162,7 +216,8 @@ def U7130PAS(sCPU, sDisk):
 
 def U7130(sCPU, sDisk):
     modelName = inspect.currentframe().f_code.co_name
-    moduleSys.funcMenu()
+    #moduleSys.funcMenu()
+    moduleSys.funcMenuT2()
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
@@ -183,6 +238,7 @@ def U7130(sCPU, sDisk):
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
     moduleCg.i2cGpio()
     moduleSys.uartLoop("/dev/ttyS0")
+    #moduleSys.audioLoopback()
     moduleSys.aplayTest()
     moduleSys.arecordTest()
     #moduleSys.cpuTempCheck(20, 60)
@@ -190,7 +246,8 @@ def U7130(sCPU, sDisk):
 
 def U7150(sCPU, sDisk):
     modelName = inspect.currentframe().f_code.co_name
-    moduleSys.funcMenu()
+    #moduleSys.funcMenu()
+    moduleSys.funcMenuT2()
     moduleSys.snGet(pn, modelName)
     moduleSys.dmidecodeLog("bios-version")
     moduleSys.dmidecodeLog("baseboard-product-name")
@@ -212,6 +269,7 @@ def U7150(sCPU, sDisk):
     moduleSys.usbCheck("Converter|Chic|Scanner|Metrologic|FUZZYSCAN", 1)
     moduleCg.i2cGpio()
     moduleSys.uartLoop("/dev/ttyS5")
+    #moduleSys.audioLoopback()
     moduleSys.aplayTest()
     moduleSys.arecordTest()
     #moduleSys.cpuTempCheck(20, 60)
@@ -223,7 +281,8 @@ def U6500(sCPU):
 
 def debug(sCPU, sPoe, sFan, sDio, sLan, sCom, sDisk):
     modelName = inspect.currentframe().f_code.co_name
-    moduleSys.funcMenu()
+    #moduleSys.funcMenu()
+    moduleSys.funcMenuT1()
     moduleSys.snGet(pn, modelName)
     #moduleSys.biosVersionCheck("1.20")
     #testBi.biStressRoom()
@@ -277,18 +336,22 @@ print(Style.RESET_ALL)
 #1-CPU, Poe, fan, dio, Lan, Com, Disk
 #U7XXX
 #1-CPU, Disk
-if pn == "20010-000001-A.0": debug("6500", 4, 2, "1D", 6, 6, "opCheck")
-elif pn == "10300-000004-A.3": Q715QA5OS("withBat")
-elif pn == "10300-000004-A.4": Q715QA5OS("withBat")
-elif pn == "10300-000007-A.0": Q715QA5OS("withoutBat")
+#if pn == "20010-000001-A.0": debug("6500", 4, 2, "1D", 6, 6, "opCheck")
+#if pn == "20010-000001-A.0": FT232H()
+if pn == "20010-000001-A.0": CJB1U("6700", "29.8G") 
+elif pn == "10300-000004-A.3": Q715QA5OS("withBat", "OS1")
+elif pn == "10300-000004-A.4": Q715QA5OS("withBat", "OS1")
+elif pn == "10300-000007-A.0": Q715QA5OS("withoutBat", "OS1")
+elif pn == "10300-000007-A.1": Q715QA5OS("withoutBat", "OS2")
 elif pn == "10300-000008-A.0": CJB("cpu", "disk")
-elif pn == "10400-000004-B.2": U7130PAS("NA")
+elif pn == "10400-000004-B.2": U7130PAS("N2807", "NA")
 elif pn == "10400-000009-A.0": U7150("N4200")
 elif pn == "10400-000010-A.0": U7150("N4200")
 elif pn == "10500-000340-A.0": U7130("N2870", "59.6G")
 elif pn == "10902-000097-A.0": AIM("6300", 4, "noFan", "1I", 4, 4, "opCheck")
-elif pn == "10951-000004-A.0": U7130("NA")
+elif pn == "10951-000004-A.0": U7130("N2807", "NA")
 elif pn == "10953-000001-B.0": U650("NA")
+elif pn == "20010-000110-A.5": CJB1U("6700", "29.8G")
 elif pn == "20010-000160-A.0": AIM("6600", 4, "noFan", "1I", 4, 4, "opCheck")
 elif pn == "20010-000161-A.0": AIM("6300", 4, "noFan", "1I", 4, 4, "opCheck")
 elif pn == "20010-000162-A.0": AIM("6100", 4, "noFan", "1I", 4, 4, "opCheck") #AIM
@@ -311,6 +374,7 @@ elif pn == "20010-000355-A.0": U7150("N4200", "opCheck")
 elif pn == "20010-000401-A.0": AIM("7600", 4, "noFan", "1I", 6, 2, "opCheck") #AIMG7
 elif pn == "20010-000404-A.1": AIM("7200", 0, "noFan", "1I", 2, 4, "opCheck") #AIML-I
 elif pn == "20010-000407-A.0": AIM("7200", 0, "noFan", "1D", 2, 4, "opCheck") #AIML-D
+elif pn == "20010-000440-X.0": AIH("NA", 0, 2, "1D", 2, 6, "opCheck") #AIHL-EP2 
 else: default()
 
 moduleSys.passGreen()

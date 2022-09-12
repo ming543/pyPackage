@@ -33,7 +33,6 @@ def logUpdate():
         subprocess.call(
                 "sshpass -p efco1234 scp -o StrictHostKeyChecking=no -r %s production@%s:%s"
                 % (localFolder, hostName, hostFolder), shell=True)
-
         #ssh = SSHClient()
         #ssh.load_system_host_keys()
         #ssh.connect('10.0.0.6')
@@ -56,35 +55,6 @@ def scpCheck():
     client = scp.Client(host=host, user=user, password=password)
     # and then
     client.transfer('/etc/local/filename', '/etc/remote/filename')
-
-
-#scpCheck()
-
-#Get PN from db
-#with shelve.open('/home/stux/pyPackage/dataBase') as db:
-#    pn = db['pnSave']
-pn = "test"
-modelName = "test"
-moduleSys.snGet(pn, modelName)
-
-#moduleSys.lanNicCheck(1, "001395") # Check CPU NIC MAC
-#moduleSys.lanEepromCheck(2, "3.25") # Check NIC Eeprom revision
-#moduleSys.lanMacProg(2, "807B85")
-#moduleCg.i2cGpio()
-#moduleSys.uartLoop("/dev/ttyS0")
-#moduleSys.memoryCheck("8192 MB","No Module")
-#moduleEbk.aicFan(2)
-#moduleEbk.aicDioSelect("1I2D")
-#moduleEbk.aicDio("GPIO1")
-#moduleEbk.aicIdioConfig("DIO1", "SINK")
-#moduleEbk.aicIdioCheck("DIO1")
-#moduleEbk.aicIdioConfig("DIO1", "SOURCE")
-#moduleEbk.aicIdioCheck("DIO1")
-#moduleEbk.aicIdioConfig("DIO1", "SOURCE")
-#moduleEbk.aicIdioConfig("DIO2", "SINK")
-#moduleEbk.aicIdioConfig("DIO2", "SOURCE")
-
-
 
 
 def getCpuTemp():
@@ -126,9 +96,8 @@ def atCheck(comPort, atCommand, atBack):
     subprocess.call("sudo killall cat &", shell=True, timeout=5)
 
 
-
-atCheck("/dev/ttyUSB2", "at\r\n", "OK")
-atCheck("/dev/ttyUSB2", "at+qccid\r\n", "CCID")
+#atCheck("/dev/ttyUSB2", "at\r\n", "OK")
+#atCheck("/dev/ttyUSB2", "at+qccid\r\n", "CCID")
 
 
 def uartLoopCheck(comPort):
@@ -221,9 +190,38 @@ def osSync():
 #print(process.expect(pexpect.EOF))
 
 
-
-
 #moduleSys.getCpuMips()
 #print(n)
+
+#scpCheck()
+
+#Get PN from db
+#with shelve.open('/home/stux/pyPackage/dataBase') as db:
+#    pn = db['pnSave']
+pn = "test"
+modelName = "test"
+moduleSys.funcMenuT1()
+moduleSys.snGet(pn, modelName)
+moduleSys.audioLoopback()
+
+#moduleSys.lanNicCheck(1, "001395") # Check CPU NIC MAC
+#moduleSys.lanEepromCheck(2, "3.25") # Check NIC Eeprom revision
+#moduleSys.lanMacProg(2, "807B85")
+#moduleCg.i2cGpio()
+#moduleSys.uartLoop("/dev/ttyS0")
+#moduleSys.memoryCheck("8192 MB","No Module")
+#moduleEbk.aicFan(2)
+#moduleEbk.aicDioSelect("1I2D")
+#moduleEbk.aicDio("GPIO1")
+#moduleEbk.aicIdioConfig("DIO1", "SINK")
+#moduleEbk.aicIdioCheck("DIO1")
+#moduleEbk.aicIdioConfig("DIO1", "SOURCE")
+#moduleEbk.aicIdioCheck("DIO1")
+#moduleEbk.aicIdioConfig("DIO1", "SOURCE")
+#moduleEbk.aicIdioConfig("DIO2", "SINK")
+#moduleEbk.aicIdioConfig("DIO2", "SOURCE")
+
+
+
 
 

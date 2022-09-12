@@ -22,6 +22,12 @@ with shelve.open('/home/stux/pyPackage/dataBase') as db:
     sn = db['snSave']
 
 
+def bi120m():
+    global biTotal 
+    global stressTime
+    biTotal = 12
+    stressTime = str(biTotal) + "0m"
+
 
 def biMenu():
     global biTotal 
@@ -29,8 +35,9 @@ def biMenu():
     m0 = '燒機測試2小時 BI Test 2hrs'
     m1 = '燒機測試4小時 BI Test 4hrs'
     m2 = '燒機測試8小時 BI Test 8hrs'
-    m3 = '返回主選單'
-    options = [m0, m1, m2, m3]
+    m3 = '燒機測試10分鐘 BI Test 10mins'
+    m4 = '返回主選單'
+    options = [m0, m1, m2, m3, m4]
 
     os.system('clear')
     print(" ")
@@ -51,6 +58,9 @@ def biMenu():
         biTotal = 48
         stressTime = str(biTotal) + "0m"
     elif choice == m3:  
+        biTotal = 1
+        stressTime = str(biTotal) + "0m"
+    elif choice == m4:  
         startTest = "/home/stux/pyPackage/t.sh"
         with open(startTest, "w") as f:
             f.write("cd /home/stux/pyPackage && python3 pyMenu.py")
@@ -91,11 +101,17 @@ def getCpuMips():
         mips = int(float(mips))//100
     return mips
 
-def getcpuH():
+def getcpuH(rTemp):
     if biosNameCheck() == "conga-QA5" or getCpuMips() >= 40:
-        cpuH = 85
+        if rTemp == 1:
+            cpuH = 85
+        else:
+            cpuH = 65
     else:
-        cpuH = getCpuMips() + 33
+        if rTemp == 1:
+            cpuH = getCpuMips() + 33
+        else:
+            cpuH = getCpuMips() + 15
     return cpuH
 
 
@@ -111,10 +127,10 @@ def serialTest():
             logging.info("RS232 serial loop test pass code:%s" % serialTest)
 
 
-def biStress():
+def biStress(rTemp):
     #biTotal = 12
-    biCount = 0
-    cpuH = getcpuH()    
+    biCount = 1
+    cpuH = getcpuH(rTemp)    
     cpuL = 20
     #-c N, --cpu N start N workers spinning on sqrt(rand())
     #-m N, --vm N start N workers spinning on anonymous mma
@@ -148,18 +164,17 @@ def biStress():
         serialTest()
         biCount = biCount + 1
         logging.info("Check CPU temp %s ! spec %s to %s C" % (cpuT, cpuL, cpuH))
-
     if biCount < biTotal:
         print("bicountFail", biCount)
-        logging.error('Check BI total run %s failed!' % biCount)
-        moduleSys.failRed('Check BI total run %s failed!' % biCount)
+        logging.error('Check BI total run %s failed!' % (biCount - 1))
+        moduleSys.failRed('Check BI total run %s failed!' % (biCount - 1))
     else:
         print("bicount OK", biCount)
-        logging.info('Check BI total run %s passed!' % biCount)
+        logging.info('Check BI total run %s passed!' % (biCount - 1))
 
 
 def biStressRoom():
-    stressTime = "120m"
+    #stressTime = "120m"
     global cpuL
     global cpuH
     cpuL = 20
@@ -170,7 +185,6 @@ def biStressRoom():
     serialTest()
     subprocess.call(
             "sudo stress-ng -c 4 -m 1 -l 80 -t %s &" % stressTime, shell=True)    
-
     nowTime = int(time.time())
     global endTime 
     endTime = int(time.time() + 600)
@@ -213,7 +227,7 @@ if __name__ == '__main__':
     biMenu()
     moduleSys.funcMenuBi()
     sn = moduleSys.snGet(pn, modelName)
-    biStress()
+    biStress(1) # 0=room, 1=chamber
     #biStressRoom()
     print("test done")
     moduleSys.passGreen()

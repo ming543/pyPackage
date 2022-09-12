@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2016, congatec AG. All rights reserved.
+ * Copyright (c) 2021, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -19,15 +19,20 @@
 
 /*---------------------------------------------------------------------------
  *
- * $Header:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/BCPRG.H-arc   1.9   Sep 06 2016 15:18:12   congatec  $
- *
  * Contents: Board controller firmware update common module definitions.
  *
  *---------------------------------------------------------------------------
  *
  *                      R E V I S I O N   H I S T O R Y
  *
- * $Log:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/BCPRG.H-arc  $
+ * MOD012: Added support for all MEC170x variants in the 144 pin WFBGA package.
+ *
+ * MOD011: added support for the /!cidoverride switch and the AVR SPM extension
+ *         commands.
+ *
+ * MOD010: added support for MEC1706
+ *
+ * MOD009: added support for MEC1705
  * 
  *    Rev 1.9   Sep 06 2016 15:18:12   congatec
  * Updated BSD header.
@@ -103,6 +108,8 @@ extern "C" {
 #define  BCPRG_BB_BOTTOM        0x400000                             //MOD007
 #define  BCPRG_EEEP_SUPPORT     0x800000                             //MOD007
 #define  BCPRG_AVR_DISABLE_CMD 0x1000000                             //MOD009
+#define  BCPRG_CID_OVR_SWITCH  0x2000000                             //MOD011
+#define  BCPRG_SPM_EXT_SUPPORT 0x4000000                             //MOD011
 
 
 /*--------------------------
@@ -152,7 +159,21 @@ enum  {
        BCPRG_FOUND_ATMEGA325P,                                       //MOD004
        BCPRG_FOUND_STM32F100R8,                                      //MOD006
        BCPRG_FOUND_TM4E1231H6ZRB,                                    //MOD008
+       BCPRG_FOUND_MEC1701HSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1701KSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1701QSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1703HSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1703KSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1703QSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1704HSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1704KSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1704QSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1705HSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1705KSZ,                                       //MOD012
        BCPRG_FOUND_MEC1705QSZ,                                       //MOD009
+       BCPRG_FOUND_MEC1706HSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1706KSZ,                                       //MOD012
+       BCPRG_FOUND_MEC1706QSZ,                                       //MOD010
        BCPRG_CHECK_FUSES_BEFORE,
        BCPRG_BAD_FUSES_ERROR,
        BCPRG_CHECK_FUSES_AFTER,

@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2016, congatec AG. All rights reserved.
+ * Copyright (c) 2021, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -19,15 +19,13 @@
 
 /*---------------------------------------------------------------------------
  *
- * $Header:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/cginfo.c-arc   1.2   Sep 06 2016 15:52:02   congatec  $
- *
  * Contents: Congatec board/BIOS information module.
  *
  *---------------------------------------------------------------------------
  *
  *                      R E V I S I O N   H I S T O R Y
  *
- * $Log:   S:/CG/archives/CGTOOLS/CGUTIL/CGUTLCMN/cginfo.c-arc  $
+ * MOD001: Added support for MEC1706 based cBC.
  * 
  *    Rev 1.2   Sep 06 2016 15:52:02   congatec
  * Added BSD header.
@@ -128,7 +126,7 @@ UINT16 CgInfoGetInfo
 #ifndef BANDR
                     //MOD001 v 
                     //sprintf((char*)(&(pCgInfoStruct->FirmwareVersion)),"CGBCP%c%c%c",CgbcCmdReadBuf[0], CgbcCmdReadBuf[1],CgbcCmdReadBuf[2]);
-                    if(CgbcType == CGBC_MEC1705QSZ)
+                    if(CgbcType == CGBC_MEC170x)                   /* MOD001 */
                     {
                         sprintf((char*)(&(pCgInfoStruct->FirmwareVersion)),"GEN5P%c%c%c",CgbcCmdReadBuf[0], CgbcCmdReadBuf[1],CgbcCmdReadBuf[2]);
                     }

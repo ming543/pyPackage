@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------
  *
- * Copyright (c) 2015, congatec AG. All rights reserved.
+ * Copyright (c) 2015, congatec GmbH. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the BSD 2-clause license which 
@@ -112,7 +112,7 @@ extern void HandleInfo(INT32 argc, _TCHAR* argv[]);
  * Local definitions
  *--------------------
  */
-#define BUILD_NUMBER            8
+#define BUILD_NUMBER            1
 
 #define CGEVAL                  0
 // Major and minor version number are defined in cgutlcmn.h
@@ -130,7 +130,7 @@ typedef struct
  */
 static _TCHAR signonMes[] = "\n"
                             "congatec System Configuration Utility ---  Version %d.%d.%d\n"                            
-                            "(C) Copyright 2005-2018 congatec AG\n\n"; 
+                            "(C) Copyright 2005-2021 congatec GmbH\n\n"; 
 
 static CG_UTIL_MODULE moduleList[] =   {
                                 {"BCPROG", "Board Controller Firmware Update Module", HandleFirmwareUpdate},

@@ -157,7 +157,8 @@ def aicFan(port):
     process.expect("( 2)*") #Fan Config
     process.sendline("2\r")
     process.expect("Select one, and config.") #Fan Config
-    process.sendline("2,0,100\r")
+    process.sendline("2,0,80\r")
+    time.sleep(1)
     process.expect("(Quit)*") 
     process.sendline("q\r")
     process.expect("( 3)*") #Fan Status
@@ -179,10 +180,20 @@ def aicFan(port):
         if fanRpm == 0:
             logging.error('Fan %s RPM Fail:' %i + fanLog)
             failRed(' Fan %s RPM Fail: ' %i + fanLog)
-    
         if fanCheck != True:
             logging.error('Fan %s not find!' %i)
             failRed(' Fan %s not find!' %i)
+    process = pexpect.spawn('make run', cwd=ekitFolder, timeout=2, encoding='utf-8' )
+    process.expect('(10)*') #Fan
+    process.sendline("10\r")
+    process.expect("( 2)*") #Fan Config
+    process.sendline("2\r")
+    process.expect("Select one, and config.") #Fan Config
+    process.sendline("2,1\r")
+    process.expect("(Quit)*") 
+    process.sendline("q\r")
+    process.expect("(Exit)*") 
+    process.sendline("exit\r")
         
         
 def aicDioSelect(sDio):

@@ -1,1 +1,0 @@
-cmd_/home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/Module.symvers := sed 's/ko$$/o/' /home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/modules.order | scripts/mod/modpost -m    -o /home/stux/pyPackage/tools/cgoslx-x64-1.03.032/CgosDrv/Lx/Module.symvers -e -i Module.symvers   -T -

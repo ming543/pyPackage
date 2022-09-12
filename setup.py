@@ -7,7 +7,8 @@ import os
 REQUIRED = {
   'GitPython', 'enquiries', 'colorama', 'getch', 'getmac', 
   'py-cpuinfo', 'netifaces', 'pyusb', 'pyserial', 'numpy',
-  'sh', 'scp', 'paramiko', 'ntplib', 'jedi'
+  'sh', 'scp', 'paramiko', 'ntplib', 'jedi', 'pyftdi', 
+  'adafruit-blinka'
 }
 
 installed = {pkg.key for pkg in pkg_resources.working_set}

@@ -1,0 +1,1 @@
+cmd_/home/stux/pyPackage/tools/cgoslx-x64-1.03.032_vmalloc/CgosDrv/Lx/built-in.a := rm -f /home/stux/pyPackage/tools/cgoslx-x64-1.03.032_vmalloc/CgosDrv/Lx/built-in.a; ar cDPrST /home/stux/pyPackage/tools/cgoslx-x64-1.03.032_vmalloc/CgosDrv/Lx/built-in.a 

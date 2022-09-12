@@ -1,5 +1,6 @@
 #!/bin/bash
-sudo cp ~/pyPackage/tools/grub /etc/default/grub
+sudo cp /etc/default/grub /etc/default/grub.bak
+sudo cp ~/pyPackage/tools/grub.lm203x /etc/default/grub
 sudo update-grub
 sudo systemctl set-default graphical.target
 
